@@ -3,6 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { TopBar } from './TopBar';
 import { MobileNav } from './MobileNav';
+import { BackupReminderBanner } from './BackupReminderBanner';
 
 const pageTitles: Record<string, string> = {
   '/dashboard': 'Dashboard',
@@ -28,6 +29,7 @@ export function AppShell() {
           title={title}
           onToggleSidebar={() => setSidebarCollapsed((c) => !c)}
         />
+        <BackupReminderBanner />
         <main className="flex-1 overflow-y-auto gradient-bg">
           <div className="max-w-7xl mx-auto p-6">
             <Outlet />
