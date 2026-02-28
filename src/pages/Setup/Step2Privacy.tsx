@@ -23,7 +23,7 @@ export default function Step2Privacy({ onNext, onBack }: Step2PrivacyProps) {
           <div>
             <h2 className="text-xl font-semibold text-white mb-2">Your data never leaves your device</h2>
             <p className="text-white/60 text-sm leading-relaxed">
-              Everything you enter in this app - your portfolio, spending, and net worth - is stored only in your browser's local storage. Nothing is sent to any server, No cloud sync. Your financial data is completely private and stays on your computer.
+              Everything you enter in this app - your portfolio, spending, and other data - is stored only in your browser's local storage. Nothing is sent to any server. Your financial data is completely private and stays on your computer.
             </p>
           </div>
         </div>
