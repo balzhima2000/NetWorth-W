@@ -59,7 +59,7 @@ html, body, #root {
     radial-gradient(ellipse 60% 50% at 30% 40%, rgba(88, 101, 242, 0.18) 0%, transparent 55%),
     radial-gradient(ellipse 50% 40% at 70% 60%, rgba(160, 100, 220, 0.12) 0%, transparent 50%),
     radial-gradient(ellipse 40% 30% at 50% 50%, rgba(200, 160, 255, 0.08) 0%, transparent 40%);
-  filter: blur(40px);
+  filter: blur(20px);
   animation: aurora-drift 12s ease-in-out infinite alternate;
   pointer-events: none;
   z-index: 0;
