@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+/* Google Fonts import */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+/* Base reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #0a0a0f;
+  color: #ffffff;
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Glass card base */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+}
+
+/* Animated gradient background for onboarding/hero areas */
+.gradient-bg {
+  background: radial-gradient(ellipse at top left, rgba(88, 101, 242, 0.15) 0%, transparent 50%),
+              radial-gradient(ellipse at bottom right, rgba(0, 214, 50, 0.08) 0%, transparent 50%),
+              #0a0a0f;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(88, 101, 242, 0.4);
+  color: white;
+}
+
+/* Input autofill dark mode fix */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: white;
+  -webkit-box-shadow: 0 0 0px 1000px #13131f inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Link reset */
+a {
+  color: inherit;
+  text-decoration: none;
+}
