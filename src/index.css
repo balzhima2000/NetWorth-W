@@ -99,6 +99,19 @@ input:-webkit-autofill:focus {
   transition: background-color 5000s ease-in-out 0s;
 }
 
+/* Number input spinner styling */
+input[type='number'] {
+  color-scheme: dark;
+}
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  opacity: 1;
+  background: transparent !important;
+  box-shadow: none;
+  filter: invert(1);
+}
+
 /* Link reset */
 a {
   color: inherit;
