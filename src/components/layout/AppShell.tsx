@@ -19,7 +19,7 @@ export function AppShell() {
   const title = pageTitles[location.pathname] ?? '';
 
   return (
-    <div className="flex h-screen bg-[#0a0a0f]">
+    <div className="flex h-dvh bg-[#0a0a0f]">
       <div className="hidden lg:flex flex-shrink-0">
         <Sidebar collapsed={sidebarCollapsed} />
       </div>
