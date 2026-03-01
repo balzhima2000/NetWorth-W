@@ -90,7 +90,12 @@ export default function Step1Name({ onNext }: Step1NameProps) {
           installmentPlans: backupData.installmentPlans,
         });
       }
-      if (backupData.categories) useCategoriesStore.setState({ categories: backupData.categories });
+      if (backupData.categories) {
+        useCategoriesStore.setState({
+          categories: backupData.categories,
+          ...(backupData.incomeCategories ? { incomeCategories: backupData.incomeCategories } : {}),
+        });
+      }
 
       // Set name from user input (don't restore old name from backup settings)
       const trimmedName = restoreName.trim();

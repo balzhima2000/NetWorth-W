@@ -75,7 +75,6 @@ export interface SpendingCategory {
   emoji: string;
   color: string;
   isDefault: boolean;
-  type: 'expense' | 'income' | 'both';
 }
 
 // ============================================================

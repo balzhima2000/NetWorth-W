@@ -52,6 +52,7 @@ export default function Spending() {
   const deleteBudget = useBudgetStore((s) => s.deleteBudget);
 
   const categories = useCategoriesStore((s) => s.categories);
+  const incomeCategories = useCategoriesStore((s) => s.incomeCategories);
   const defaultCurrency = useSettingsStore((s) => s.defaultCurrency);
   const exchangeRates = useSettingsStore((s) => s.exchangeRates);
   const cards = useCardsStore((s) => s.cards).filter((c) => c.isActive);
@@ -150,8 +151,10 @@ export default function Spending() {
 
   const hasFilters = !!(filterDateFrom || filterDateTo || filterCategory || filterType !== 'all' || filterPayment !== 'all');
 
+  const allCategories = [...categories, ...incomeCategories];
+
   const getCategoryInfo = (catId: string) =>
-    categories.find((c) => c.id === catId) ?? { name: catId, emoji: '💰', color: '#6b7280' };
+    allCategories.find((c) => c.id === catId) ?? { name: catId, emoji: '💰', color: '#6b7280' };
 
   const getConvertedAmount = (amount: number, currency: string): number => {
     if (currency === defaultCurrency) return amount;
@@ -171,6 +174,9 @@ export default function Spending() {
     setTxNotes(''); setTxPayment(lastUsedPaymentMethod); setTxCurrency(defaultCurrency);
     setShowAddTx(true);
   };
+
+  // Get category list for the current transaction type
+  const txCategoryOptions = txType === 'expense' ? categories : incomeCategories;
 
   const openEditTx = (tx: Transaction) => {
     setEditingTx(tx); setTxType(tx.type); setTxAmount(String(tx.amount));
@@ -217,6 +223,10 @@ export default function Spending() {
     setRecFrequency('monthly'); setRecDayOfMonth('1'); setRecStartDate(getTodayISO());
     setRecEndDate(''); setRecNotes(''); setShowAddRecurring(true);
   };
+
+  // Get category list for the current recurring type
+  const recCategoryOptions = recType === 'expense' ? categories : incomeCategories;
+
   const openEditRecurring = (p: RecurringPayment) => {
     setEditingRecurring(p); setRecName(p.name); setRecAmount(String(p.amount));
     setRecCategory(p.category); setRecType(p.type); setRecFrequency(p.frequency);
@@ -235,7 +245,8 @@ export default function Spending() {
 
   const openAddInstallment = () => {
     setInstName(''); setInstTotal(''); setInstCount(''); setInstCategory(categories[0]?.id ?? '');
-    setInstDay('1'); setInstStartDate(getTodayISO()); setInstNotes(''); setShowAddInstallment(true);
+    setInstDay('1'); setInstStartDate(getTodayISO()); setInstNotes('');
+    setShowAddInstallment(true);
   };
   const handleSaveInstallment = () => {
     if (!instName || !instTotal || !instCount) return;
@@ -309,7 +320,7 @@ export default function Spending() {
                 <Input label="From Date" type="date" value={filterDateFrom} onChange={e => setFilterDateFrom(e.target.value)} />
                 <Input label="To Date" type="date" value={filterDateTo} onChange={e => setFilterDateTo(e.target.value)} />
                 <Select label="Category" value={filterCategory} onChange={e => setFilterCategory(e.target.value)}
-                  options={[{ value: '', label: 'All Categories' }, ...categories.map(c => ({ value: c.id, label: `${c.emoji} ${c.name}` }))]} />
+                  options={[{ value: '', label: 'All Categories' }, ...allCategories.map(c => ({ value: c.id, label: `${c.emoji} ${c.name}` }))]} />
                 <Select label="Type" value={filterType} onChange={e => setFilterType(e.target.value)}
                   options={[{ value: 'all', label: 'All' }, { value: 'expense', label: 'Expenses' }, { value: 'income', label: 'Income' }]} />
                 <Select label="Payment Method" value={filterPayment} onChange={e => setFilterPayment(e.target.value)}
@@ -383,7 +394,7 @@ export default function Spending() {
               <p className="text-white/40 text-sm">Month {month}/{year}</p>
             </div>
             <div className="space-y-5">
-              {categories.filter(c => !['salary', 'investment'].includes(c.id)).map((cat) => {
+              {categories.map((cat) => {
                 const budget = currentMonthBudgets.find(b => b.category === cat.id);
                 const spent = monthTransactions.filter(t => t.type === 'expense' && t.category === cat.id).reduce((sum, t) => sum + t.convertedAmount, 0);
                 const progress = budget ? (spent / budget.amount) * 100 : null;
@@ -539,7 +550,7 @@ export default function Spending() {
               {!exchangeRates.find(r => r.currency === txCurrency) && <span className="text-amber-400 ml-1">(no exchange rate set)</span>}
             </p>
           )}
-          <Select label="Category" value={txCategory} onChange={(e) => setTxCategory(e.target.value)} options={categories.filter(c => !c.type || c.type === txType || c.type === 'both').map(c => ({ value: c.id, label: `${c.emoji} ${c.name}` }))} required />
+          <Select label="Category" value={txCategory} onChange={(e) => setTxCategory(e.target.value)} options={txCategoryOptions.map(c => ({ value: c.id, label: `${c.emoji} ${c.name}` }))} required />
           <Input label="Date" type="date" value={txDate} onChange={(e) => setTxDate(e.target.value)} />
           <Select label="Payment Method" value={txPayment} onChange={(e) => setTxPayment(e.target.value)} options={paymentOptions} />
           <Input label="Notes (optional)" placeholder="Description..." value={txNotes} onChange={(e) => setTxNotes(e.target.value)} />
@@ -556,7 +567,7 @@ export default function Spending() {
           </div>
           <Input label="Name" placeholder="Netflix, Rent, Salary..." value={recName} onChange={e => setRecName(e.target.value)} required />
           <Input label="Amount" type="number" placeholder="0.00" value={recAmount} onChange={e => setRecAmount(e.target.value)} required />
-          <Select label="Category" value={recCategory} onChange={e => setRecCategory(e.target.value)} options={categories.filter(c => !c.type || c.type === recType || c.type === 'both').map(c => ({ value: c.id, label: `${c.emoji} ${c.name}` }))} />
+          <Select label="Category" value={recCategory} onChange={e => setRecCategory(e.target.value)} options={recCategoryOptions.map(c => ({ value: c.id, label: `${c.emoji} ${c.name}` }))} />
           <Select label="Frequency" value={recFrequency} onChange={e => setRecFrequency(e.target.value as 'weekly' | 'monthly' | 'yearly')} options={FREQUENCIES} />
           {recFrequency !== 'weekly' && <Input label="Day of Month" type="number" placeholder="1" value={recDayOfMonth} onChange={e => setRecDayOfMonth(e.target.value)} hint="1–28 recommended" />}
           <Input label="Start Date" type="date" value={recStartDate} onChange={e => setRecStartDate(e.target.value)} />
@@ -578,6 +589,7 @@ export default function Spending() {
             <p className="text-[#00d632] text-sm font-mono">{formatCurrency(parseFloat(instTotal) / parseInt(instCount), defaultCurrency)} per installment</p>
           )}
           <Select label="Category" value={instCategory} onChange={e => setInstCategory(e.target.value)} options={categories.map(c => ({ value: c.id, label: `${c.emoji} ${c.name}` }))} />
+
           <Input label="Day of Month" type="number" placeholder="1" value={instDay} onChange={e => setInstDay(e.target.value)} hint="Which day each installment is due" />
           <Input label="Start Date" type="date" value={instStartDate} onChange={e => setInstStartDate(e.target.value)} />
           <Input label="Notes (optional)" value={instNotes} onChange={e => setInstNotes(e.target.value)} />

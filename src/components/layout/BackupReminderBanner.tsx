@@ -28,6 +28,7 @@ export function BackupReminderBanner() {
   const recurringPayments = useRecurringStore((s) => s.recurringPayments);
   const installmentPlans  = useRecurringStore((s) => s.installmentPlans);
   const categories        = useCategoriesStore((s) => s.categories);
+  const incomeCategories  = useCategoriesStore((s) => s.incomeCategories);
 
   const toast = useToast();
 
@@ -49,7 +50,7 @@ export function BackupReminderBanner() {
       trades, transactions, budgets,
       manualEntries, snapshots, cards,
       recurringPayments, installmentPlans,
-      categories, settings: {},
+      categories, incomeCategories, settings: {},
     });
     setLastBackupDate(new Date().toISOString());
     toast.success('Backup downloaded. Your data is safe!');

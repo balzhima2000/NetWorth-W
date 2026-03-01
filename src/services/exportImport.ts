@@ -23,6 +23,7 @@ export interface FullBackup {
   recurringPayments: RecurringPayment[];
   installmentPlans: InstallmentPlan[];
   categories: SpendingCategory[];
+  incomeCategories?: SpendingCategory[];
   settings: Record<string, unknown>;
 }
 

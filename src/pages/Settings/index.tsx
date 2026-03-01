@@ -46,6 +46,10 @@ export default function Settings() {
   const addCategory = useCategoriesStore((s) => s.addCategory);
   const updateCategory = useCategoriesStore((s) => s.updateCategory);
   const deleteCategory = useCategoriesStore((s) => s.deleteCategory);
+  const incomeCategories = useCategoriesStore((s) => s.incomeCategories);
+  const addIncomeCategory = useCategoriesStore((s) => s.addIncomeCategory);
+  const updateIncomeCategory = useCategoriesStore((s) => s.updateIncomeCategory);
+  const deleteIncomeCategory = useCategoriesStore((s) => s.deleteIncomeCategory);
 
   const manualEntries = useNetWorthStore((s) => s.manualEntries);
   const addManualEntry = useNetWorthStore((s) => s.addManualEntry);
@@ -93,22 +97,47 @@ export default function Settings() {
   const [catName, setCatName] = useState('');
   const [catEmoji, setCatEmoji] = useState('');
   const [catColor, setCatColor] = useState('#6b7280');
+  const [catContext, setCatContext] = useState<'expense' | 'income'>('expense');
   const [deleteCatId, setDeleteCatId] = useState<string | null>(null);
+  const [deleteCatContext, setDeleteCatContext] = useState<'expense' | 'income'>('expense');
 
-  const openAddCat = () => {
-    setEditingCat(null); setCatName(''); setCatEmoji(''); setCatColor('#6b7280'); setShowCatModal(true);
+  const openAddCat = (context: 'expense' | 'income') => {
+    setEditingCat(null); setCatName(''); setCatEmoji(''); setCatColor('#6b7280');
+    setCatContext(context); setShowCatModal(true);
   };
-  const openEditCat = (cat: SpendingCategory) => {
-    setEditingCat(cat); setCatName(cat.name); setCatEmoji(cat.emoji); setCatColor(cat.color); setShowCatModal(true);
+  const openEditCat = (cat: SpendingCategory, context: 'expense' | 'income') => {
+    setEditingCat(cat); setCatName(cat.name); setCatEmoji(cat.emoji); setCatColor(cat.color);
+    setCatContext(context); setShowCatModal(true);
   };
   const handleSaveCat = () => {
     if (!catName) return;
     if (editingCat) {
-      updateCategory(editingCat.id, { name: catName, emoji: catEmoji, color: catColor });
+      if (catContext === 'expense') {
+        updateCategory(editingCat.id, { name: catName, emoji: catEmoji, color: catColor });
+      } else {
+        updateIncomeCategory(editingCat.id, { name: catName, emoji: catEmoji, color: catColor });
+      }
     } else {
-      addCategory({ id: crypto.randomUUID(), name: catName, emoji: catEmoji || '💰', color: catColor, isDefault: false, type: 'both' });
+      if (catContext === 'expense') {
+        addCategory({ id: crypto.randomUUID(), name: catName, emoji: catEmoji || '💰', color: catColor, isDefault: false });
+      } else {
+        addIncomeCategory({ id: `income_${crypto.randomUUID()}`, name: catName, emoji: catEmoji || '💰', color: catColor, isDefault: false });
+      }
     }
     setShowCatModal(false);
+  };
+  const confirmDeleteCat = (catId: string, context: 'expense' | 'income') => {
+    setDeleteCatId(catId);
+    setDeleteCatContext(context);
+  };
+  const handleDeleteCat = () => {
+    if (!deleteCatId) return;
+    if (deleteCatContext === 'expense') {
+      deleteCategory(deleteCatId);
+    } else {
+      deleteIncomeCategory(deleteCatId);
+    }
+    setDeleteCatId(null);
   };
   const catHasTransactions = (catId: string) => transactions.some(t => t.category === catId);
 
@@ -177,7 +206,7 @@ export default function Settings() {
     exportFullBackup({
       trades, transactions, budgets,
       manualEntries, snapshots, cards, recurringPayments, installmentPlans,
-      categories, settings: {},
+      categories, incomeCategories, settings: {},
     });
     setLastBackupDate(new Date().toISOString());
     toast.success('Full backup downloaded.');
@@ -216,7 +245,12 @@ export default function Settings() {
     if (importData.recurringPayments && importData.installmentPlans) {
       useRecurringStore.setState({ recurringPayments: importData.recurringPayments, installmentPlans: importData.installmentPlans });
     }
-    if (importData.categories) useCategoriesStore.setState({ categories: importData.categories });
+    if (importData.categories) {
+      useCategoriesStore.setState({
+        categories: importData.categories,
+        ...(importData.incomeCategories ? { incomeCategories: importData.incomeCategories } : {}),
+      });
+    }
     setShowImportConfirm(false);
     setImportData(null);
     setImportSummary(null);
@@ -343,11 +377,11 @@ export default function Settings() {
         </div>
       </GlassCard>
 
-      {/* ── SPENDING CATEGORIES ── */}
+      {/* ── EXPENSE CATEGORIES ── */}
       <GlassCard padding="lg">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-white">🏷️ Spending Categories</h2>
-          <Button variant="secondary" size="sm" onClick={openAddCat}>+ Add Category</Button>
+          <h2 className="text-xl font-semibold text-white">🏷️ Expense Categories</h2>
+          <Button variant="secondary" size="sm" onClick={() => openAddCat('expense')}>+ Add Expense Category</Button>
         </div>
         <div className="space-y-2">
           {categories.map((cat) => (
@@ -359,11 +393,44 @@ export default function Settings() {
                 {cat.isDefault && <span className="text-xs text-white/30">default</span>}
               </div>
               <div className="flex gap-1">
-                <button onClick={() => openEditCat(cat)} className="p-1.5 rounded-lg text-white/30 hover:text-white/70 hover:bg-white/10 transition-colors">
+                <button onClick={() => openEditCat(cat, 'expense')} className="p-1.5 rounded-lg text-white/30 hover:text-white/70 hover:bg-white/10 transition-colors">
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                 </button>
                 <button
-                  onClick={() => !cat.isDefault && !catHasTransactions(cat.id) && setDeleteCatId(cat.id)}
+                  onClick={() => !cat.isDefault && !catHasTransactions(cat.id) && confirmDeleteCat(cat.id, 'expense')}
+                  disabled={cat.isDefault || catHasTransactions(cat.id)}
+                  className={`p-1.5 rounded-lg transition-colors ${cat.isDefault || catHasTransactions(cat.id) ? 'text-white/15 cursor-not-allowed' : 'text-white/30 hover:text-[#ff4757] hover:bg-[#ff4757]/10'}`}
+                  title={cat.isDefault ? 'Default categories cannot be deleted' : catHasTransactions(cat.id) ? 'Category is used in transactions' : 'Delete'}
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </GlassCard>
+
+      {/* ── INCOME CATEGORIES ── */}
+      <GlassCard padding="lg">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold text-white">💰 Income Categories</h2>
+          <Button variant="secondary" size="sm" onClick={() => openAddCat('income')}>+ Add Income Category</Button>
+        </div>
+        <div className="space-y-2">
+          {incomeCategories.map((cat) => (
+            <div key={cat.id} className="flex items-center justify-between p-2.5 bg-white/5 rounded-xl border border-white/8">
+              <div className="flex items-center gap-2">
+                <span className="text-lg">{cat.emoji}</span>
+                <div className="w-2 h-2 rounded-full" style={{ background: cat.color }} />
+                <span className="text-white text-sm font-medium">{cat.name}</span>
+                {cat.isDefault && <span className="text-xs text-white/30">default</span>}
+              </div>
+              <div className="flex gap-1">
+                <button onClick={() => openEditCat(cat, 'income')} className="p-1.5 rounded-lg text-white/30 hover:text-white/70 hover:bg-white/10 transition-colors">
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                </button>
+                <button
+                  onClick={() => !cat.isDefault && !catHasTransactions(cat.id) && confirmDeleteCat(cat.id, 'income')}
                   disabled={cat.isDefault || catHasTransactions(cat.id)}
                   className={`p-1.5 rounded-lg transition-colors ${cat.isDefault || catHasTransactions(cat.id) ? 'text-white/15 cursor-not-allowed' : 'text-white/30 hover:text-[#ff4757] hover:bg-[#ff4757]/10'}`}
                   title={cat.isDefault ? 'Default categories cannot be deleted' : catHasTransactions(cat.id) ? 'Category is used in transactions' : 'Delete'}
@@ -507,7 +574,7 @@ export default function Settings() {
       </GlassCard>
 
       {/* CATEGORY MODAL */}
-      <Modal isOpen={showCatModal} onClose={() => setShowCatModal(false)} title={editingCat ? 'Edit Category' : 'Add Category'} size="sm"
+      <Modal isOpen={showCatModal} onClose={() => setShowCatModal(false)} title={editingCat ? `Edit ${catContext === 'expense' ? 'Expense' : 'Income'} Category` : `Add ${catContext === 'expense' ? 'Expense' : 'Income'} Category`} size="sm"
         footer={<><Button variant="ghost" onClick={() => setShowCatModal(false)}>Cancel</Button><Button variant="primary" onClick={handleSaveCat} disabled={!catName}>{editingCat ? 'Save' : 'Add'}</Button></>}>
         <div className="space-y-3">
           <div className="grid grid-cols-3 gap-3">
@@ -581,7 +648,7 @@ export default function Settings() {
       </Modal>
 
       {/* CONFIRM DIALOGS */}
-      <ConfirmDialog isOpen={!!deleteCatId} onClose={() => setDeleteCatId(null)} onConfirm={() => { if (deleteCatId) { deleteCategory(deleteCatId); setDeleteCatId(null); } }} title="Delete Category" message="Delete this spending category?" confirmLabel="Delete" confirmVariant="danger" />
+      <ConfirmDialog isOpen={!!deleteCatId} onClose={() => setDeleteCatId(null)} onConfirm={() => { handleDeleteCat(); }} title="Delete Category" message="Delete this category?" confirmLabel="Delete" confirmVariant="danger" />
       <ConfirmDialog isOpen={!!deleteCardId} onClose={() => setDeleteCardId(null)} onConfirm={() => { if (deleteCardId) { deleteCard(deleteCardId); setDeleteCardId(null); } }} title="Delete Card" message="Delete this payment card? Transactions linked to it will remain." confirmLabel="Delete" confirmVariant="danger" />
       <ConfirmDialog isOpen={!!deleteEntryId} onClose={() => setDeleteEntryId(null)} onConfirm={() => { if (deleteEntryId) { deleteManualEntry(deleteEntryId); setDeleteEntryId(null); } }} title="Delete Entry" message="Delete this asset/liability entry?" confirmLabel="Delete" confirmVariant="danger" />
     </div>
