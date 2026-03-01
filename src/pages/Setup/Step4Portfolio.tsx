@@ -59,14 +59,28 @@ export default function Step4Portfolio({ onNext, onBack }: Step4PortfolioProps) 
             <h3 className="text-xl font-semibold text-white">Simple</h3>
             <p className="text-white/60 text-sm">Just enter the total value of your portfolio. You can add individual stocks later.</p>
             {mode === 'simple' && (
-              <Input
-                type="number"
-                label="Current portfolio value"
-                placeholder="50000"
-                value={simpleValue}
-                onChange={(e) => setSimpleValue(e.target.value)}
-                leftAddon={defaultCurrency === 'USD' ? '$' : undefined}
-              />
+              <div onClick={(e) => e.stopPropagation()}>
+                <Input
+                  type="number"
+                  label="Current portfolio value"
+                  placeholder="50000"
+                  value={simpleValue}
+                  min={0}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (val === '' || parseFloat(val) >= 0) setSimpleValue(val);
+                  }}
+                  leftAddon={defaultCurrency === 'USD' ? '$' : undefined}
+                  className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                />
+                <button
+                  type="button"
+                  onClick={() => setSimpleValue(String((parseFloat(simpleValue) || 0) + 5000))}
+                  className="mt-2 w-full text-sm text-white/60 hover:text-white border border-white/10 hover:border-white/20 rounded-lg py-1.5 transition-colors"
+                >
+                  + 5,000
+                </button>
+              </div>
             )}
           </div>
         </GlassCard>
