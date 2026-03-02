@@ -26,10 +26,12 @@ export function AppShell() {
       </div>
 
       <div className="flex flex-col flex-1 min-w-0 min-h-0">
-        <TopBar
-          title={title}
-          onToggleSidebar={() => setSidebarCollapsed((c) => !c)}
-        />
+        <div className="hidden lg:block">
+          <TopBar
+            title={title}
+            onToggleSidebar={() => setSidebarCollapsed((c) => !c)}
+          />
+        </div>
         <BackupReminderBanner />
         <main className="flex-1 overflow-y-auto gradient-bg">
           <div className="max-w-7xl mx-auto p-4 sm:p-6">

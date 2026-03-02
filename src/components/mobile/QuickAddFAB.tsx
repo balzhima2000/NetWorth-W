@@ -34,7 +34,7 @@ export function QuickAddFAB() {
 
       {/* Action cards */}
       {open && (
-        <div className="fixed bottom-[calc(4.5rem+env(safe-area-inset-bottom))] right-4 z-50 flex flex-col gap-3 items-end">
+        <div className="fixed bottom-[calc(9.75rem+env(safe-area-inset-bottom))] right-4 z-50 flex flex-col gap-3 items-end">
           {actions.map((action) => (
             <button
               key={action.key}
@@ -54,7 +54,7 @@ export function QuickAddFAB() {
         aria-label="Quick add"
         className={`
           fixed right-4 z-50
-          bottom-[calc(4rem+env(safe-area-inset-bottom))]
+          bottom-[calc(5.5rem+env(safe-area-inset-bottom))]
           w-14 h-14 rounded-full shadow-lg
           bg-[#5865f2] hover:bg-[#4752c4] active:scale-95
           flex items-center justify-center
