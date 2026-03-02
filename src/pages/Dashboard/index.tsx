@@ -130,9 +130,13 @@ export default function Dashboard() {
   if (isMobile) {
     return (
       <div className="space-y-4 pb-24">
+        {/* Greeting header */}
+        <div>
+          <h2 className="text-xl font-semibold text-white">{greeting}{userNickname ? `, ${userNickname}` : ''} 👋</h2>
+        </div>
+
         {/* Net Worth card */}
         <GlassCard padding="lg">
-          <p className="text-white/40 text-sm mb-1">{greeting}{userNickname ? `, ${userNickname}` : ''} 👋</p>
           <p className="text-white/50 text-xs mb-2">Net Worth</p>
           <h1 className="text-3xl font-bold text-white font-mono">
             {formatCurrency(netWorth, defaultCurrency, true)}
@@ -202,12 +206,16 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
+      {/* Greeting header */}
+      <div>
+        <h2 className="text-2xl font-semibold text-white">{greeting}{userNickname ? `, ${userNickname}` : ''} 👋</h2>
+      </div>
+
       {/* Net Worth Hero */}
       <GlassCard padding="lg">
         <div className="space-y-4">
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-white/40 text-sm mb-1">{greeting}{userNickname ? `, ${userNickname}` : ''} 👋</p>
               <p className="text-white/50 text-sm mb-3">Your Net Worth</p>
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white font-mono">
                 {formatCurrency(netWorth, defaultCurrency, true)}
