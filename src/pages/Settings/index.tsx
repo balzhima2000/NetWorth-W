@@ -327,7 +327,7 @@ export default function Settings() {
             <p>
               Get a free key at <a href="https://www.alphavantage.co" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 underline underline-offset-2">alphavantage.co</a>
               <span className="text-white/30"> {' · '} </span>
-              Also see: <a href="https://www.massive.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 underline underline-offset-2">massive.com</a>
+              <a href="https://www.massive.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 underline underline-offset-2">massive.com</a>
             </p>
           </div>
         </div>
