@@ -16,6 +16,17 @@ import { testApiKey } from '../../services/alphaVantage';
 import { exportFullBackup, exportTransactionsCSV, parseBackup } from '../../services/exportImport';
 import type { SpendingCategory, Card, ManualEntry } from '../../types/index';
 
+const EMOJI_OPTIONS = [
+  '🍕','🍔','🌮','🍣','🥗','☕','🍺','🥤','🍰','🥡',
+  '🛒','👕','👟','👜','💄','🎁','🏷️','🧴',
+  '🏠','🛋️','⚡','💧','📦','🔧','🌿','🏡',
+  '🚗','🚌','🚂','✈️','🚲','⛽','🛵','🚕',
+  '💊','🏥','🏋️','🧘','🦷','🩺','💉','🌡️',
+  '🎮','🎬','🎵','🎭','📚','🎲','🏖️','🎨',
+  '💰','💳','📈','🏦','💸','🪙','💼','📊',
+  '👶','🐶','🎓','🎉','❤️','🙏','🤝','⭐',
+];
+
 export default function Settings() {
   const toast = useToast();
 
@@ -391,17 +402,16 @@ export default function Settings() {
                 <span className="text-lg">{cat.emoji}</span>
                 <div className="w-2 h-2 rounded-full" style={{ background: cat.color }} />
                 <span className="text-white text-sm font-medium">{cat.name}</span>
-                {cat.isDefault && <span className="text-xs text-white/30">default</span>}
               </div>
               <div className="flex gap-1">
                 <button onClick={() => openEditCat(cat, 'expense')} className="p-1.5 rounded-lg text-white/30 hover:text-white/70 hover:bg-white/10 transition-colors">
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                 </button>
                 <button
-                  onClick={() => !cat.isDefault && !catHasTransactions(cat.id) && confirmDeleteCat(cat.id, 'expense')}
-                  disabled={cat.isDefault || catHasTransactions(cat.id)}
-                  className={`p-1.5 rounded-lg transition-colors ${cat.isDefault || catHasTransactions(cat.id) ? 'text-white/15 cursor-not-allowed' : 'text-white/30 hover:text-[#ff4757] hover:bg-[#ff4757]/10'}`}
-                  title={cat.isDefault ? 'Default categories cannot be deleted' : catHasTransactions(cat.id) ? 'Category is used in transactions' : 'Delete'}
+                  onClick={() => !catHasTransactions(cat.id) && confirmDeleteCat(cat.id, 'expense')}
+                  disabled={catHasTransactions(cat.id)}
+                  className={`p-1.5 rounded-lg transition-colors ${catHasTransactions(cat.id) ? 'text-white/15 cursor-not-allowed' : 'text-white/30 hover:text-[#ff4757] hover:bg-[#ff4757]/10'}`}
+                  title={catHasTransactions(cat.id) ? 'Category is used in transactions' : 'Delete'}
                 >
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                 </button>
@@ -424,17 +434,16 @@ export default function Settings() {
                 <span className="text-lg">{cat.emoji}</span>
                 <div className="w-2 h-2 rounded-full" style={{ background: cat.color }} />
                 <span className="text-white text-sm font-medium">{cat.name}</span>
-                {cat.isDefault && <span className="text-xs text-white/30">default</span>}
               </div>
               <div className="flex gap-1">
                 <button onClick={() => openEditCat(cat, 'income')} className="p-1.5 rounded-lg text-white/30 hover:text-white/70 hover:bg-white/10 transition-colors">
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                 </button>
                 <button
-                  onClick={() => !cat.isDefault && !catHasTransactions(cat.id) && confirmDeleteCat(cat.id, 'income')}
-                  disabled={cat.isDefault || catHasTransactions(cat.id)}
-                  className={`p-1.5 rounded-lg transition-colors ${cat.isDefault || catHasTransactions(cat.id) ? 'text-white/15 cursor-not-allowed' : 'text-white/30 hover:text-[#ff4757] hover:bg-[#ff4757]/10'}`}
-                  title={cat.isDefault ? 'Default categories cannot be deleted' : catHasTransactions(cat.id) ? 'Category is used in transactions' : 'Delete'}
+                  onClick={() => !catHasTransactions(cat.id) && confirmDeleteCat(cat.id, 'income')}
+                  disabled={catHasTransactions(cat.id)}
+                  className={`p-1.5 rounded-lg transition-colors ${catHasTransactions(cat.id) ? 'text-white/15 cursor-not-allowed' : 'text-white/30 hover:text-[#ff4757] hover:bg-[#ff4757]/10'}`}
+                  title={catHasTransactions(cat.id) ? 'Category is used in transactions' : 'Delete'}
                 >
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                 </button>
@@ -578,13 +587,22 @@ export default function Settings() {
       <Modal isOpen={showCatModal} onClose={() => setShowCatModal(false)} title={editingCat ? `Edit ${catContext === 'expense' ? 'Expense' : 'Income'} Category` : `Add ${catContext === 'expense' ? 'Expense' : 'Income'} Category`} size="sm"
         footer={<><Button variant="ghost" onClick={() => setShowCatModal(false)}>Cancel</Button><Button variant="primary" onClick={handleSaveCat} disabled={!catName}>{editingCat ? 'Save' : 'Add'}</Button></>}>
         <div className="space-y-3">
-          <div className="grid grid-cols-3 gap-3">
-            <div className="col-span-1">
-              <Input label="Emoji" placeholder="🍕" value={catEmoji} onChange={e => setCatEmoji(e.target.value)} />
+          <Input label="Name" placeholder="Category name" value={catName} onChange={e => setCatName(e.target.value)} required />
+          <div>
+            <p className="text-sm font-medium text-white/70 mb-2">Emoji</p>
+            <div className="grid grid-cols-8 gap-1 p-2 bg-white/5 rounded-xl max-h-36 overflow-y-auto mb-2">
+              {EMOJI_OPTIONS.map((emoji) => (
+                <button
+                  key={emoji}
+                  type="button"
+                  onClick={() => setCatEmoji(emoji)}
+                  className={`text-xl p-1.5 rounded-lg transition-all hover:bg-white/10 ${catEmoji === emoji ? 'bg-[#5865f2]/30 ring-1 ring-[#5865f2]' : ''}`}
+                >
+                  {emoji}
+                </button>
+              ))}
             </div>
-            <div className="col-span-2">
-              <Input label="Name" placeholder="Category name" value={catName} onChange={e => setCatName(e.target.value)} required />
-            </div>
+            <Input placeholder="Or type a custom emoji..." value={catEmoji} onChange={e => setCatEmoji(e.target.value)} hint="Type any emoji not shown above" />
           </div>
           <div>
             <p className="text-sm font-medium text-white/70 mb-2">Color</p>
