@@ -39,7 +39,6 @@ export default function Settings() {
   const apiKey = useSettingsStore((s) => s.alphaVantageApiKey);
   const setApiKey = useSettingsStore((s) => s.setAlphaVantageApiKey);
   const requestsUsed = useSettingsStore((s) => s.alphaVantageRequestsUsedToday);
-  const requestsResetDate = useSettingsStore((s) => s.alphaVantageRequestsResetDate);
   const lastBackupDate = useSettingsStore((s) => s.lastBackupDate);
   const setLastBackupDate = useSettingsStore((s) => s.setLastBackupDate);
   const exchangeRates = useSettingsStore((s) => s.exchangeRates);
@@ -323,7 +322,7 @@ export default function Settings() {
           {apiKeyStatus === 'valid' && <p className="text-[#00d632] text-sm">✅ Valid API key — saved!</p>}
           {apiKeyStatus === 'invalid' && <p className="text-[#ff4757] text-sm">❌ Invalid API key — check and try again</p>}
           <div className="p-3 bg-white/5 rounded-xl text-sm text-white/40 space-y-1">
-            <p>Requests used today: <span className="text-white">{requestsUsed}/25</span> (resets: {requestsResetDate})</p>
+            <p>Requests used today: <span className="text-white">{requestsUsed}/25</span></p>
             <p>
               Get a free key at: <a href="https://www.alphavantage.co" target="_blank" rel="noopener noreferrer" className="!text-blue-400 hover:!text-blue-300 underline underline-offset-2">alphavantage.co</a>
               <span className="text-white/30"> {' · '} </span>
