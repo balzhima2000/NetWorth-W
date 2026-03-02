@@ -123,6 +123,7 @@ export default function Dashboard() {
 
   const greetingHour = new Date().getHours();
   const greeting = greetingHour < 5 ? 'Good Night' : greetingHour < 12 ? 'Good Morning' : greetingHour < 18 ? 'Good Afternoon' : 'Good Evening';
+  const greetingEmoji = greetingHour < 5 ? '🌙' : greetingHour < 12 ? '☀️' : greetingHour < 18 ? '🌤️' : '🌆';
 
   const isMobile = useIsMobile();
 
@@ -132,7 +133,7 @@ export default function Dashboard() {
       <div className="space-y-4 pb-24">
         {/* Greeting header */}
         <div>
-          <h2 className="text-xl font-semibold text-white">{greeting}{userNickname ? `, ${userNickname}` : ''} 👋</h2>
+          <h2 className="text-xl font-semibold text-white">{greeting}{userNickname ? `, ${userNickname}` : ''} {greetingEmoji}</h2>
         </div>
 
         {/* Net Worth card */}
@@ -208,7 +209,7 @@ export default function Dashboard() {
     <div className="space-y-6">
       {/* Greeting header */}
       <div>
-        <h2 className="text-2xl font-semibold text-white">{greeting}{userNickname ? `, ${userNickname}` : ''} 👋</h2>
+        <h2 className="text-2xl font-semibold text-white">{greeting}{userNickname ? `, ${userNickname}` : ''} {greetingEmoji}</h2>
       </div>
 
       {/* Net Worth Hero */}
