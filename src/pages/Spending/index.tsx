@@ -590,7 +590,7 @@ export default function Spending() {
           <Input label="Name" placeholder="Netflix, Rent, Salary..." value={recName} onChange={e => setRecName(e.target.value)} required />
           <div className="grid grid-cols-2 gap-3">
             <Input label="Amount" type="number" inputMode="decimal" placeholder="0.00" value={recAmount} onChange={e => setRecAmount(e.target.value)} required />
-            <Select label="Currency" value={recCurrency} onChange={e => setRecCurrency(e.target.value)} options={[{ value: defaultCurrency, label: defaultCurrency }, ...exchangeRates.map(r => ({ value: r.currency, label: r.currency }))]} />
+            <Select label="Currency" value={recCurrency} onChange={e => setRecCurrency(e.target.value)} options={CURRENCIES.map(c => ({ value: c.code, label: `${c.code} — ${c.name}` }))} />
           </div>
           <Select label="Category" value={recCategory} onChange={e => setRecCategory(e.target.value)} options={recCategoryOptions.map(c => ({ value: c.id, label: `${c.emoji} ${c.name}` }))} />
           <Select label="Frequency" value={recFrequency} onChange={e => setRecFrequency(e.target.value as 'weekly' | 'monthly' | 'yearly')} options={FREQUENCIES} />
