@@ -122,7 +122,7 @@ export default function Dashboard() {
   }, [transactions, recurringPayments, activityFeedShowTransactions, activityFeedShowRecurring]);
 
   const greetingHour = new Date().getHours();
-  const greeting = greetingHour < 12 ? 'Good morning' : greetingHour < 18 ? 'Good afternoon' : 'Good evening';
+  const greeting = greetingHour < 5 ? 'Good Night' : greetingHour < 12 ? 'Good Morning' : greetingHour < 18 ? 'Good Afternoon' : 'Good Evening';
 
   const isMobile = useIsMobile();
 
