@@ -121,6 +121,7 @@ export default function Spending() {
   const [recStartDate, setRecStartDate] = useState(getTodayISO());
   const [recEndDate, setRecEndDate] = useState('');
   const [recNotes, setRecNotes] = useState('');
+  const [recCurrency, setRecCurrency] = useState(defaultCurrency);
   const [deleteRecurringId, setDeleteRecurringId] = useState<string | null>(null);
 
   // Installment modal
@@ -235,7 +236,7 @@ export default function Spending() {
     setEditingRecurring(null); setRecName(''); setRecAmount('');
     setRecCategory(categories[0]?.id ?? ''); setRecType('expense');
     setRecFrequency('monthly'); setRecDayOfMonth('1'); setRecStartDate(getTodayISO());
-    setRecEndDate(''); setRecNotes(''); setShowAddRecurring(true);
+    setRecEndDate(''); setRecNotes(''); setRecCurrency(defaultCurrency); setShowAddRecurring(true);
   };
 
   // Get category list for the current recurring type
@@ -245,13 +246,13 @@ export default function Spending() {
     setEditingRecurring(p); setRecName(p.name); setRecAmount(String(p.amount));
     setRecCategory(p.category); setRecType(p.type); setRecFrequency(p.frequency);
     setRecDayOfMonth(String(p.dayOfMonth ?? 1)); setRecStartDate(p.startDate);
-    setRecEndDate(p.endDate ?? ''); setRecNotes(p.notes); setShowAddRecurring(true);
+    setRecEndDate(p.endDate ?? ''); setRecNotes(p.notes); setRecCurrency(p.currency ?? defaultCurrency); setShowAddRecurring(true);
   };
   const handleSaveRecurring = () => {
     if (!recName || !recAmount) return;
     const dayOfMonth = recFrequency !== 'weekly' ? parseInt(recDayOfMonth) : null;
     const nextDueDate = getNextDueDate(recFrequency, recStartDate, dayOfMonth);
-    const data: RecurringPayment = { id: editingRecurring?.id ?? crypto.randomUUID(), name: recName, amount: parseFloat(recAmount), category: recCategory, type: recType, frequency: recFrequency, dayOfMonth, dayOfWeek: null, startDate: recStartDate, endDate: recEndDate || null, isActive: editingRecurring?.isActive ?? true, notes: recNotes, nextDueDate };
+    const data: RecurringPayment = { id: editingRecurring?.id ?? crypto.randomUUID(), name: recName, amount: parseFloat(recAmount), currency: recCurrency, category: recCategory, type: recType, frequency: recFrequency, dayOfMonth, dayOfWeek: null, startDate: recStartDate, endDate: recEndDate || null, isActive: editingRecurring?.isActive ?? true, notes: recNotes, nextDueDate };
     if (editingRecurring) { updateRecurringPayment(editingRecurring.id, data); toast.success('Recurring payment updated.'); }
     else { addRecurringPayment(data); toast.success('Recurring payment added.'); }
     setShowAddRecurring(false);
@@ -483,9 +484,14 @@ export default function Spending() {
                           </div>
                         </div>
                         <div className="flex items-center gap-1 flex-shrink-0">
-                          <p className={`font-mono font-semibold mr-2 ${p.type === 'expense' ? 'text-[#ff4757]' : 'text-[#00d632]'}`}>
-                            {p.type === 'expense' ? '-' : '+'}{formatCurrency(p.amount, defaultCurrency)}
-                          </p>
+                          <div className="mr-2 text-right">
+                            <p className={`font-mono font-semibold ${p.type === 'expense' ? 'text-[#ff4757]' : 'text-[#00d632]'}`}>
+                              {p.type === 'expense' ? '-' : '+'}{formatCurrency(p.amount, p.currency ?? defaultCurrency)}
+                            </p>
+                            {p.currency && p.currency !== defaultCurrency && (
+                              <p className="text-white/30 text-xs">{p.currency}</p>
+                            )}
+                          </div>
                           <button onClick={() => updateRecurringPayment(p.id, { isActive: !p.isActive })} className="p-1.5 rounded-lg text-white/30 hover:text-white/70 hover:bg-white/10 transition-colors text-sm" title={p.isActive ? 'Pause' : 'Resume'}>
                             {p.isActive ? '⏸' : '▶'}
                           </button>
@@ -582,7 +588,10 @@ export default function Spending() {
             <button onClick={() => { setRecType('income'); setRecCategory(''); }} className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${recType === 'income' ? 'bg-[#00d632] text-black' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Income</button>
           </div>
           <Input label="Name" placeholder="Netflix, Rent, Salary..." value={recName} onChange={e => setRecName(e.target.value)} required />
-          <Input label="Amount" type="number" inputMode="decimal" placeholder="0.00" value={recAmount} onChange={e => setRecAmount(e.target.value)} required />
+          <div className="grid grid-cols-2 gap-3">
+            <Input label="Amount" type="number" inputMode="decimal" placeholder="0.00" value={recAmount} onChange={e => setRecAmount(e.target.value)} required />
+            <Select label="Currency" value={recCurrency} onChange={e => setRecCurrency(e.target.value)} options={[{ value: defaultCurrency, label: defaultCurrency }, ...exchangeRates.map(r => ({ value: r.currency, label: r.currency }))]} />
+          </div>
           <Select label="Category" value={recCategory} onChange={e => setRecCategory(e.target.value)} options={recCategoryOptions.map(c => ({ value: c.id, label: `${c.emoji} ${c.name}` }))} />
           <Select label="Frequency" value={recFrequency} onChange={e => setRecFrequency(e.target.value as 'weekly' | 'monthly' | 'yearly')} options={FREQUENCIES} />
           {recFrequency !== 'weekly' && <Input label="Day of Month" type="number" inputMode="numeric" placeholder="1" value={recDayOfMonth} onChange={e => setRecDayOfMonth(e.target.value)} hint="1–28 recommended" />}

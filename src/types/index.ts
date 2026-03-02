@@ -103,6 +103,7 @@ export interface RecurringPayment {
   id: string;
   name: string;
   amount: number;
+  currency: string; // e.g. "USD", "EUR" — defaults to defaultCurrency if missing
   category: string;
   type: 'expense' | 'income';
   frequency: 'weekly' | 'monthly' | 'yearly';

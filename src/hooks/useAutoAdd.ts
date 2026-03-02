@@ -15,6 +15,7 @@ export function useAutoAdd() {
   const updateInstallmentPlan = useRecurringStore((s) => s.updateInstallmentPlan);
   const addTransaction = useTransactionStore((s) => s.addTransaction);
   const defaultCurrency = useSettingsStore((s) => s.defaultCurrency);
+  const exchangeRates = useSettingsStore((s) => s.exchangeRates);
 
   useEffect(() => {
     const today = startOfDay(new Date());
@@ -25,6 +26,12 @@ export function useAutoAdd() {
       if (rp.endDate && isBefore(new Date(rp.endDate), today)) return;
 
       let nextDue = startOfDay(new Date(rp.nextDueDate));
+
+      const rpCurrency = rp.currency ?? defaultCurrency;
+      const rpRate = exchangeRates.find((r) => r.currency === rpCurrency);
+      const rpConverted = rpCurrency === defaultCurrency
+        ? rp.amount
+        : rpRate ? rp.amount * rpRate.rateToDefault : rp.amount;
 
       while (isBefore(nextDue, today) || nextDue.getTime() === today.getTime()) {
         // Add the transaction
@@ -37,8 +44,8 @@ export function useAutoAdd() {
           type: rp.type,
           paymentMethod: 'cash',
           cardId: null,
-          currency: defaultCurrency,
-          convertedAmount: rp.amount,
+          currency: rpCurrency,
+          convertedAmount: rpConverted,
           isAutoAdded: true,
           installmentPlanId: null,
           installmentNumber: null,
