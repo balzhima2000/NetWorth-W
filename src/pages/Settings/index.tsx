@@ -325,9 +325,9 @@ export default function Settings() {
           <div className="p-3 bg-white/5 rounded-xl text-sm text-white/40 space-y-1">
             <p>Requests used today: <span className="text-white">{requestsUsed}/25</span> (resets: {requestsResetDate})</p>
             <p>
-              Get a free key at <a href="https://www.alphavantage.co" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 underline underline-offset-2">alphavantage.co</a>
+              Get a free key at: <a href="https://www.alphavantage.co" target="_blank" rel="noopener noreferrer" className="!text-blue-400 hover:!text-blue-300 underline underline-offset-2">alphavantage.co</a>
               <span className="text-white/30"> {' · '} </span>
-              <a href="https://www.massive.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 underline underline-offset-2">massive.com</a>
+              <a href="https://www.massive.com" target="_blank" rel="noopener noreferrer" className="!text-blue-400 hover:!text-blue-300 underline underline-offset-2">massive.com</a>
             </p>
           </div>
         </div>
