@@ -12,7 +12,7 @@ import { useAllocationStore } from '../../stores/allocationStore';
 import { GlassCard, Button, Input, Select, Modal, ConfirmDialog } from '../../components/ui';
 import { formatCurrency, formatDate } from '../../utils/formatters';
 import { CURRENCIES, CARD_COLORS, MANUAL_ASSET_CATEGORIES, MANUAL_LIABILITY_CATEGORIES } from '../../utils/constants';
-import { testApiKey } from '../../services/alphaVantage';
+import { testApiKey, fetchExchangeRate } from '../../services/alphaVantage';
 import { exportFullBackup, exportTransactionsCSV, parseBackup } from '../../services/exportImport';
 import type { SpendingCategory, Card, ManualEntry } from '../../types/index';
 
@@ -39,6 +39,7 @@ export default function Settings() {
   const apiKey = useSettingsStore((s) => s.alphaVantageApiKey);
   const setApiKey = useSettingsStore((s) => s.setAlphaVantageApiKey);
   const requestsUsed = useSettingsStore((s) => s.alphaVantageRequestsUsedToday);
+  const decrementApiRequests = useSettingsStore((s) => s.decrementApiRequests);
   const lastBackupDate = useSettingsStore((s) => s.lastBackupDate);
   const setLastBackupDate = useSettingsStore((s) => s.setLastBackupDate);
   const exchangeRates = useSettingsStore((s) => s.exchangeRates);
@@ -95,10 +96,50 @@ export default function Settings() {
   const [newRateValue, setNewRateValue] = useState('');
   const [showAddRate, setShowAddRate] = useState(false);
 
+  const [fetchingNewRate, setFetchingNewRate] = useState(false);
+  const [refreshingRates, setRefreshingRates] = useState(false);
+
   const handleAddRate = () => {
     if (!newRateCurrency || !newRateValue) return;
     addExchangeRate({ currency: newRateCurrency, rateToDefault: parseFloat(newRateValue) });
     setNewRateCurrency(''); setNewRateValue(''); setShowAddRate(false);
+  };
+
+  const handleFetchNewRate = async () => {
+    if (!newRateCurrency || !apiKey) return;
+    setFetchingNewRate(true);
+    try {
+      const rate = await fetchExchangeRate(newRateCurrency, defaultCurrency, apiKey);
+      setNewRateValue(rate.toFixed(6));
+      decrementApiRequests();
+    } catch (e: any) {
+      toast.error(`Failed to fetch rate: ${e.message}`);
+    } finally {
+      setFetchingNewRate(false);
+    }
+  };
+
+  const handleRefreshAllRates = async () => {
+    if (!apiKey || exchangeRates.length === 0) return;
+    setRefreshingRates(true);
+    let updated = 0;
+    for (const rate of exchangeRates) {
+      if (requestsUsed + updated >= 25) {
+        toast.error('API limit reached — some rates not updated');
+        break;
+      }
+      try {
+        const newRate = await fetchExchangeRate(rate.currency, defaultCurrency, apiKey);
+        addExchangeRate({ currency: rate.currency, rateToDefault: newRate });
+        decrementApiRequests();
+        updated++;
+      } catch (e: any) {
+        toast.error(`Failed to refresh ${rate.currency}: ${e.message}`);
+        break;
+      }
+    }
+    if (updated > 0) toast.success(`Updated ${updated} exchange rate${updated > 1 ? 's' : ''}`);
+    setRefreshingRates(false);
   };
 
   // ── Categories State ──
@@ -346,7 +387,14 @@ export default function Settings() {
           <div>
             <div className="flex items-center justify-between mb-2">
               <p className="text-sm font-medium text-white/70">Exchange Rates</p>
-              <Button variant="ghost" size="sm" onClick={() => setShowAddRate(!showAddRate)}>+ Add Rate</Button>
+              <div className="flex gap-2">
+                {apiKey && exchangeRates.length > 0 && (
+                  <Button variant="ghost" size="sm" onClick={handleRefreshAllRates} disabled={refreshingRates}>
+                    {refreshingRates ? 'Refreshing...' : '🔄 Refresh All'}
+                  </Button>
+                )}
+                <Button variant="ghost" size="sm" onClick={() => setShowAddRate(!showAddRate)}>+ Add Rate</Button>
+              </div>
             </div>
             <p className="text-xs text-white/30 mb-3">1 foreign currency = X {defaultCurrency}. Update periodically.</p>
 
@@ -369,7 +417,12 @@ export default function Settings() {
                     hint={`1 ${newRateCurrency || 'EUR'} = ? ${defaultCurrency}`}
                   />
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
+                  {apiKey && newRateCurrency && (
+                    <Button variant="ghost" size="sm" onClick={handleFetchNewRate} disabled={fetchingNewRate}>
+                      {fetchingNewRate ? 'Fetching...' : '⬇ Fetch live rate'}
+                    </Button>
+                  )}
                   <Button variant="primary" size="sm" onClick={handleAddRate} disabled={!newRateCurrency || !newRateValue}>Add Rate</Button>
                   <Button variant="ghost" size="sm" onClick={() => setShowAddRate(false)}>Cancel</Button>
                 </div>

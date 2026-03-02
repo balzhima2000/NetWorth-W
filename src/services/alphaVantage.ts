@@ -59,6 +59,24 @@ export async function searchSymbol(
   };
 }
 
+export async function fetchExchangeRate(
+  fromCurrency: string,
+  toCurrency: string,
+  apiKey: string
+): Promise<number> {
+  const url = `${ALPHA_VANTAGE_BASE_URL}?function=CURRENCY_EXCHANGE_RATE&from_currency=${encodeURIComponent(fromCurrency)}&to_currency=${encodeURIComponent(toCurrency)}&apikey=${apiKey}`;
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  const data = await response.json();
+
+  if (data['Note']) throw new Error('Rate limit reached');
+  if (data['Information']) throw new Error('Invalid API key');
+
+  const rate = data['Realtime Currency Exchange Rate']?.['5. Exchange Rate'];
+  if (!rate) throw new Error(`No FX data for ${fromCurrency}/${toCurrency}`);
+  return parseFloat(rate);
+}
+
 export async function testApiKey(apiKey: string): Promise<boolean> {
   try {
     const url = `${ALPHA_VANTAGE_BASE_URL}?function=GLOBAL_QUOTE&symbol=IBM&apikey=${apiKey}`;
