@@ -10,6 +10,7 @@ import { calculateCurrentHoldings } from '../../utils/calculations';
 import { NetWorthLineChart } from '../../components/charts/NetWorthLineChart';
 import { TREND_PERIODS } from '../../utils/constants';
 import { useNavigate } from 'react-router-dom';
+import { useIsMobile } from '../../hooks/useIsMobile';
 
 type TrendPeriod = typeof TREND_PERIODS[number];
 
@@ -122,6 +123,82 @@ export default function Dashboard() {
 
   const greetingHour = new Date().getHours();
   const greeting = greetingHour < 12 ? 'Good morning' : greetingHour < 18 ? 'Good afternoon' : 'Good evening';
+
+  const isMobile = useIsMobile();
+
+  // ── Mobile view ──────────────────────────────────────────────
+  if (isMobile) {
+    return (
+      <div className="space-y-4 pb-24">
+        {/* Net Worth card */}
+        <GlassCard padding="lg">
+          <p className="text-white/40 text-sm mb-1">{greeting}{userNickname ? `, ${userNickname}` : ''} 👋</p>
+          <p className="text-white/50 text-xs mb-2">Net Worth</p>
+          <h1 className="text-3xl font-bold text-white font-mono">
+            {formatCurrency(netWorth, defaultCurrency, true)}
+          </h1>
+          {netWorthChange && (
+            <div className="flex items-center gap-2 mt-1.5">
+              <span className={`text-sm font-mono ${netWorthChange.amount >= 0 ? 'text-[#00d632]' : 'text-[#ff4757]'}`}>
+                {netWorthChange.amount >= 0 ? '+' : ''}{formatCurrency(netWorthChange.amount, defaultCurrency, true)}
+              </span>
+              <span className={`text-xs font-mono ${netWorthChange.amount >= 0 ? 'text-[#00d632]' : 'text-[#ff4757]'}`}>
+                ({netWorthChange.percent >= 0 ? '+' : ''}{netWorthChange.percent.toFixed(2)}%)
+              </span>
+            </div>
+          )}
+          {/* Mini stats row */}
+          <div className="flex gap-3 mt-4 pt-4 border-t border-white/8">
+            <div className="flex-1">
+              <p className="text-white/40 text-xs">This Month</p>
+              <p className="text-white font-mono font-semibold text-sm mt-0.5">
+                -{formatCurrency(monthSpending, defaultCurrency, true)}
+              </p>
+            </div>
+            <div className="flex-1">
+              <p className="text-white/40 text-xs">Assets</p>
+              <p className="text-[#00d632] font-mono font-semibold text-sm mt-0.5">
+                {formatCurrency(totalAssets, defaultCurrency, true)}
+              </p>
+            </div>
+            {liabilitiesTotal > 0 && (
+              <div className="flex-1">
+                <p className="text-white/40 text-xs">Liabilities</p>
+                <p className="text-[#ff4757] font-mono font-semibold text-sm mt-0.5">
+                  {formatCurrency(liabilitiesTotal, defaultCurrency, true)}
+                </p>
+              </div>
+            )}
+          </div>
+        </GlassCard>
+
+        {/* Recent Activity */}
+        <GlassCard padding="md">
+          <h2 className="text-base font-semibold text-white mb-3">Recent Activity</h2>
+          {activityItems.length > 0 ? (
+            <div className="space-y-2">
+              {activityItems.map((item) => (
+                <div key={`${item.type}-${item.id}`} className="flex items-center justify-between p-2.5 bg-white/5 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <span className="text-lg">{item.emoji}</span>
+                    <div>
+                      <p className="text-white text-sm font-medium">{item.label}</p>
+                      <p className="text-white/30 text-xs">{formatDate(item.date, 'short')}</p>
+                    </div>
+                  </div>
+                  <p className={`font-mono text-sm font-semibold ${item.amountType === 'expense' ? 'text-[#ff4757]' : 'text-[#00d632]'}`}>
+                    {item.amountType === 'expense' ? '-' : '+'}{formatCurrency(item.amount, defaultCurrency)}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-white/30 text-sm text-center py-6">No recent activity — use the + button to add your first entry</p>
+          )}
+        </GlassCard>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

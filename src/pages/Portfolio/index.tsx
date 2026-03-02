@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { usePortfolioStore } from '../../stores/portfolioStore';
+import { useQuickAddStore } from '../../stores/quickAddStore';
 import { useToast } from '../../hooks/useToast';
 import { useAllocationStore } from '../../stores/allocationStore';
 import { useSettingsStore } from '../../stores/settingsStore';
@@ -89,6 +90,16 @@ export default function Portfolio() {
 
   // Page title
   useEffect(() => { document.title = 'Portfolio — NetWorth Tracker'; }, []);
+
+  // Quick-add FAB handler
+  const quickAddTarget = useQuickAddStore((s) => s.target);
+  const setQuickAddTarget = useQuickAddStore((s) => s.setTarget);
+  useEffect(() => {
+    if (quickAddTarget === 'trade') {
+      openAddTrade();
+      setQuickAddTarget(null);
+    }
+  }, [quickAddTarget]);
 
   const openAddTrade = (forTicker?: string) => {
     setEditingTrade(null);

@@ -4,6 +4,7 @@ import { Sidebar } from './Sidebar';
 import { TopBar } from './TopBar';
 import { MobileNav } from './MobileNav';
 import { BackupReminderBanner } from './BackupReminderBanner';
+import { QuickAddFAB } from '../mobile/QuickAddFAB';
 
 const pageTitles: Record<string, string> = {
   '/dashboard': 'Dashboard',
@@ -38,6 +39,9 @@ export function AppShell() {
 
         <div className="lg:hidden flex-shrink-0">
           <MobileNav />
+        </div>
+        <div className="lg:hidden">
+          <QuickAddFAB />
         </div>
       </div>
     </div>

@@ -1,5 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useTransactionStore } from '../../stores/transactionStore';
+import { useQuickAddStore } from '../../stores/quickAddStore';
+import { useIsMobile } from '../../hooks/useIsMobile';
 import { useToast } from '../../hooks/useToast';
 import { useBudgetStore } from '../../stores/budgetStore';
 import { useSettingsStore } from '../../stores/settingsStore';
@@ -67,9 +69,20 @@ export default function Spending() {
 
   const [activeTab, setActiveTab] = useState('transactions');
   const toast = useToast();
+  const isMobile = useIsMobile();
 
   // Page title
   useEffect(() => { document.title = 'Spending — NetWorth Tracker'; }, []);
+
+  // Quick-add FAB handler
+  const quickAddTarget = useQuickAddStore((s) => s.target);
+  const setQuickAddTarget = useQuickAddStore((s) => s.setTarget);
+  useEffect(() => {
+    if (quickAddTarget === 'expense' || quickAddTarget === 'income') {
+      openAddTx(quickAddTarget);
+      setQuickAddTarget(null);
+    }
+  }, [quickAddTarget]);
 
   // Transaction modal
   const [showAddTx, setShowAddTx] = useState(false);
@@ -167,10 +180,11 @@ export default function Spending() {
     ...cards.map((c) => ({ value: c.id, label: `💳 ${c.name}` })),
   ];
 
-  const openAddTx = () => {
+  const openAddTx = (type: 'expense' | 'income' = 'expense') => {
     setEditingTx(null);
-    setTxType('expense'); setTxAmount('');
-    setTxCategory(categories[0]?.id ?? ''); setTxDate(getTodayISO());
+    setTxType(type); setTxAmount('');
+    setTxCategory((type === 'expense' ? categories[0] : incomeCategories[0])?.id ?? '');
+    setTxDate(getTodayISO());
     setTxNotes(''); setTxPayment(lastUsedPaymentMethod); setTxCurrency(defaultCurrency);
     setShowAddTx(true);
   };
@@ -261,11 +275,13 @@ export default function Spending() {
     toast.success(`Installment plan created: ${totalInstallments} payments of ${formatCurrency(installmentAmount, defaultCurrency)}.`);
   };
 
-  const spendingTabs = [
-    { id: 'transactions', label: '💳 Transactions' },
-    { id: 'budgets', label: '🎯 Budgets' },
-    { id: 'recurring', label: '🔄 Recurring' },
-  ];
+  const spendingTabs = isMobile
+    ? [{ id: 'transactions', label: '💳 Transactions' }]
+    : [
+        { id: 'transactions', label: '💳 Transactions' },
+        { id: 'budgets', label: '🎯 Budgets' },
+        { id: 'recurring', label: '🔄 Recurring' },
+      ];
 
   const budgetCatId = budgetCategory;
   const budgetCatInfo = getCategoryInfo(budgetCatId);
@@ -277,7 +293,7 @@ export default function Spending() {
           <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1">Spending</h1>
           <p className="text-white/50">Track transactions, budgets, and recurring payments</p>
         </div>
-        <Button variant="primary" onClick={openAddTx}>+ Add Transaction</Button>
+        <Button variant="primary" onClick={() => openAddTx()}>+ Add Transaction</Button>
       </div>
 
       {/* Overview */}
@@ -379,7 +395,7 @@ export default function Spending() {
               icon="💳"
               title="No transactions found"
               description={hasFilters ? "No transactions match your filters." : "Add your first transaction to start tracking."}
-              action={!hasFilters ? <Button variant="primary" size="sm" onClick={openAddTx}>+ Add Transaction</Button> : undefined}
+              action={!hasFilters ? <Button variant="primary" size="sm" onClick={() => openAddTx()}>+ Add Transaction</Button> : undefined}
             />
           )}
         </div>

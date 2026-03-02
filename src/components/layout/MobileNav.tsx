@@ -20,7 +20,7 @@ export function MobileNav() {
           <NavLink
             key={item.to}
             to={item.to}
-            className={`flex flex-col items-center justify-center gap-1 flex-1 py-3 px-1 text-xs transition-colors duration-200 ${isActive ? 'text-[#5865f2]' : 'text-white/40 hover:text-white/70'}`}
+            className={`flex flex-col items-center justify-center gap-1 flex-1 py-3 px-1 text-xs transition-all duration-200 rounded-xl mx-0.5 ${isActive ? 'text-[#5865f2] bg-[#5865f2]/15' : 'text-white/40 hover:text-white/70'}`}
           >
             <span className="text-xl">{item.icon}</span>
             <span className="font-medium">{item.label}</span>
