@@ -557,7 +557,7 @@ export default function Spending() {
             <button onClick={() => { setTxType('income'); setTxCategory(''); }} className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${txType === 'income' ? 'bg-[#00d632] text-black' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Income</button>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <Input label="Amount" type="number" placeholder="0.00" value={txAmount} onChange={(e) => setTxAmount(e.target.value)} required />
+            <Input label="Amount" type="number" inputMode="decimal" placeholder="0.00" value={txAmount} onChange={(e) => setTxAmount(e.target.value)} required />
             <Select label="Currency" value={txCurrency} onChange={(e) => setTxCurrency(e.target.value)} options={CURRENCIES.map(c => ({ value: c.code, label: `${c.code} ${c.symbol}` }))} />
           </div>
           {txCurrency !== defaultCurrency && txAmount && (
@@ -582,10 +582,10 @@ export default function Spending() {
             <button onClick={() => { setRecType('income'); setRecCategory(''); }} className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${recType === 'income' ? 'bg-[#00d632] text-black' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Income</button>
           </div>
           <Input label="Name" placeholder="Netflix, Rent, Salary..." value={recName} onChange={e => setRecName(e.target.value)} required />
-          <Input label="Amount" type="number" placeholder="0.00" value={recAmount} onChange={e => setRecAmount(e.target.value)} required />
+          <Input label="Amount" type="number" inputMode="decimal" placeholder="0.00" value={recAmount} onChange={e => setRecAmount(e.target.value)} required />
           <Select label="Category" value={recCategory} onChange={e => setRecCategory(e.target.value)} options={recCategoryOptions.map(c => ({ value: c.id, label: `${c.emoji} ${c.name}` }))} />
           <Select label="Frequency" value={recFrequency} onChange={e => setRecFrequency(e.target.value as 'weekly' | 'monthly' | 'yearly')} options={FREQUENCIES} />
-          {recFrequency !== 'weekly' && <Input label="Day of Month" type="number" placeholder="1" value={recDayOfMonth} onChange={e => setRecDayOfMonth(e.target.value)} hint="1–28 recommended" />}
+          {recFrequency !== 'weekly' && <Input label="Day of Month" type="number" inputMode="numeric" placeholder="1" value={recDayOfMonth} onChange={e => setRecDayOfMonth(e.target.value)} hint="1–28 recommended" />}
           <Input label="Start Date" type="date" value={recStartDate} onChange={e => setRecStartDate(e.target.value)} />
           <Input label="End Date (optional)" type="date" value={recEndDate} onChange={e => setRecEndDate(e.target.value)} />
           <Input label="Notes (optional)" placeholder="Optional notes..." value={recNotes} onChange={e => setRecNotes(e.target.value)} />
@@ -598,15 +598,15 @@ export default function Spending() {
         <div className="space-y-4">
           <Input label="Plan Name" placeholder="iPhone payment, Furniture..." value={instName} onChange={e => setInstName(e.target.value)} required />
           <div className="grid grid-cols-2 gap-3">
-            <Input label="Total Amount" type="number" placeholder="1200" value={instTotal} onChange={e => setInstTotal(e.target.value)} required />
-            <Input label="# Installments" type="number" placeholder="12" value={instCount} onChange={e => setInstCount(e.target.value)} required />
+            <Input label="Total Amount" type="number" inputMode="decimal" placeholder="1200" value={instTotal} onChange={e => setInstTotal(e.target.value)} required />
+            <Input label="# Installments" type="number" inputMode="numeric" placeholder="12" value={instCount} onChange={e => setInstCount(e.target.value)} required />
           </div>
           {instTotal && instCount && parseInt(instCount) > 0 && (
             <p className="text-[#00d632] text-sm font-mono">{formatCurrency(parseFloat(instTotal) / parseInt(instCount), defaultCurrency)} per installment</p>
           )}
           <Select label="Category" value={instCategory} onChange={e => setInstCategory(e.target.value)} options={categories.map(c => ({ value: c.id, label: `${c.emoji} ${c.name}` }))} />
 
-          <Input label="Day of Month" type="number" placeholder="1" value={instDay} onChange={e => setInstDay(e.target.value)} hint="Which day each installment is due" />
+          <Input label="Day of Month" type="number" inputMode="numeric" placeholder="1" value={instDay} onChange={e => setInstDay(e.target.value)} hint="Which day each installment is due" />
           <Input label="Start Date" type="date" value={instStartDate} onChange={e => setInstStartDate(e.target.value)} />
           <Input label="Notes (optional)" value={instNotes} onChange={e => setInstNotes(e.target.value)} />
         </div>
@@ -615,7 +615,7 @@ export default function Spending() {
       {/* Budget Modal */}
       <Modal isOpen={showBudgetModal} onClose={() => setShowBudgetModal(false)} title={`Set Budget — ${budgetCatInfo.emoji} ${budgetCatInfo.name}`} size="sm"
         footer={<><Button variant="ghost" onClick={() => setShowBudgetModal(false)}>Cancel</Button><Button variant="primary" onClick={handleSaveBudget} disabled={!budgetAmount}>Save Budget</Button></>}>
-        <Input label={`Monthly Budget (${defaultCurrency})`} type="number" placeholder="500" value={budgetAmount} onChange={(e) => setBudgetAmount(e.target.value)} autoFocus />
+        <Input label={`Monthly Budget (${defaultCurrency})`} type="number" inputMode="decimal" placeholder="500" value={budgetAmount} onChange={(e) => setBudgetAmount(e.target.value)} autoFocus />
       </Modal>
 
       {/* Confirm Dialogs */}

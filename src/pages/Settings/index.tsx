@@ -348,6 +348,7 @@ export default function Settings() {
                   <Input
                     label={`Rate to ${defaultCurrency}`}
                     type="number"
+                    inputMode="decimal"
                     placeholder="1.08"
                     value={newRateValue}
                     onChange={(e) => setNewRateValue(e.target.value)}
@@ -623,7 +624,7 @@ export default function Settings() {
         footer={<><Button variant="ghost" onClick={() => setShowEntryModal(false)}>Cancel</Button><Button variant="primary" onClick={handleSaveEntry} disabled={!entryName || !entryValue}>{editingEntry ? 'Save' : 'Add'}</Button></>}>
         <div className="space-y-3">
           <Input label="Name" placeholder={entryIsLiability ? 'Student loan, Mortgage...' : 'House, Car, Savings...'} value={entryName} onChange={e => setEntryName(e.target.value)} required />
-          <Input label={`Value (${defaultCurrency})`} type="number" placeholder="50000" value={entryValue} onChange={e => setEntryValue(e.target.value)} required />
+          <Input label={`Value (${defaultCurrency})`} type="number" inputMode="decimal" placeholder="50000" value={entryValue} onChange={e => setEntryValue(e.target.value)} required />
           <Select label="Category" value={entryCategory} onChange={e => setEntryCategory(e.target.value)} options={entryIsLiability ? liabilityCatOptions : assetCatOptions} />
         </div>
       </Modal>

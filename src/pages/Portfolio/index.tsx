@@ -472,8 +472,8 @@ export default function Portfolio() {
             <Input label={lookingUpName ? 'Looking up...' : 'Company Name'} placeholder="Apple Inc." value={companyName} onChange={(e) => setCompanyName(e.target.value)} disabled={lookingUpName} />
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <Input label="Shares" type="number" placeholder="10" value={quantity} onChange={(e) => setQuantity(e.target.value)} required />
-            <Input label={tradeType === 'sell' ? 'Sell Price' : 'Buy Price'} type="number" placeholder="150.00" value={price} onChange={(e) => setPrice(e.target.value)} required />
+            <Input label="Shares" type="number" inputMode="decimal" placeholder="10" value={quantity} onChange={(e) => setQuantity(e.target.value)} required />
+            <Input label={tradeType === 'sell' ? 'Sell Price' : 'Buy Price'} type="number" inputMode="decimal" placeholder="150.00" value={price} onChange={(e) => setPrice(e.target.value)} required />
           </div>
           {quantity && price && parseFloat(quantity) > 0 && parseFloat(price) > 0 && (
             <p className="text-white/40 text-sm">Total: <span className="text-white font-mono">{formatCurrency(parseFloat(quantity) * parseFloat(price), defaultCurrency)}</span></p>
@@ -499,7 +499,7 @@ export default function Portfolio() {
           {allocMode === 'category' && (
             <div className="space-y-3">
               {ASSET_CATEGORIES.map((cat) => (
-                <Input key={cat.id} label={`${cat.label} %`} type="number" placeholder="0" value={allocTargets[cat.id] ?? ''} onChange={(e) => setAllocTargets({ ...allocTargets, [cat.id]: e.target.value })} />
+                <Input key={cat.id} label={`${cat.label} %`} type="number" inputMode="decimal" placeholder="0" value={allocTargets[cat.id] ?? ''} onChange={(e) => setAllocTargets({ ...allocTargets, [cat.id]: e.target.value })} />
               ))}
             </div>
           )}
@@ -508,7 +508,7 @@ export default function Portfolio() {
               {holdings.map((h) => (
                 <div key={h.ticker} className="flex items-center gap-3">
                   <span className="text-white font-mono w-16">{h.ticker}</span>
-                  <Input type="number" placeholder="0" value={allocTargets[h.ticker] ?? ''} onChange={(e) => setAllocTargets({ ...allocTargets, [h.ticker]: e.target.value })} />
+                  <Input type="number" inputMode="decimal" placeholder="0" value={allocTargets[h.ticker] ?? ''} onChange={(e) => setAllocTargets({ ...allocTargets, [h.ticker]: e.target.value })} />
                   <span className="text-white/40 text-sm">%</span>
                 </div>
               ))}
