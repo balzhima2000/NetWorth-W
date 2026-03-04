@@ -360,23 +360,31 @@ export default function Settings() {
               <p className="text-sm font-semibold text-white">📈 Global Stocks</p>
               <span className="text-xs text-white/40 bg-white/5 px-2 py-0.5 rounded-full">Alpha Vantage</span>
             </div>
-            <Input
-              type="password"
-              placeholder="Enter API key..."
-              value={newStocksKey}
-              onChange={(e) => { setNewStocksKey(e.target.value); setStocksKeyStatus('idle'); }}
-            />
-            <div className="flex gap-2 flex-wrap">
-              <Button variant="secondary" size="sm" onClick={handleTestStocksKey} disabled={!newStocksKey || stocksKeyStatus === 'testing'}>
-                {stocksKeyStatus === 'testing' ? 'Testing...' : 'Test Key'}
-              </Button>
-              <Button variant="ghost" size="sm" onClick={() => { setStocksApiKey(newStocksKey); setStocksKeyStatus('idle'); toast.success('Stocks key saved.'); }} disabled={!newStocksKey}>
-                Save Without Testing
-              </Button>
-              {stocksApiKey && <Button variant="ghost" size="sm" onClick={() => { setStocksApiKey(''); setNewStocksKey(''); setStocksKeyStatus('idle'); toast.success('Stocks key removed.'); }}>Remove</Button>}
-            </div>
-            {stocksKeyStatus === 'valid' && <p className="text-[#00d632] text-xs">✅ Valid — saved!</p>}
-            {stocksKeyStatus === 'invalid' && <p className="text-[#ff4757] text-xs">❌ Invalid key</p>}
+            {stocksApiKey ? (
+              <>
+                <Input type="password" value={stocksApiKey} disabled />
+                <Button variant="ghost" size="sm" onClick={() => { setStocksApiKey(''); setNewStocksKey(''); setStocksKeyStatus('idle'); toast.success('Stocks key removed.'); }}>Remove</Button>
+              </>
+            ) : (
+              <>
+                <Input
+                  type="password"
+                  placeholder="Enter API key..."
+                  value={newStocksKey}
+                  onChange={(e) => { setNewStocksKey(e.target.value); setStocksKeyStatus('idle'); }}
+                />
+                <div className="flex gap-2 flex-wrap">
+                  <Button variant="secondary" size="sm" onClick={handleTestStocksKey} disabled={!newStocksKey || stocksKeyStatus === 'testing'}>
+                    {stocksKeyStatus === 'testing' ? 'Testing...' : 'Test Key'}
+                  </Button>
+                  <Button variant="ghost" size="sm" onClick={() => { setStocksApiKey(newStocksKey); setStocksKeyStatus('idle'); toast.success('Stocks key saved.'); }} disabled={!newStocksKey}>
+                    Save Without Testing
+                  </Button>
+                </div>
+                {stocksKeyStatus === 'valid' && <p className="text-[#00d632] text-xs">✅ Valid — saved!</p>}
+                {stocksKeyStatus === 'invalid' && <p className="text-[#ff4757] text-xs">❌ Invalid key</p>}
+              </>
+            )}
             <div className="text-xs text-white/30 space-y-0.5">
               {stocksApiKey
                 ? <p>Requests used today: <span className="text-white/60">{stocksRequestsToday}/25</span></p>
@@ -391,23 +399,31 @@ export default function Settings() {
               <p className="text-sm font-semibold text-white">💱 Exchange Rates</p>
               <span className="text-xs text-white/40 bg-white/5 px-2 py-0.5 rounded-full">Alpha Vantage</span>
             </div>
-            <Input
-              type="password"
-              placeholder="Enter API key..."
-              value={newFxKey}
-              onChange={(e) => { setNewFxKey(e.target.value); setFxKeyStatus('idle'); }}
-            />
-            <div className="flex gap-2 flex-wrap">
-              <Button variant="secondary" size="sm" onClick={handleTestFxKey} disabled={!newFxKey || fxKeyStatus === 'testing'}>
-                {fxKeyStatus === 'testing' ? 'Testing...' : 'Test Key'}
-              </Button>
-              <Button variant="ghost" size="sm" onClick={() => { setFxApiKey(newFxKey); setFxKeyStatus('idle'); toast.success('Exchange Rate key saved.'); }} disabled={!newFxKey}>
-                Save Without Testing
-              </Button>
-              {fxApiKey && <Button variant="ghost" size="sm" onClick={() => { setFxApiKey(''); setNewFxKey(''); setFxKeyStatus('idle'); toast.success('FX key removed. Stored rates kept.'); }}>Remove</Button>}
-            </div>
-            {fxKeyStatus === 'valid' && <p className="text-[#00d632] text-xs">✅ Valid — saved!</p>}
-            {fxKeyStatus === 'invalid' && <p className="text-[#ff4757] text-xs">❌ Invalid key</p>}
+            {fxApiKey ? (
+              <>
+                <Input type="password" value={fxApiKey} disabled />
+                <Button variant="ghost" size="sm" onClick={() => { setFxApiKey(''); setNewFxKey(''); setFxKeyStatus('idle'); toast.success('FX key removed. Stored rates kept.'); }}>Remove</Button>
+              </>
+            ) : (
+              <>
+                <Input
+                  type="password"
+                  placeholder="Enter API key..."
+                  value={newFxKey}
+                  onChange={(e) => { setNewFxKey(e.target.value); setFxKeyStatus('idle'); }}
+                />
+                <div className="flex gap-2 flex-wrap">
+                  <Button variant="secondary" size="sm" onClick={handleTestFxKey} disabled={!newFxKey || fxKeyStatus === 'testing'}>
+                    {fxKeyStatus === 'testing' ? 'Testing...' : 'Test Key'}
+                  </Button>
+                  <Button variant="ghost" size="sm" onClick={() => { setFxApiKey(newFxKey); setFxKeyStatus('idle'); toast.success('Exchange Rate key saved.'); }} disabled={!newFxKey}>
+                    Save Without Testing
+                  </Button>
+                </div>
+                {fxKeyStatus === 'valid' && <p className="text-[#00d632] text-xs">✅ Valid — saved!</p>}
+                {fxKeyStatus === 'invalid' && <p className="text-[#ff4757] text-xs">❌ Invalid key</p>}
+              </>
+            )}
             <div className="text-xs text-white/30 space-y-0.5">
               {fxApiKey
                 ? <p>Requests used today: <span className="text-white/60">{fxRequestsToday}/25</span></p>
@@ -422,23 +438,31 @@ export default function Settings() {
               <p className="text-sm font-semibold text-white">🇮🇱 Israeli Market (TASE)</p>
               <span className="text-xs text-white/40 bg-white/5 px-2 py-0.5 rounded-full">TASE DataHub</span>
             </div>
-            <Input
-              type="password"
-              placeholder="Enter API key..."
-              value={newIsraeliKey}
-              onChange={(e) => { setNewIsraeliKey(e.target.value); setIsraeliKeyStatus('idle'); }}
-            />
-            <div className="flex gap-2 flex-wrap">
-              <Button variant="secondary" size="sm" onClick={handleTestIsraeliKey} disabled={!newIsraeliKey || israeliKeyStatus === 'testing'}>
-                {israeliKeyStatus === 'testing' ? 'Testing...' : 'Test Key'}
-              </Button>
-              <Button variant="ghost" size="sm" onClick={() => { setIsraeliApiKey(newIsraeliKey); setIsraeliKeyStatus('idle'); toast.success('TASE key saved.'); }} disabled={!newIsraeliKey}>
-                Save Without Testing
-              </Button>
-              {israeliApiKey && <Button variant="ghost" size="sm" onClick={() => { setIsraeliApiKey(''); setNewIsraeliKey(''); setIsraeliKeyStatus('idle'); toast.success('TASE key removed.'); }}>Remove</Button>}
-            </div>
-            {israeliKeyStatus === 'valid' && <p className="text-[#00d632] text-xs">✅ Valid — saved!</p>}
-            {israeliKeyStatus === 'invalid' && <p className="text-[#ff4757] text-xs">❌ Invalid key</p>}
+            {israeliApiKey ? (
+              <>
+                <Input type="password" value={israeliApiKey} disabled />
+                <Button variant="ghost" size="sm" onClick={() => { setIsraeliApiKey(''); setNewIsraeliKey(''); setIsraeliKeyStatus('idle'); toast.success('TASE key removed.'); }}>Remove</Button>
+              </>
+            ) : (
+              <>
+                <Input
+                  type="password"
+                  placeholder="Enter API key..."
+                  value={newIsraeliKey}
+                  onChange={(e) => { setNewIsraeliKey(e.target.value); setIsraeliKeyStatus('idle'); }}
+                />
+                <div className="flex gap-2 flex-wrap">
+                  <Button variant="secondary" size="sm" onClick={handleTestIsraeliKey} disabled={!newIsraeliKey || israeliKeyStatus === 'testing'}>
+                    {israeliKeyStatus === 'testing' ? 'Testing...' : 'Test Key'}
+                  </Button>
+                  <Button variant="ghost" size="sm" onClick={() => { setIsraeliApiKey(newIsraeliKey); setIsraeliKeyStatus('idle'); toast.success('TASE key saved.'); }} disabled={!newIsraeliKey}>
+                    Save Without Testing
+                  </Button>
+                </div>
+                {israeliKeyStatus === 'valid' && <p className="text-[#00d632] text-xs">✅ Valid — saved!</p>}
+                {israeliKeyStatus === 'invalid' && <p className="text-[#ff4757] text-xs">❌ Invalid key</p>}
+              </>
+            )}
             <div className="text-xs text-white/30 space-y-0.5">
               {israeliApiKey
                 ? <p>Requests today: <span className="text-white/60">{israeliRequestsToday}</span> <span className="text-white/20">(limit: 10/2 sec)</span></p>
