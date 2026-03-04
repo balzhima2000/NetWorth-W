@@ -443,7 +443,7 @@ export default function Settings() {
               {israeliApiKey
                 ? <p>Requests today: <span className="text-white/60">{israeliRequestsToday}</span> <span className="text-white/20">(limit: 10/2 sec)</span></p>
                 : <p className="text-amber-400/60">Not configured — TASE prices entered manually</p>}
-              <p>Get access at: <a href="https://datahub.tase.co.il/login" target="_blank" rel="noopener noreferrer" className="!text-blue-400 hover:!text-blue-300 underline underline-offset-2">datahub.tase.co.il</a> — subscribe to <span className="text-white/50">Securities data End of Day</span></p>
+              <p>Get access at: <a href="https://datahub.tase.co.il/login" target="_blank" rel="noopener noreferrer" className="!text-blue-400 hover:!text-blue-300 underline underline-offset-2">datahub.tase.co.il</a> — subscribe to <span className="text-white/50">Securities data End of Day</span> (stocks) and <span className="text-white/50">Mutual Funds</span> (ETFs &amp; funds)</p>
             </div>
           </div>
 
