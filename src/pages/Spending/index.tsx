@@ -165,6 +165,33 @@ export default function Spending() {
     .filter((t) => t.type === 'income')
     .reduce((sum, t) => sum + t.convertedAmount, 0);
 
+  // Upcoming recurring expenses due later this month (not yet auto-added as transactions)
+  const { upcomingTotal, upcomingCount } = useMemo(() => {
+    const todayStr = getTodayISO();
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const monthStr = `${year}-${pad(month)}`;
+    const daysInMonth = new Date(year, month, 0).getDate();
+    const monthEnd = `${monthStr}-${pad(daysInMonth)}`;
+
+    let total = 0;
+    let count = 0;
+    recurringPayments.forEach((rp) => {
+      if (!rp.isActive) return;
+      if (rp.type !== 'expense') return;
+      if (rp.endDate && rp.endDate < todayStr) return;
+      if (rp.nextDueDate > todayStr && rp.nextDueDate <= monthEnd && rp.nextDueDate.startsWith(monthStr)) {
+        const rpCurrency = rp.currency ?? defaultCurrency;
+        const rpRate = exchangeRates.find((r) => r.currency === rpCurrency);
+        const converted = rpCurrency === defaultCurrency
+          ? rp.amount
+          : rpRate ? rp.amount * rpRate.rateToDefault : rp.amount;
+        total += converted;
+        count++;
+      }
+    });
+    return { upcomingTotal: total, upcomingCount: count };
+  }, [recurringPayments, exchangeRates, defaultCurrency, month, year]);
+
   const filteredTx = useMemo(() => {
     return [...transactions]
       .filter((t) => {
@@ -345,6 +372,11 @@ export default function Spending() {
           <p className="text-white/50 text-sm mb-1">This Month Spent</p>
           <h3 className="text-2xl font-bold text-[#ff4757] font-mono">{formatCurrency(monthSpending, defaultCurrency, true)}</h3>
           <p className="text-xs text-white/30 mt-1">{monthTransactions.filter(t => t.type === 'expense').length} expenses</p>
+          {upcomingCount > 0 && (
+            <p className="text-xs text-amber-400/70 mt-1">
+              + {formatCurrency(upcomingTotal, defaultCurrency, true)} upcoming ({upcomingCount} recurring)
+            </p>
+          )}
         </GlassCard>
         <GlassCard padding="md">
           <p className="text-white/50 text-sm mb-1">This Month Income</p>
