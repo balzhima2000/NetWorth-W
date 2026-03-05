@@ -56,7 +56,6 @@ export default function Spending() {
   const addTransaction = useTransactionStore((s) => s.addTransaction);
   const updateTransaction = useTransactionStore((s) => s.updateTransaction);
   const deleteTransaction = useTransactionStore((s) => s.deleteTransaction);
-  const recalculateRatesForCurrency = useTransactionStore((s) => s.recalculateRatesForCurrency);
   const lastUsedPaymentMethod = useTransactionStore((s) => s.lastUsedPaymentMethod);
   const setLastUsedPaymentMethod = useTransactionStore((s) => s.setLastUsedPaymentMethod);
 
@@ -69,7 +68,6 @@ export default function Spending() {
   const incomeCategories = useCategoriesStore((s) => s.incomeCategories);
   const defaultCurrency = useSettingsStore((s) => s.defaultCurrency);
   const exchangeRates = useSettingsStore((s) => s.exchangeRates);
-  const addExchangeRate = useSettingsStore((s) => s.addExchangeRate);
   const fxApiKey = useSettingsStore((s) => s.fxApiKey);
   const decrementFxRequests = useSettingsStore((s) => s.decrementFxRequests);
   const cards = useCardsStore((s) => s.cards).filter((c) => c.isActive);
@@ -295,12 +293,8 @@ export default function Spending() {
     const amount = parseFloat(txAmount);
     let convertedAmount: number;
     if (txCurrency !== defaultCurrency && txRate && parseFloat(txRate) > 0) {
-      const rate = parseFloat(txRate);
-      convertedAmount = amount * rate;
-      // Save this rate globally so auto-added recurring transactions (and future ones)
-      // use the correct rate, and retroactively fix all stored convertedAmounts.
-      addExchangeRate({ currency: txCurrency, rateToDefault: rate });
-      recalculateRatesForCurrency(txCurrency, rate);
+      // Per-transaction rate — local only, does not update global exchange rates
+      convertedAmount = amount * parseFloat(txRate);
     } else {
       convertedAmount = getConvertedAmount(amount, txCurrency);
     }

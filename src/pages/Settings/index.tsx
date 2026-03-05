@@ -494,7 +494,7 @@ export default function Settings() {
                 </Button>
               )}
             </div>
-            <p className="text-xs text-white/30 mb-3">1 foreign currency = X {defaultCurrency}. Rates are set when you record an expense or trade in a foreign currency.</p>
+            <p className="text-xs text-white/30 mb-3">1 foreign currency = X {defaultCurrency}. Rates are updated via Refresh All using your FX API key.</p>
 
             {exchangeRates.length > 0 ? (
               <div className="space-y-2">
@@ -506,7 +506,7 @@ export default function Settings() {
                 ))}
               </div>
             ) : (
-              <p className="text-white/30 text-sm">No exchange rates yet — rates are added when you record an expense or trade in a foreign currency.</p>
+              <p className="text-white/30 text-sm">No exchange rates yet — use Refresh All with an FX API key to populate rates.</p>
             )}
           </div>
         </div>
