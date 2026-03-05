@@ -16,6 +16,7 @@ interface SettingsStore extends Settings {
   // ── Per-slot API key setters ──
   setStocksApiKey: (key: string) => void;
   setFxApiKey: (key: string) => void;
+  setFxProvider: (provider: 'alpha-vantage' | 'massive') => void;
   setIsraeliApiKey: (key: string) => void;
   // ── Per-slot request counters ──
   decrementStocksRequests: () => void;
@@ -39,6 +40,7 @@ const defaultSettings: Settings = {
   stocksRequestsToday: 0,
   stocksRequestsResetDate: today(),
   fxApiKey: '',
+  fxProvider: 'alpha-vantage',
   fxRequestsToday: 0,
   fxRequestsResetDate: today(),
   israeliApiKey: '',
@@ -75,6 +77,7 @@ export const useSettingsStore = create<SettingsStore>()(
         })),
       setStocksApiKey: (key) => set({ stocksApiKey: key }),
       setFxApiKey: (key) => set({ fxApiKey: key }),
+      setFxProvider: (provider) => set({ fxProvider: provider }),
       setIsraeliApiKey: (key) => set({ israeliApiKey: key }),
       decrementStocksRequests: () =>
         set((state) => ({ stocksRequestsToday: state.stocksRequestsToday + 1 })),
@@ -112,7 +115,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'nw-settings',
-      version: 2,
+      version: 3,
       migrate: (persisted: any, version) => {
         if (version < 2) {
           const t = today();
@@ -126,6 +129,10 @@ export const useSettingsStore = create<SettingsStore>()(
           persisted.israeliApiKey           = '';
           persisted.israeliRequestsToday    = 0;
           persisted.israeliRequestsResetDate = t;
+        }
+        if (version < 3) {
+          // Add FX provider preference — default to alpha-vantage for existing users
+          persisted.fxProvider = 'alpha-vantage';
         }
         return persisted;
       },

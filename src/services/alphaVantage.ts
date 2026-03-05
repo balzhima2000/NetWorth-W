@@ -122,6 +122,10 @@ export async function testApiKey(apiKey: string): Promise<boolean> {
     if (!response.ok) return false;
     const data = await response.json();
     if (data['Information']) return false;
+    if (data['Note']) return false;
+    // Require actual stock data — an empty Global Quote means the key was rejected
+    const quote = data['Global Quote'];
+    if (!quote || !quote['01. symbol']) return false;
     return true;
   } catch {
     return false;

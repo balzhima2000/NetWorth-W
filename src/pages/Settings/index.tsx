@@ -13,6 +13,7 @@ import { GlassCard, Button, Input, Select, Modal, ConfirmDialog } from '../../co
 import { formatCurrency, formatDate } from '../../utils/formatters';
 import { CURRENCIES, CARD_COLORS, MANUAL_ASSET_CATEGORIES, MANUAL_LIABILITY_CATEGORIES } from '../../utils/constants';
 import { testApiKey, fetchExchangeRate } from '../../services/alphaVantage';
+import { testMassiveKey, fetchExchangeRateMassive } from '../../services/massiveApi';
 import { testTaseKey } from '../../services/taseDataHub';
 import { exportFullBackup, exportTransactionsCSV, parseBackup } from '../../services/exportImport';
 import type { SpendingCategory, Card, ManualEntry } from '../../types/index';
@@ -44,6 +45,8 @@ export default function Settings() {
   // FX API (Alpha Vantage, separate key)
   const fxApiKey = useSettingsStore((s) => s.fxApiKey);
   const setFxApiKey = useSettingsStore((s) => s.setFxApiKey);
+  const fxProvider = useSettingsStore((s) => s.fxProvider);
+  const setFxProvider = useSettingsStore((s) => s.setFxProvider);
   const fxRequestsToday = useSettingsStore((s) => s.fxRequestsToday);
   const decrementFxRequests = useSettingsStore((s) => s.decrementFxRequests);
   // Israeli Market API (TASE DataHub)
@@ -108,7 +111,9 @@ export default function Settings() {
   const handleTestFxKey = async () => {
     if (!newFxKey) return;
     setFxKeyStatus('testing');
-    const valid = await testApiKey(newFxKey);
+    const valid = fxProvider === 'massive'
+      ? await testMassiveKey(newFxKey)
+      : await testApiKey(newFxKey);
     setFxKeyStatus(valid ? 'valid' : 'invalid');
     if (valid) { setFxApiKey(newFxKey); toast.success('Exchange Rate API key saved!'); }
     else toast.error('Invalid API key.');
@@ -147,7 +152,9 @@ export default function Settings() {
         break;
       }
       try {
-        const newRate = await fetchExchangeRate(currency, defaultCurrency, fxApiKey);
+        const newRate = fxProvider === 'massive'
+          ? await fetchExchangeRateMassive(currency, defaultCurrency, fxApiKey)
+          : await fetchExchangeRate(currency, defaultCurrency, fxApiKey);
         addExchangeRate({ currency, rateToDefault: newRate });
         recalculateRatesForCurrency(currency, newRate);
         decrementFxRequests();
@@ -405,11 +412,25 @@ export default function Settings() {
             </div>
           </div>
 
-          {/* Exchange Rates — Alpha Vantage */}
+          {/* Exchange Rates — Alpha Vantage or Massive (Polygon) */}
           <div className="p-4 bg-white/5 rounded-xl border border-white/8 space-y-3">
             <div className="flex items-center justify-between">
               <p className="text-sm font-semibold text-white">💱 Exchange Rates</p>
-              <span className="text-xs text-white/40 bg-white/5 px-2 py-0.5 rounded-full">Alpha Vantage</span>
+              <span className="text-xs text-white/40 bg-white/5 px-2 py-0.5 rounded-full">
+                {fxProvider === 'massive' ? 'Massive (Polygon)' : 'Alpha Vantage'}
+              </span>
+            </div>
+            {/* Provider selector */}
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-white/50">Provider:</span>
+              <button
+                onClick={() => { setFxProvider('alpha-vantage'); setFxKeyStatus('idle'); }}
+                className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${fxProvider === 'alpha-vantage' ? 'bg-[#5865f2]/20 border-[#5865f2]/50 text-white' : 'border-white/10 text-white/40 hover:text-white/70'}`}
+              >Alpha Vantage</button>
+              <button
+                onClick={() => { setFxProvider('massive'); setFxKeyStatus('idle'); }}
+                className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${fxProvider === 'massive' ? 'bg-[#5865f2]/20 border-[#5865f2]/50 text-white' : 'border-white/10 text-white/40 hover:text-white/70'}`}
+              >Massive (Polygon)</button>
             </div>
             {fxApiKey ? (
               <>
@@ -438,9 +459,9 @@ export default function Settings() {
             )}
             <div className="text-xs text-white/30 space-y-0.5">
               {fxApiKey
-                ? <p>Requests used today: <span className="text-white/60">{fxRequestsToday}/25</span></p>
-                : <p className="text-amber-400/60">Not configured — exchange rates entered manually</p>}
-              <p>Get a free key: <a href="https://www.alphavantage.co" target="_blank" rel="noopener noreferrer" className="!text-blue-400 hover:!text-blue-300 underline underline-offset-2">alphavantage.co</a>{' · '}<a href="https://www.massive.com" target="_blank" rel="noopener noreferrer" className="!text-blue-400 hover:!text-blue-300 underline underline-offset-2">massive.com</a></p>
+                ? <p>Requests used today: <span className="text-white/60">{fxRequestsToday}{fxProvider === 'alpha-vantage' ? '/25' : ''}</span></p>
+                : <p className="text-amber-400/60">Not configured — exchange rates not available</p>}
+              <p>Get a free key: <a href="https://www.alphavantage.co" target="_blank" rel="noopener noreferrer" className="!text-blue-400 hover:!text-blue-300 underline underline-offset-2">alphavantage.co</a>{' · '}<a href="https://massive.com" target="_blank" rel="noopener noreferrer" className="!text-blue-400 hover:!text-blue-300 underline underline-offset-2">massive.com</a></p>
             </div>
           </div>
 
