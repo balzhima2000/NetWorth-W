@@ -16,14 +16,33 @@ export async function fetchExchangeRateMassive(
   toCurrency: string,
   apiKey: string
 ): Promise<number> {
-  const url = `${MASSIVE_BASE_URL}/v1/conversion/${encodeURIComponent(fromCurrency)}/${encodeURIComponent(toCurrency)}?amount=1&precision=6&apiKey=${apiKey}`;
-  const response = await fetch(url);
-  if (!response.ok) throw new Error(`HTTP ${response.status}`);
-  const data = await response.json();
-  if (data.status === 'ERROR' || data.converted == null) {
-    throw new Error(data.error ?? `No conversion data for ${fromCurrency}/${toCurrency}`);
+  // Attempt 1: real-time conversion (requires paid Currencies plan)
+  const convUrl = `${MASSIVE_BASE_URL}/v1/conversion/${encodeURIComponent(fromCurrency)}/${encodeURIComponent(toCurrency)}?amount=1&precision=6&apiKey=${apiKey}`;
+  const convResp = await fetch(convUrl);
+
+  if (convResp.ok) {
+    const data = await convResp.json();
+    if (data.status !== 'ERROR' && data.converted != null) {
+      return data.converted as number;
+    }
   }
-  return data.converted as number;
+
+  if (convResp.status === 403) {
+    // Real-time endpoint requires a paid plan — fall back to previous day's close (free Basic Currencies tier)
+    const ticker = `C:${fromCurrency}${toCurrency}`;
+    const aggUrl = `${MASSIVE_BASE_URL}/v2/aggs/ticker/${encodeURIComponent(ticker)}/prev?adjusted=true&apiKey=${apiKey}`;
+    const aggResp = await fetch(aggUrl);
+    if (aggResp.ok) {
+      const aggData = await aggResp.json();
+      const rate = aggData.results?.[0]?.c;
+      if (rate != null) return rate as number;
+    }
+    throw new Error(
+      'Forex data unavailable — upgrade your Massive/Polygon plan at massive.com/pricing, or switch provider to Alpha Vantage (free)'
+    );
+  }
+
+  throw new Error(`HTTP ${convResp.status}`);
 }
 
 /**
