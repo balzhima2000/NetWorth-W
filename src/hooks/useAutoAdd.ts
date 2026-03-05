@@ -42,7 +42,7 @@ export function useAutoAdd() {
       const rpRate = exchangeRates.find((r) => r.currency === rpCurrency);
       const rpConverted = rpCurrency === defaultCurrency
         ? rp.amount
-        : rpRate ? rp.amount * rpRate.rateToDefault : rp.amount;
+        : rpRate ? rp.amount * rpRate.rateToDefault : 0; // 0 = rate unknown; Refresh All in Settings will fix retroactively
 
       while (isBefore(nextDue, today) || nextDue.getTime() === today.getTime()) {
         // Add the transaction

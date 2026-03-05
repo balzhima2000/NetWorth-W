@@ -56,8 +56,9 @@ export default function Settings() {
   const addExchangeRate = useSettingsStore((s) => s.addExchangeRate);
   const removeExchangeRate = useSettingsStore((s) => s.removeExchangeRate);
   const setHasCompletedSetup = useSettingsStore((s) => s.setHasCompletedSetup);
-  // Transaction store — for retroactive rate recalculation
+  // Transaction store — for retroactive rate recalculation + detecting currencies in use
   const recalculateRatesForCurrency = useTransactionStore((s) => s.recalculateRatesForCurrency);
+  const transactions = useTransactionStore((s) => s.transactions);
 
   // ── Data Stores ──
   const cards = useCardsStore((s) => s.cards);
@@ -126,22 +127,33 @@ export default function Settings() {
   const [refreshingRates, setRefreshingRates] = useState(false);
 
   const handleRefreshAllRates = async () => {
-    if (!fxApiKey || exchangeRates.length === 0) return;
+    if (!fxApiKey) return;
+    // Build list: existing rates + any foreign currency used in transactions
+    const txForeignCurrencies = [...new Set(
+      transactions
+        .filter((t) => t.currency !== defaultCurrency)
+        .map((t) => t.currency)
+    )];
+    const currenciesToRefresh = [...new Set([
+      ...exchangeRates.map((r) => r.currency),
+      ...txForeignCurrencies,
+    ])];
+    if (currenciesToRefresh.length === 0) return;
     setRefreshingRates(true);
     let updated = 0;
-    for (const rate of exchangeRates) {
+    for (const currency of currenciesToRefresh) {
       if (fxRequestsToday + updated >= 25) {
         toast.error('API limit reached — some rates not updated');
         break;
       }
       try {
-        const newRate = await fetchExchangeRate(rate.currency, defaultCurrency, fxApiKey);
-        addExchangeRate({ currency: rate.currency, rateToDefault: newRate });
-        recalculateRatesForCurrency(rate.currency, newRate);
+        const newRate = await fetchExchangeRate(currency, defaultCurrency, fxApiKey);
+        addExchangeRate({ currency, rateToDefault: newRate });
+        recalculateRatesForCurrency(currency, newRate);
         decrementFxRequests();
         updated++;
       } catch (e: any) {
-        toast.error(`Failed to refresh ${rate.currency}: ${e.message}`);
+        toast.error(`Failed to refresh ${currency}: ${e.message}`);
         break;
       }
     }
@@ -488,7 +500,7 @@ export default function Settings() {
           <div>
             <div className="flex items-center justify-between mb-2">
               <p className="text-sm font-medium text-white/70">Exchange Rates</p>
-              {fxApiKey && exchangeRates.length > 0 && (
+              {fxApiKey && (exchangeRates.length > 0 || transactions.some((t) => t.currency !== defaultCurrency)) && (
                 <Button variant="ghost" size="sm" onClick={handleRefreshAllRates} disabled={refreshingRates}>
                   {refreshingRates ? 'Refreshing...' : '🔄 Refresh All'}
                 </Button>
