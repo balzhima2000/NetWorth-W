@@ -184,7 +184,7 @@ export interface Settings {
   stocksRequestsToday: number;
   stocksRequestsResetDate: string;
   fxApiKey: string;               // FX API key (Alpha Vantage or Massive/Polygon)
-  fxProvider: 'alpha-vantage' | 'massive'; // which FX data provider to use
+  fxProvider: 'alpha-vantage' | 'massive' | 'boi'; // which FX data provider to use
   fxRequestsToday: number;
   fxRequestsResetDate: string;
   israeliApiKey: string;          // TASE DataHub — Israeli market (Securities - Basic, free)

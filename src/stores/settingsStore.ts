@@ -16,7 +16,7 @@ interface SettingsStore extends Settings {
   // ── Per-slot API key setters ──
   setStocksApiKey: (key: string) => void;
   setFxApiKey: (key: string) => void;
-  setFxProvider: (provider: 'alpha-vantage' | 'massive') => void;
+  setFxProvider: (provider: 'alpha-vantage' | 'massive' | 'boi') => void;
   setIsraeliApiKey: (key: string) => void;
   // ── Per-slot request counters ──
   decrementStocksRequests: () => void;

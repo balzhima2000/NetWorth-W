@@ -14,6 +14,7 @@ import { formatCurrency, formatDate } from '../../utils/formatters';
 import { CURRENCIES, CARD_COLORS, MANUAL_ASSET_CATEGORIES, MANUAL_LIABILITY_CATEGORIES } from '../../utils/constants';
 import { testApiKey, fetchExchangeRate } from '../../services/alphaVantage';
 import { testMassiveKey, fetchExchangeRateMassive } from '../../services/massiveApi';
+import { fetchBOIExchangeRates } from '../../services/boiApi';
 import { testTaseKey } from '../../services/taseDataHub';
 import { exportFullBackup, exportTransactionsCSV, parseBackup } from '../../services/exportImport';
 import type { SpendingCategory, Card, ManualEntry } from '../../types/index';
@@ -131,7 +132,7 @@ export default function Settings() {
   const [refreshingRates, setRefreshingRates] = useState(false);
 
   const handleRefreshAllRates = async () => {
-    if (!fxApiKey) return;
+    if (fxProvider !== 'boi' && !fxApiKey) return;
     // Build list: existing rates + foreign currencies used in transactions OR recurring payments
     const txForeignCurrencies = [...new Set(
       transactions
@@ -155,25 +156,46 @@ export default function Settings() {
     setRefreshingRates(true);
     let updated = 0;
     const errors: string[] = [];
-    for (const currency of currenciesToRefresh) {
-      // Daily limit only applies to Alpha Vantage (25 req/day); Massive has no daily cap
-      if (fxProvider === 'alpha-vantage' && fxRequestsToday + updated >= 25) {
-        toast.error('Alpha Vantage daily limit reached — some rates not updated');
-        break;
-      }
+
+    if (fxProvider === 'boi') {
+      // Bank of Israel: fetch all rates in one call, no API key needed
       try {
-        const newRate = fxProvider === 'massive'
-          ? await fetchExchangeRateMassive(currency, defaultCurrency, fxApiKey)
-          : await fetchExchangeRate(currency, defaultCurrency, fxApiKey);
-        addExchangeRate({ currency, rateToDefault: newRate });
-        recalculateRatesForCurrency(currency, newRate);
-        // Only track the daily counter for Alpha Vantage
-        if (fxProvider === 'alpha-vantage') decrementFxRequests();
-        updated++;
+        const allRates = await fetchBOIExchangeRates();
+        for (const currency of currenciesToRefresh) {
+          const rate = allRates.get(currency.toUpperCase());
+          if (rate != null) {
+            addExchangeRate({ currency, rateToDefault: rate });
+            recalculateRatesForCurrency(currency, rate);
+            updated++;
+          } else {
+            errors.push(`${currency}: not published by Bank of Israel`);
+          }
+        }
       } catch (e: any) {
-        errors.push(`${currency}: ${e.message}`);
+        errors.push(`Bank of Israel: ${e.message}`);
+      }
+    } else {
+      for (const currency of currenciesToRefresh) {
+        // Daily limit only applies to Alpha Vantage (25 req/day); Massive has no daily cap
+        if (fxProvider === 'alpha-vantage' && fxRequestsToday + updated >= 25) {
+          toast.error('Alpha Vantage daily limit reached — some rates not updated');
+          break;
+        }
+        try {
+          const newRate = fxProvider === 'massive'
+            ? await fetchExchangeRateMassive(currency, defaultCurrency, fxApiKey)
+            : await fetchExchangeRate(currency, defaultCurrency, fxApiKey);
+          addExchangeRate({ currency, rateToDefault: newRate });
+          recalculateRatesForCurrency(currency, newRate);
+          // Only track the daily counter for Alpha Vantage
+          if (fxProvider === 'alpha-vantage') decrementFxRequests();
+          updated++;
+        } catch (e: any) {
+          errors.push(`${currency}: ${e.message}`);
+        }
       }
     }
+
     if (updated > 0) toast.success(`Updated ${updated} exchange rate${updated > 1 ? 's' : ''}`);
     if (errors.length > 0) toast.error(`Failed to refresh — ${errors.join(', ')}`);
     setRefreshingRates(false);
@@ -428,11 +450,11 @@ export default function Settings() {
             <div className="flex items-center justify-between">
               <p className="text-sm font-semibold text-white">💱 Exchange Rates</p>
               <span className="text-xs text-white/40 bg-white/5 px-2 py-0.5 rounded-full">
-                {fxProvider === 'massive' ? 'Massive (Polygon)' : 'Alpha Vantage'}
+                {fxProvider === 'massive' ? 'Massive (Polygon)' : fxProvider === 'boi' ? 'Bank of Israel' : 'Alpha Vantage'}
               </span>
             </div>
             {/* Provider selector */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <span className="text-xs text-white/50">Provider:</span>
               <button
                 onClick={() => { setFxProvider('alpha-vantage'); setFxKeyStatus('idle'); }}
@@ -442,8 +464,20 @@ export default function Settings() {
                 onClick={() => { setFxProvider('massive'); setFxKeyStatus('idle'); }}
                 className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${fxProvider === 'massive' ? 'bg-[#5865f2]/20 border-[#5865f2]/50 text-white' : 'border-white/10 text-white/40 hover:text-white/70'}`}
               >Massive (Polygon)</button>
+              <button
+                onClick={() => { setFxProvider('boi'); setFxKeyStatus('idle'); }}
+                className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${fxProvider === 'boi' ? 'bg-[#5865f2]/20 border-[#5865f2]/50 text-white' : 'border-white/10 text-white/40 hover:text-white/70'}`}
+              >Bank of Israel 🆓</button>
             </div>
-            {fxApiKey ? (
+            {fxProvider === 'boi' ? (
+              /* BOI needs no API key — just show Refresh button */
+              <div className="flex gap-2 flex-wrap items-center">
+                <Button variant="secondary" size="sm" onClick={handleRefreshAllRates} disabled={refreshingRates}>
+                  {refreshingRates ? 'Refreshing...' : '🔄 Refresh Rates'}
+                </Button>
+                <p className="text-xs text-[#00d632]/80">✓ Free — no API key required</p>
+              </div>
+            ) : fxApiKey ? (
               <>
                 <Input type="password" value={fxApiKey} disabled />
                 <div className="flex gap-2 flex-wrap">
@@ -474,10 +508,12 @@ export default function Settings() {
               </>
             )}
             <div className="text-xs text-white/30 space-y-0.5">
-              {fxApiKey
-                ? <p>Requests used today: <span className="text-white/60">{fxRequestsToday}{fxProvider === 'alpha-vantage' ? '/25' : ''}</span></p>
-                : <p className="text-amber-400/60">Not configured — exchange rates not available</p>}
-              <p>Get a free key: <a href="https://www.alphavantage.co" target="_blank" rel="noopener noreferrer" className="!text-blue-400 hover:!text-blue-300 underline underline-offset-2">alphavantage.co</a>{' · '}<a href="https://massive.com" target="_blank" rel="noopener noreferrer" className="!text-blue-400 hover:!text-blue-300 underline underline-offset-2">massive.com</a></p>
+              {fxProvider === 'boi'
+                ? <p className="text-white/40">Official Bank of Israel rates · updated daily · ILS only</p>
+                : fxApiKey
+                  ? <p>Requests used today: <span className="text-white/60">{fxRequestsToday}{fxProvider === 'alpha-vantage' ? '/25' : ''}</span></p>
+                  : <p className="text-amber-400/60">Not configured — exchange rates not available</p>}
+              {fxProvider !== 'boi' && <p>Get a free key: <a href="https://www.alphavantage.co" target="_blank" rel="noopener noreferrer" className="!text-blue-400 hover:!text-blue-300 underline underline-offset-2">alphavantage.co</a>{' · '}<a href="https://massive.com" target="_blank" rel="noopener noreferrer" className="!text-blue-400 hover:!text-blue-300 underline underline-offset-2">massive.com</a></p>}
             </div>
           </div>
 
