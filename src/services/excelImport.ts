@@ -113,7 +113,9 @@ export async function parsePortfolioExcel(
           const symbol = String(row['Symbol'] ?? '').trim();
           if (!name || !symbol) return;
 
-          const ticker = symbol.toUpperCase();
+          // TASE stocks use numeric security IDs (e.g. "1159235") as their symbol.
+          // When the symbol is purely numeric, fall back to the Name column for the ticker.
+          const ticker = /^\d+$/.test(symbol) ? name : symbol.toUpperCase();
           const currency = String(row['Currency'] ?? 'USD').trim().toUpperCase();
           const market: 'global' | 'tase' = currency === 'ILS' ? 'tase' : 'global';
 
