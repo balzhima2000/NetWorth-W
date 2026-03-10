@@ -59,6 +59,42 @@ Two separate price concepts exist:
 
 "Refresh Prices" is enabled if the user has either key with relevant holdings (not gated on `stocksApiKey` alone).
 
+## Broker Excel import
+
+`src/services/excelImport.ts` — `parsePortfolioExcel(file, existingTrades, defaultCurrency, exchangeRates)`
+
+Parses a broker `.xlsx` snapshot (one row = one open position) into `ImportRow[]` objects ready for preview and import. Key normalisation rules:
+
+1. **Agorot → ILS**: TASE stocks quote Last rate and Average cost in agorot (1/100 ₪). Divide by 100. Total value / P&L are already in ILS — do **not** divide.
+2. **Currency conversion**: Foreign-currency average cost is multiplied by `ExchangeRate.rateToDefault` to convert to the user's `defaultCurrency`. If no rate is stored, `noRateAvailable = true` (shown in orange in the preview).
+3. **Numeric symbols**: Israeli TASE stocks use numeric security IDs as their Symbol (e.g. `"1159235"`). When Symbol is purely numeric, the **Name** column is used as the ticker instead.
+4. **Market detection**: `currency === 'ILS'` → `market = 'tase'`, else `market = 'global'`.
+
+### Column mapping
+| Col | Header | Stored? | Notes |
+|-----|--------|---------|-------|
+| A | Name | ✅ `StockTrade.name` (also ticker if Symbol is numeric) | |
+| B | Symbol | ✅ `StockTrade.ticker` | Falls back to Name when purely numeric |
+| C | Last rate | ❌ preview only | |
+| J | Quantity | ✅ `StockTrade.quantity` | |
+| L | Average cost | ✅ `StockTrade.buyPrice` | Normalised (agorot→ILS) + converted to defaultCurrency |
+| N | Currency | ✅ `StockTrade.market` | ILS→tase, else→global |
+
+### Entry points
+- **Portfolio page**: `📥 Import Excel` button → `ExcelImportModal.tsx` (preview modal)
+- **Setup wizard step 5**: `Step5ExcelImport.tsx` (inline, no modal) — shown for Detailed mode only; skipped for Simple mode
+
+## Setup wizard
+
+`src/pages/Setup/index.tsx` — 8-step linear wizard
+
+```
+1 Name → 2 Privacy → 3 Currency → 4 Portfolio → [5 Import Holdings] → 6 Cards → 7 FIRE → 8 Done
+```
+
+- Step 5 is **automatically skipped** when `portfolioMode === 'simple'` (skip in `handleNext` at step 4; skip-back in `handleBack` at step 6).
+- Step 8 Done screen shows a summary including holdings imported count (from `portfolioStore.trades`).
+
 ## Auto-push
 All committed fixes are automatically pushed to the remote (`git push` after every commit).
 
@@ -66,15 +102,22 @@ All committed fixes are automatically pushed to the remote (`git push` after eve
 ```
 src/
   services/
-    boiApi.ts          — Frankfurter FX fetching (fetchBOIExchangeRates, fetchBOIExchangeRate)
-    alphaVantageApi.ts — Alpha Vantage FX fetching
-    massiveApi.ts      — Massive/Polygon FX fetching
+    boiApi.ts               — Frankfurter FX fetching
+    alphaVantageApi.ts      — Alpha Vantage FX fetching
+    massiveApi.ts           — Massive/Polygon FX fetching
+    excelImport.ts          — Broker .xlsx parsing → ImportRow[]
   stores/
-    settingsStore.ts   — Settings, exchange rates table, API key tracking
-    transactionStore.ts — Transactions (no recalculation functions)
-    recurringStore.ts  — Recurring payments & installment plans (CRUD only)
-    portfolioStore.ts  — Stock trades + currentPrices lookup (separate from buyPrice)
+    settingsStore.ts        — Settings, exchange rates table, API key tracking
+    transactionStore.ts     — Transactions (no recalculation functions)
+    recurringStore.ts       — Recurring payments & installment plans (CRUD only)
+    portfolioStore.ts       — Stock trades + currentPrices lookup (separate from buyPrice)
   pages/
-    Settings/index.tsx — All settings UI including FX provider config & Refresh All
-  types/index.ts       — All TypeScript interfaces (Transaction, RecurringPayment, etc.)
+    Settings/index.tsx      — All settings UI including FX provider config & Refresh All
+    Portfolio/
+      index.tsx             — Portfolio page with Import Excel button
+      ExcelImportModal.tsx  — Standalone Excel import modal (post-setup)
+    Setup/
+      index.tsx             — 8-step wizard orchestrator with skip logic
+      Step5ExcelImport.tsx  — Inline Excel import step (setup wizard only)
+  types/index.ts            — All TypeScript interfaces (Transaction, RecurringPayment, etc.)
 ```
