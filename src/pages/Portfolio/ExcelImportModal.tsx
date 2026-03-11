@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Modal, Button } from '../../components/ui';
 import { ASSET_CATEGORIES } from '../../utils/constants';
-import { formatCurrency, getTodayISO } from '../../utils/formatters';
+import { formatCurrency } from '../../utils/formatters';
 import { parsePortfolioExcel } from '../../services/excelImport';
 import type { ImportRow } from '../../services/excelImport';
 import type { StockTrade } from '../../types/index';
@@ -189,7 +189,6 @@ export function ExcelImportModal({
                   <th className="pb-2 pr-3 text-right">P&L</th>
                   <th className="pb-2 pr-3 text-right">Yield</th>
                   <th className="pb-2 pr-3 text-right">Position&nbsp;%</th>
-                  <th className="pb-2 pr-3 text-left" style={{ minWidth: 120 }}>Buy Date</th>
                   <th className="pb-2 pr-3 text-left" style={{ minWidth: 110 }}>Category</th>
                   <th className="pb-2 text-left">Market</th>
                 </tr>
@@ -249,17 +248,6 @@ export function ExcelImportModal({
                       {/* Position % (preview-only) */}
                       <td className="py-2.5 pr-3 text-right font-mono text-white/60 text-xs">
                         {row.positionRatio.toFixed(2)}%
-                      </td>
-
-                      {/* Buy Date — editable */}
-                      <td className="py-2.5 pr-3">
-                        <input
-                          type="date"
-                          value={row.buyDate}
-                          onChange={(e) => updateRow(row.rowKey, { buyDate: e.target.value || getTodayISO() })}
-                          className="bg-white/[0.06] border border-white/10 rounded-lg px-2 py-1 text-xs text-white w-full focus:outline-none focus:ring-1 focus:ring-[#5865f2]/50"
-                          style={{ colorScheme: 'dark' }}
-                        />
                       </td>
 
                       {/* Category — editable */}
