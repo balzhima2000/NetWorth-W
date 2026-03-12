@@ -37,7 +37,7 @@ export function AppShell() {
 
         <BackupReminderBanner />
 
-        <main className="flex-1 overflow-y-auto gradient-bg">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden gradient-bg">
           {/*
             key={location.pathname} remounts the wrapper on every navigation,
             re-triggering the page-enter CSS animation.
