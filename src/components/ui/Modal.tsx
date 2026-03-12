@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Button } from './Button';
 
 interface ModalProps {
@@ -40,11 +41,13 @@ export function Modal({ isOpen, onClose, title, children, size = 'md', footer }:
 
   if (!isOpen) return null;
 
-  return (
-    /*
-     * Mobile: items-end → modal anchors to bottom (bottom sheet)
-     * Desktop: items-center sm:p-4 → modal floats in the middle
-     */
+  /*
+   * Rendered via createPortal into document.body so the modal is never
+   * clipped by ancestor overflow containers (e.g. <main overflow-x-hidden>).
+   * Mobile: items-end → anchors to bottom (bottom sheet)
+   * Desktop: items-center sm:p-4 → floats in the centre
+   */
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4">
       {/* Backdrop */}
       <div
@@ -101,7 +104,8 @@ export function Modal({ isOpen, onClose, title, children, size = 'md', footer }:
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 

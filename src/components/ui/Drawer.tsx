@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 interface DrawerProps {
   isOpen: boolean;
@@ -30,7 +31,7 @@ export function Drawer({ isOpen, onClose, title, children, width = 'md' }: Drawe
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
-  return (
+  return createPortal(
     <>
       {/* Backdrop */}
       <div
@@ -44,6 +45,9 @@ export function Drawer({ isOpen, onClose, title, children, width = 'md' }: Drawe
        * Panel:
        *   Mobile  → full-width bottom sheet, slides up from bottom
        *   Desktop → right-side panel, slides in from right
+       *
+       * Rendered via createPortal into document.body so it is never clipped
+       * by ancestor overflow containers (e.g. <main overflow-x-hidden>).
        */}
       <div
         className={`
@@ -90,6 +94,7 @@ export function Drawer({ isOpen, onClose, title, children, width = 'md' }: Drawe
           {children}
         </div>
       </div>
-    </>
+    </>,
+    document.body,
   );
 }
