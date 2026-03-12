@@ -45,7 +45,7 @@ export default function Step6Fire({ onNext, onBack }: Step6FireProps) {
           type="checkbox"
           checked={!hasTarget}
           onChange={(e) => setHasTarget(!e.target.checked)}
-          className="w-5 h-5 accent-[#5865f2]"
+          className="w-5 h-5 accent-[#10B981]"
         />
         <span className="text-sm">I don't have a target yet</span>
       </label>

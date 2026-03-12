@@ -1,171 +1,168 @@
-/* Google Fonts import */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+/* ── Typefaces ────────────────────────────────────────────
+ * Plus Jakarta Sans — premium geometric sans, variable-weight,
+ *   polished at small text and large headings alike
+ * JetBrains Mono    — crisp tabular numerics for financial data
+ */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @import "tailwindcss";
 
-/* Base reset */
-*, *::before, *::after {
-  box-sizing: border-box;
+/* ── Design tokens ──────────────────────────────────────── */
+:root {
+  /* ── Accent — premium emerald ─────────────────────────── *
+   * #10B981 reads as confident and modern on OLED black.    *
+   * Not neon (#00ff00), not gaming (#39ff14), not Robinhood *
+   * (#00c805). Its slight cool-teal bias keeps it feeling   *
+   * premium and differentiated.                             */
+  --accent:        #10B981;
+  --accent-hover:  #0EA571;
+  --accent-press:  #0D9468;
+  --accent-dim:    rgba(16, 185, 129, 0.12);
+  --accent-border: rgba(16, 185, 129, 0.22);
+  --accent-glow:   rgba(16, 185, 129, 0.10);
+
+  /* ── Financial state colours ──────────────────────────── */
+  --positive:      #22C55E;   /* gains — warmer, brighter green   */
+  --positive-bg:   rgba(34, 197, 94,  0.10);
+  --negative:      #EF4444;   /* losses — clean red, not aggressive */
+  --negative-bg:   rgba(239, 68,  68,  0.10);
+  --warning:       #F59E0B;
+
+  /* ── Surface elevation stack — OLED-first ─────────────── *
+   * Each level is a deliberate step up from pure black so   *
+   * OLED panels save power on the base layer while cards    *
+   * still read as lifted and distinct.                      */
+  --bg:            #000000;   /* page — true OLED black         */
+  --surface-0:     #080808;   /* nav chrome: sidebar, topbar    */
+  --surface-1:     #0F0F0F;   /* default card / panel           */
+  --surface-2:     #141414;   /* interactive hover, input bg    */
+  --surface-3:     #1C1C1C;   /* select options, tooltips       */
+
+  /* ── Borders ──────────────────────────────────────────── */
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --border-normal: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.13);
+
+  /* ── Typography ───────────────────────────────────────── */
+  --font-ui:   'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', ui-monospace, monospace;
+
+  /* ── Motion ───────────────────────────────────────────── */
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* bouncy native feel */
+  --snap:   cubic-bezier(0.22, 1, 0.36, 1);    /* fast crisp settle  */
 }
+
+/* ── Base reset ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
 
 html, body, #root {
   margin: 0;
   padding: 0;
   height: 100%;
-  background-color: #0a0a0f;
+  background-color: var(--bg);
   color: #ffffff;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-ui);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.25);
+/* Financial figures: tabular nums for clean column alignment */
+.font-mono,
+[class*="tabular"],
+[data-financial] {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
 }
 
-/* Glass card base */
+/* ── Scrollbar ──────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.09);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.16); }
+
+/* ── Card / panel surface ───────────────────────────────── *
+ * Solid surfaces instead of glass blur — backdrop-filter is *
+ * expensive and glass-morphism reads as "2021 trend" on     *
+ * OLED where solid blacks look sharper and more deliberate. *
+ * Blur is reserved for modal backdrops and nav pill.        */
 .glass {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--surface-1);
+  border: 1px solid var(--border-subtle);
   border-radius: 16px;
 }
 
-/* Animated gradient background for onboarding/hero areas */
+/* ── Page gradient atmosphere ───────────────────────────── *
+ * Extremely restrained green-tinted radial gradients give   *
+ * the pitch-black page subtle depth without adding noise.   *
+ * Think ambient light, not spotlight.                       */
 .gradient-bg {
-  background: #0a0a0f;
+  background: var(--bg);
   position: relative;
 }
-
 .gradient-bg::before {
   content: '';
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 50% 55%, rgba(120, 80, 200, 0.25) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 30% 40%, rgba(88, 101, 242, 0.18) 0%, transparent 55%),
-    radial-gradient(ellipse 50% 40% at 70% 60%, rgba(160, 100, 220, 0.12) 0%, transparent 50%),
-    radial-gradient(ellipse 40% 30% at 50% 50%, rgba(200, 160, 255, 0.08) 0%, transparent 40%);
-  filter: blur(20px);
+    radial-gradient(ellipse 80% 55% at 85% 5%,  rgba(16, 185, 129, 0.055) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 45% at 5%  95%, rgba(16, 185, 129, 0.040) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 35% at 50% 50%, rgba(16, 185, 129, 0.020) 0%, transparent 40%);
   pointer-events: none;
   z-index: 0;
 }
+.gradient-bg > * { position: relative; z-index: 1; }
 
-.gradient-bg > * {
-  position: relative;
-  z-index: 1;
-}
-
-@keyframes aurora-drift {
-  0% {
-    transform: translateY(0) scale(1);
-    opacity: 0.8;
-  }
-  50% {
-    transform: translateY(-15px) scale(1.03);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(10px) scale(0.98);
-    opacity: 0.85;
-  }
-}
-
-/* Selection color */
+/* ── Selection colour ───────────────────────────────────── */
 ::selection {
-  background: rgba(88, 101, 242, 0.4);
+  background: rgba(16, 185, 129, 0.28);
   color: white;
 }
 
-/* Input autofill dark mode fix */
+/* ── Input autofill dark-mode fix ───────────────────────── */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
   -webkit-text-fill-color: white;
-  -webkit-box-shadow: 0 0 0px 1000px #13131f inset;
+  -webkit-box-shadow: 0 0 0px 1000px #0C0C0C inset;
   transition: background-color 5000s ease-in-out 0s;
 }
 
-/* Number input spinner styling */
-input[type='number'] {
-  color-scheme: dark;
-}
-
+/* Number input — suppress native spinner UI */
+input[type='number'] { color-scheme: dark; }
 input[type='number']::-webkit-outer-spin-button,
 input[type='number']::-webkit-inner-spin-button {
   -webkit-appearance: none;
   appearance: none;
   margin: 0;
 }
-
-input[type='number'] {
-  -moz-appearance: textfield;
-}
+input[type='number'] { -moz-appearance: textfield; }
 
 /* Link reset */
-a {
-  color: inherit;
-  text-decoration: none;
-}
+a { color: inherit; text-decoration: none; }
 
-/* ── Mobile animation system ─────────────────────────────── */
+/* ── Animation system ───────────────────────────────────── */
 
-:root {
-  /* Spring: overshoots slightly for a native-feel bounce */
-  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-  /* Snap: fast settle, no overshoot */
-  --snap: cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* Page entrance — every route change triggers this */
+/* Page entrance — fires on every route change */
 @keyframes page-enter {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0);    }
 }
 
-/* Card stagger reveal — children get animation-delay via nth-child */
+/* Card stagger reveal */
 @keyframes reveal-up {
-  from {
-    opacity: 0;
-    transform: translateY(22px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0);    }
 }
 
-/* FAB action items spring in from below */
+/* FAB action items spring in */
 @keyframes fab-action-in {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.88);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  from { opacity: 0; transform: translateY(18px) scale(0.9); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);   }
 }
 
-/* FAB backdrop fade */
 @keyframes backdrop-in {
   from { opacity: 0; backdrop-filter: blur(0px); }
   to   { opacity: 1; backdrop-filter: blur(8px); }
@@ -178,50 +175,46 @@ a {
   100% { opacity: 1; }
 }
 
-.page-enter {
-  animation: page-enter 380ms var(--snap) both;
-}
+.page-enter { animation: page-enter 340ms var(--snap) both; }
 
-/* Staggered children */
-.stagger-children > *:nth-child(1) { animation: reveal-up 420ms var(--spring) 0ms   both; }
-.stagger-children > *:nth-child(2) { animation: reveal-up 420ms var(--spring) 70ms  both; }
-.stagger-children > *:nth-child(3) { animation: reveal-up 420ms var(--spring) 140ms both; }
-.stagger-children > *:nth-child(4) { animation: reveal-up 420ms var(--spring) 210ms both; }
-.stagger-children > *:nth-child(5) { animation: reveal-up 420ms var(--spring) 280ms both; }
+/* Staggered card reveals */
+.stagger-children > *:nth-child(1) { animation: reveal-up 400ms var(--spring) 0ms   both; }
+.stagger-children > *:nth-child(2) { animation: reveal-up 400ms var(--spring) 60ms  both; }
+.stagger-children > *:nth-child(3) { animation: reveal-up 400ms var(--spring) 120ms both; }
+.stagger-children > *:nth-child(4) { animation: reveal-up 400ms var(--spring) 180ms both; }
+.stagger-children > *:nth-child(5) { animation: reveal-up 400ms var(--spring) 240ms both; }
 
-/* FAB action stagger (reversed — top item is slowest) */
-.fab-action-1 { animation: fab-action-in 340ms var(--spring) 0ms   both; }
-.fab-action-2 { animation: fab-action-in 340ms var(--spring) 55ms  both; }
-.fab-action-3 { animation: fab-action-in 340ms var(--spring) 110ms both; }
+/* FAB action stagger */
+.fab-action-1 { animation: fab-action-in 300ms var(--spring) 0ms   both; }
+.fab-action-2 { animation: fab-action-in 300ms var(--spring) 50ms  both; }
+.fab-action-3 { animation: fab-action-in 300ms var(--spring) 100ms both; }
 
 /* ── Floating bottom nav ─────────────────────────────────── */
 .mobile-nav-pill {
-  background: rgba(10, 10, 20, 0.88);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(8, 8, 8, 0.93);
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.07);
   box-shadow:
-    0 16px 40px rgba(0, 0, 0, 0.5),
-    0 1px 0 rgba(255, 255, 255, 0.06) inset;
+    0 20px 48px rgba(0, 0, 0, 0.70),
+    0 1px 0 rgba(255, 255, 255, 0.05) inset;
 }
 
-/* Sliding highlight blob — sits behind the active tab icon */
+/* Sliding indicator blob — accent green */
 .nav-indicator {
   position: absolute;
   top: 5px;
   left: 0;
-  /* Exactly 1/5 of the pill width */
   width: 20%;
   height: calc(100% - 10px);
-  background: rgba(88, 101, 242, 0.16);
-  border: 1px solid rgba(88, 101, 242, 0.28);
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.22);
   border-radius: 14px;
   pointer-events: none;
-  /* Spring-physics slide between tabs */
   transition: transform 400ms var(--spring);
 }
 
-/* Active nav icon springs upward */
+/* Active icon springs upward */
 .nav-icon-active {
   transition: transform 350ms var(--spring), opacity 200ms ease;
   transform: translateY(-3px) scale(1.18);
@@ -231,51 +224,31 @@ a {
   transform: translateY(0) scale(1);
 }
 
-/* Active label slides in below icon */
-.nav-label-active {
-  animation: reveal-up 260ms var(--snap) both;
-}
+/* Active label slides in */
+.nav-label-active { animation: reveal-up 240ms var(--snap) both; }
 
 /* ── Modal / Drawer bottom-sheet pattern ─────────────────── */
-
-/* Mobile: slides up from bottom (sheet) */
 @keyframes modal-sheet-up {
   from { transform: translateY(48px); opacity: 0; }
   to   { transform: translateY(0);    opacity: 1; }
 }
-
-/* Desktop: subtle zoom-in from center */
 @keyframes modal-zoom-in {
   from { transform: scale(0.96) translateY(6px); opacity: 0; }
   to   { transform: scale(1)    translateY(0);   opacity: 1; }
 }
 
 @media (max-width: 639px) {
-  .modal-enter {
-    animation: modal-sheet-up 360ms var(--snap) both;
-  }
+  .modal-enter { animation: modal-sheet-up 340ms var(--snap) both; }
 }
 @media (min-width: 640px) {
-  .modal-enter {
-    animation: modal-zoom-in 220ms ease both;
-  }
+  .modal-enter { animation: modal-zoom-in 200ms ease both; }
 }
 
-/* Drawer: slide up from bottom on mobile, slide from right on desktop */
-@keyframes drawer-sheet-up {
-  from { transform: translateY(100%); }
-  to   { transform: translateY(0); }
-}
-
-/* Modal footer: stack buttons full-width on mobile */
 @media (max-width: 639px) {
-  .modal-footer-row > * {
-    width: 100%;
-    justify-content: center;
-  }
+  .modal-footer-row > * { width: 100%; justify-content: center; }
 }
 
-/* ── Respect reduced-motion preferences ──────────────────── */
+/* ── Respect reduced-motion ──────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .modal-enter,
   .page-enter,
@@ -290,10 +263,5 @@ a {
 }
 
 /* ── Row hover utility ───────────────────────────────────── */
-/* Apply to list rows that need a hover lift on desktop */
-.hover-row {
-  transition: background-color 120ms ease;
-}
-.hover-row:hover {
-  background: rgba(255, 255, 255, 0.07);
-}
+.hover-row { transition: background-color 120ms ease; }
+.hover-row:hover { background: rgba(255, 255, 255, 0.05); }

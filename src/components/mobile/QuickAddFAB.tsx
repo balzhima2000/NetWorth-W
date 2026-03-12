@@ -9,7 +9,7 @@ const actions = [
     label: 'Expense',
     sublabel: 'Log spending',
     route: '/spending',
-    accent: '#ff4757',
+    accent: '#EF4444',
   },
   {
     key: 'income' as const,
@@ -17,7 +17,7 @@ const actions = [
     label: 'Income',
     sublabel: 'Add income',
     route: '/spending',
-    accent: '#00d632',
+    accent: '#22C55E',
   },
   {
     key: 'trade' as const,
@@ -25,7 +25,7 @@ const actions = [
     label: 'Trade',
     sublabel: 'Log a position',
     route: '/portfolio',
-    accent: '#5865f2',
+    accent: '#10B981',
   },
 ];
 
@@ -76,7 +76,7 @@ export function QuickAddFAB() {
               // stagger classes defined in index.css
               className={`fab-action-${i + 1} flex items-center gap-3 pl-3 pr-5 py-2.5 rounded-2xl active:scale-95`}
               style={{
-                background: 'rgba(14, 14, 26, 0.96)',
+                background: 'rgba(10, 10, 10, 0.96)',
                 border: `1px solid ${action.accent}28`,
                 backdropFilter: 'blur(20px)',
                 WebkitBackdropFilter: 'blur(20px)',
@@ -108,10 +108,10 @@ export function QuickAddFAB() {
         style={{
           right: '16px',
           bottom: FAB_BOTTOM,
-          background: 'linear-gradient(145deg, #6c73f5, #5865f2)',
+          background: 'linear-gradient(145deg, #10B981, #065F46)',
           boxShadow: open
-            ? '0 4px 16px rgba(88, 101, 242, 0.35)'
-            : '0 8px 28px rgba(88, 101, 242, 0.55)',
+            ? '0 4px 16px rgba(16, 185, 129, 0.30)'
+            : '0 8px 28px rgba(16, 185, 129, 0.45)',
           transition: 'box-shadow 250ms ease, transform 200ms ease',
         }}
         // active state via CSS — inline active:scale-90 doesn't work on style prop

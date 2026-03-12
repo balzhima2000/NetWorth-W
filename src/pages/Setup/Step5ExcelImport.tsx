@@ -114,8 +114,8 @@ export default function Step5ExcelImport({ onNext, onBack }: Step5ExcelImportPro
 
       {/* ── Success banner ── */}
       {importedCount !== null && (
-        <div className="bg-[#00d632]/10 border border-[#00d632]/30 rounded-xl px-4 py-3 text-center">
-          <p className="text-[#00d632] font-medium">
+        <div className="bg-[#22C55E]/10 border border-[#22C55E]/30 rounded-xl px-4 py-3 text-center">
+          <p className="text-[#22C55E] font-medium">
             ✅ {importedCount} holding{importedCount !== 1 ? 's' : ''} imported successfully!
           </p>
           <button
@@ -147,7 +147,7 @@ export default function Step5ExcelImport({ onNext, onBack }: Step5ExcelImportPro
             onChange={handleFileChange}
           />
           {parseError && (
-            <p className="text-[#ff4757] text-sm bg-[#ff4757]/10 rounded-lg px-3 py-2">{parseError}</p>
+            <p className="text-[#EF4444] text-sm bg-[#EF4444]/10 rounded-lg px-3 py-2">{parseError}</p>
           )}
         </div>
       )}
@@ -193,7 +193,7 @@ export default function Step5ExcelImport({ onNext, onBack }: Step5ExcelImportPro
                       checked={rows.length > 0 && rows.every((r) => r.selected)}
                       onChange={toggleAll}
                       className="rounded"
-                      style={{ accentColor: '#5865f2' }}
+                      style={{ accentColor: '#10B981' }}
                     />
                   </th>
                   <th className="py-2.5 pr-4 text-left">Name / Symbol</th>
@@ -219,7 +219,7 @@ export default function Step5ExcelImport({ onNext, onBack }: Step5ExcelImportPro
                           checked={row.selected}
                           onChange={() => toggleSelect(row.rowKey)}
                           className="rounded"
-                          style={{ accentColor: '#5865f2' }}
+                          style={{ accentColor: '#10B981' }}
                         />
                       </td>
 
@@ -250,12 +250,12 @@ export default function Step5ExcelImport({ onNext, onBack }: Step5ExcelImportPro
                       </td>
 
                       {/* P&L */}
-                      <td className={`py-2.5 pr-3 text-right font-mono text-xs ${row.totalPL >= 0 ? 'text-[#00d632]' : 'text-[#ff4757]'}`}>
+                      <td className={`py-2.5 pr-3 text-right font-mono text-xs ${row.totalPL >= 0 ? 'text-[#22C55E]' : 'text-[#EF4444]'}`}>
                         {row.totalPL >= 0 ? '+' : ''}{fmtNum(row.totalPL, row.currency)}
                       </td>
 
                       {/* Yield */}
-                      <td className={`py-2.5 pr-3 text-right font-mono text-xs ${row.totalYield >= 0 ? 'text-[#00d632]' : 'text-[#ff4757]'}`}>
+                      <td className={`py-2.5 pr-3 text-right font-mono text-xs ${row.totalYield >= 0 ? 'text-[#22C55E]' : 'text-[#EF4444]'}`}>
                         {fmtPct(row.totalYield)}
                       </td>
 
@@ -269,11 +269,11 @@ export default function Step5ExcelImport({ onNext, onBack }: Step5ExcelImportPro
                         <select
                           value={row.assetCategory}
                           onChange={(e) => updateRow(row.rowKey, { assetCategory: e.target.value as AssetCategory })}
-                          className="bg-white/[0.06] border border-white/10 rounded-lg px-2 py-1 text-xs text-white w-full focus:outline-none focus:ring-1 focus:ring-[#5865f2]/50"
+                          className="bg-white/[0.06] border border-white/10 rounded-lg px-2 py-1 text-xs text-white w-full focus:outline-none focus:ring-1 focus:ring-[#10B981]/50"
                           style={{ colorScheme: 'dark' }}
                         >
                           {CATEGORY_OPTIONS.map((o) => (
-                            <option key={o.value} value={o.value} style={{ background: '#13131f' }}>
+                            <option key={o.value} value={o.value} style={{ background: '#111111' }}>
                               {o.label}
                             </option>
                           ))}

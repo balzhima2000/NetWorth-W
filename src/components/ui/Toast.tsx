@@ -80,15 +80,15 @@ function ToastContainer() {
 // ─── Individual Toast Card ────────────────────────────────────────────────────
 
 const variantStyles: Record<ToastVariant, { bar: string; icon: string }> = {
-  success: { bar: 'bg-[#00d632]', icon: '✓' },
-  error:   { bar: 'bg-[#ff4757]', icon: '✕' },
-  info:    { bar: 'bg-[#5865f2]', icon: 'ℹ' },
+  success: { bar: 'bg-[#10B981]', icon: '✓' },
+  error:   { bar: 'bg-[#EF4444]', icon: '✕' },
+  info:    { bar: 'bg-[#3B82F6]', icon: 'ℹ' },
 };
 
 const variantIconBg: Record<ToastVariant, string> = {
-  success: 'bg-[#00d632]/20 text-[#00d632]',
-  error:   'bg-[#ff4757]/20 text-[#ff4757]',
-  info:    'bg-[#5865f2]/20 text-[#5865f2]',
+  success: 'bg-[#10B981]/[0.15] text-[#10B981]',
+  error:   'bg-[#EF4444]/[0.15] text-[#EF4444]',
+  info:    'bg-[#3B82F6]/[0.15] text-[#3B82F6]',
 };
 
 function ToastCard({ toast }: { toast: ToastItem }) {
@@ -101,7 +101,7 @@ function ToastCard({ toast }: { toast: ToastItem }) {
       className={`
         pointer-events-auto
         relative flex items-center gap-3
-        bg-[#1a1a2e] border border-white/10
+        bg-[#111111] border border-white/[0.08]
         rounded-xl shadow-2xl
         px-4 py-3 pr-10
         min-w-[260px] max-w-[360px]

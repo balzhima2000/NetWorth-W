@@ -47,7 +47,7 @@ export default function Step5Cards({ onNext, onBack }: Step5CardsProps) {
                 </div>
                 <button
                   onClick={() => handleRemoveCard(card.id)}
-                  className="text-white/40 hover:text-[#ff4757] transition-colors"
+                  className="text-white/40 hover:text-[#EF4444] transition-colors"
                 >
                   ✕
                 </button>

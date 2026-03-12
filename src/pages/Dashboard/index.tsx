@@ -158,7 +158,7 @@ export default function Dashboard() {
   // ── Mobile view ──────────────────────────────────────────────
   if (isMobile) {
     const isPositive = netWorthChange ? netWorthChange.amount >= 0 : true;
-    const changeColor = isPositive ? '#00d632' : '#ff4757';
+    const changeColor = isPositive ? '#22C55E' : '#EF4444';
 
     return (
       <div className="space-y-3 stagger-children">
@@ -222,14 +222,14 @@ export default function Dashboard() {
             </div>
             <div>
               <p className="text-white/35 text-[10px] font-medium uppercase tracking-wider">Assets</p>
-              <p className="font-mono font-semibold text-sm mt-1" style={{ color: '#00d632' }}>
+              <p className="font-mono font-semibold text-sm mt-1" style={{ color: '#22C55E' }}>
                 {formatCurrency(totalAssets, defaultCurrency, true)}
               </p>
             </div>
             {liabilitiesTotal > 0 && (
               <div>
                 <p className="text-white/35 text-[10px] font-medium uppercase tracking-wider">Debt</p>
-                <p className="font-mono font-semibold text-sm mt-1" style={{ color: '#ff4757' }}>
+                <p className="font-mono font-semibold text-sm mt-1" style={{ color: '#EF4444' }}>
                   {formatCurrency(liabilitiesTotal, defaultCurrency, true)}
                 </p>
               </div>
@@ -251,7 +251,7 @@ export default function Dashboard() {
                 className="h-full rounded-full"
                 style={{
                   width: `${fireProgress}%`,
-                  background: 'linear-gradient(90deg, #5865f2, #00d632)',
+                  background: 'linear-gradient(90deg, #10B981, #22C55E)',
                   transition: 'width 800ms cubic-bezier(0.34, 1.56, 0.64, 1)',
                 }}
               />
@@ -303,7 +303,7 @@ export default function Dashboard() {
                   </div>
                   <p
                     className="font-mono text-sm font-semibold ml-3 flex-shrink-0"
-                    style={{ color: item.amountType === 'expense' ? '#ff4757' : '#00d632' }}
+                    style={{ color: item.amountType === 'expense' ? '#EF4444' : '#22C55E' }}
                   >
                     {item.amountType === 'expense' ? '-' : '+'}
                     {formatCurrency(item.amount, defaultCurrency)}
@@ -352,15 +352,15 @@ export default function Dashboard() {
 
                 {netWorthChange && (
                   <div className="flex items-center gap-2 mt-2">
-                    <span className={`text-sm font-mono font-semibold ${netWorthChange.amount >= 0 ? 'text-[#00d632]' : 'text-[#ff4757]'}`}>
+                    <span className={`text-sm font-mono font-semibold ${netWorthChange.amount >= 0 ? 'text-[#22C55E]' : 'text-[#EF4444]'}`}>
                       {netWorthChange.amount >= 0 ? '+' : ''}{formatCurrency(netWorthChange.amount, defaultCurrency, true)}
                     </span>
                     <span
                       className="text-xs font-mono px-2 py-0.5 rounded-full font-semibold"
                       style={{
-                        background: `${netWorthChange.amount >= 0 ? '#00d632' : '#ff4757'}18`,
-                        color: netWorthChange.amount >= 0 ? '#00d632' : '#ff4757',
-                        border: `1px solid ${netWorthChange.amount >= 0 ? '#00d632' : '#ff4757'}30`,
+                        background: `${netWorthChange.amount >= 0 ? '#22C55E' : '#EF4444'}18`,
+                        color: netWorthChange.amount >= 0 ? '#22C55E' : '#EF4444',
+                        border: `1px solid ${netWorthChange.amount >= 0 ? '#22C55E' : '#EF4444'}30`,
                       }}
                     >
                       {netWorthChange.percent >= 0 ? '+' : ''}{netWorthChange.percent.toFixed(2)}%
@@ -376,9 +376,9 @@ export default function Dashboard() {
                   <button
                     key={period.label}
                     onClick={() => setSelectedPeriod(period)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5865f2]/50 ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981]/50 ${
                       selectedPeriod.label === period.label
-                        ? 'bg-[#5865f2] text-white'
+                        ? 'bg-[#10B981] text-white'
                         : 'text-white/40 hover:text-white/70 hover:bg-white/10'
                     }`}
                   >
@@ -402,7 +402,7 @@ export default function Dashboard() {
           <div className="grid grid-cols-3 gap-4">
             <GlassCard padding="md">
               <p className="text-white/40 text-xs font-medium uppercase tracking-wider mb-2">Total Assets</p>
-              <h3 className="text-xl font-bold text-[#00d632] font-mono">
+              <h3 className="text-xl font-bold text-[#22C55E] font-mono">
                 {formatCurrency(totalAssets, defaultCurrency, true)}
               </h3>
               <div className="mt-2 space-y-0.5">
@@ -417,7 +417,7 @@ export default function Dashboard() {
 
             <GlassCard padding="md">
               <p className="text-white/40 text-xs font-medium uppercase tracking-wider mb-2">Liabilities</p>
-              <h3 className="text-xl font-bold text-[#ff4757] font-mono">
+              <h3 className="text-xl font-bold text-[#EF4444] font-mono">
                 {formatCurrency(liabilitiesTotal, defaultCurrency, true)}
               </h3>
               {liabilitiesTotal === 0 && <p className="text-xs text-white/25 mt-2">None 🎉</p>}
@@ -450,7 +450,7 @@ export default function Dashboard() {
                   {fireRemaining !== null && fireRemaining > 0 && (
                     <p className="text-xs text-white/30 mt-1">{formatCurrency(fireRemaining, defaultCurrency, true)} to go</p>
                   )}
-                  {fireProgress >= 100 && <p className="text-xs text-[#00d632] mt-1">🎉 You've reached FIRE!</p>}
+                  {fireProgress >= 100 && <p className="text-xs text-[#22C55E] mt-1">🎉 You've reached FIRE!</p>}
                 </div>
               </div>
               <ProgressBar value={fireProgress} max={100} color={fireProgress >= 100 ? 'green' : 'blue'} />
@@ -464,7 +464,7 @@ export default function Dashboard() {
                 <h2 className="text-sm font-semibold text-white">Top Holdings</h2>
                 <button
                   onClick={() => navigate('/portfolio')}
-                  className="text-[#5865f2] text-xs hover:text-[#5865f2]/70 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5865f2]/50 rounded px-1"
+                  className="text-[#10B981] text-xs hover:text-[#10B981]/70 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981]/50 rounded px-1"
                 >
                   View all →
                 </button>
@@ -478,8 +478,8 @@ export default function Dashboard() {
                     style={{ background: 'rgba(255,255,255,0.04)' }}
                   >
                     <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-lg bg-[#5865f2]/20 flex items-center justify-center flex-shrink-0">
-                        <span className="text-[#5865f2] text-[10px] font-bold leading-none">{h.ticker.slice(0, 3)}</span>
+                      <div className="w-8 h-8 rounded-lg bg-[#10B981]/20 flex items-center justify-center flex-shrink-0">
+                        <span className="text-[#10B981] text-[10px] font-bold leading-none">{h.ticker.slice(0, 3)}</span>
                       </div>
                       <div className="min-w-0">
                         <p className="text-white font-medium text-sm leading-tight">{h.ticker}</p>
@@ -488,7 +488,7 @@ export default function Dashboard() {
                     </div>
                     <div className="text-right flex-shrink-0 ml-2">
                       <p className="text-white font-mono text-sm">{formatCurrency(h.currentValue, defaultCurrency, true)}</p>
-                      <p className={`text-[11px] font-mono ${h.unrealizedGain >= 0 ? 'text-[#00d632]' : 'text-[#ff4757]'}`}>
+                      <p className={`text-[11px] font-mono ${h.unrealizedGain >= 0 ? 'text-[#22C55E]' : 'text-[#EF4444]'}`}>
                         {h.unrealizedGain >= 0 ? '+' : ''}{h.unrealizedGainPercent.toFixed(2)}%
                       </p>
                     </div>
@@ -505,13 +505,13 @@ export default function Dashboard() {
               <div className="flex items-center gap-1.5">
                 <button
                   onClick={() => setActivityFeedSettings({ showTransactions: !activityFeedShowTransactions })}
-                  className={`text-xs px-2 py-1 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5865f2]/50 ${activityFeedShowTransactions ? 'bg-[#5865f2]/20 text-[#5865f2]' : 'bg-white/5 text-white/30 hover:text-white/50'}`}
+                  className={`text-xs px-2 py-1 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981]/50 ${activityFeedShowTransactions ? 'bg-[#10B981]/20 text-[#10B981]' : 'bg-white/5 text-white/30 hover:text-white/50'}`}
                 >
                   💳 Tx
                 </button>
                 <button
                   onClick={() => setActivityFeedSettings({ showRecurring: !activityFeedShowRecurring })}
-                  className={`text-xs px-2 py-1 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5865f2]/50 ${activityFeedShowRecurring ? 'bg-[#5865f2]/20 text-[#5865f2]' : 'bg-white/5 text-white/30 hover:text-white/50'}`}
+                  className={`text-xs px-2 py-1 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981]/50 ${activityFeedShowRecurring ? 'bg-[#10B981]/20 text-[#10B981]' : 'bg-white/5 text-white/30 hover:text-white/50'}`}
                 >
                   🔄 Rec
                 </button>
@@ -540,7 +540,7 @@ export default function Dashboard() {
                     </div>
                     <p
                       className="font-mono text-xs font-semibold ml-2 flex-shrink-0"
-                      style={{ color: item.amountType === 'expense' ? '#ff4757' : '#00d632' }}
+                      style={{ color: item.amountType === 'expense' ? '#EF4444' : '#22C55E' }}
                     >
                       {item.amountType === 'expense' ? '-' : '+'}{formatCurrency(item.amount, defaultCurrency)}
                     </p>

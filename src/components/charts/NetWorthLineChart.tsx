@@ -19,7 +19,7 @@ export function NetWorthLineChart({ data, currency }: NetWorthLineChartProps) {
   if (data.length === 0) return null;
 
   const isUp = data.length > 1 && data[data.length - 1].netWorth >= data[0].netWorth;
-  const lineColor = isUp ? '#00d632' : '#ff4757';
+  const lineColor = isUp ? '#22C55E' : '#EF4444';
 
   return (
     <ResponsiveContainer width="100%" height={300}>
@@ -39,7 +39,7 @@ export function NetWorthLineChart({ data, currency }: NetWorthLineChartProps) {
         />
         <Tooltip
           contentStyle={{
-            background: '#13131f',
+            background: '#111111',
             border: '1px solid rgba(255,255,255,0.1)',
             borderRadius: 12,
             color: 'white',

@@ -43,9 +43,9 @@ const icons = {
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', icon: icons.dashboard },
   { to: '/portfolio', label: 'Portfolio', icon: icons.portfolio },
-  { to: '/spending', label: 'Spending', icon: icons.spending },
-  { to: '/fire', label: 'FIRE', icon: icons.fire },
-  { to: '/settings', label: 'Settings', icon: icons.settings },
+  { to: '/spending',  label: 'Spending',  icon: icons.spending  },
+  { to: '/fire',      label: 'FIRE',      icon: icons.fire      },
+  { to: '/settings',  label: 'Settings',  icon: icons.settings  },
 ];
 
 interface SidebarProps {
@@ -58,11 +58,12 @@ export function Sidebar({ collapsed = false }: SidebarProps) {
 
   return (
     <aside
-      className={`flex flex-col h-full bg-[#0a0a0f] border-r border-white/8 transition-all duration-300 ${collapsed ? 'w-16' : 'w-60'}`}
+      className={`flex flex-col h-full bg-[#080808] border-r border-white/[0.07] transition-all duration-300 ${collapsed ? 'w-16' : 'w-60'}`}
     >
       {/* Logo */}
-      <div className={`flex items-center gap-3 px-4 py-5 border-b border-white/8 flex-shrink-0 ${collapsed ? 'justify-center px-0' : ''}`}>
-        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#5865f2] to-[#00d632] flex items-center justify-center text-white font-bold text-sm flex-shrink-0 shadow-lg shadow-[#5865f2]/20">
+      <div className={`flex items-center gap-3 px-4 py-5 border-b border-white/[0.07] flex-shrink-0 ${collapsed ? 'justify-center px-0' : ''}`}>
+        {/* Logomark — emerald gradient, monochromatic and premium */}
+        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#10B981] to-[#065F46] flex items-center justify-center text-white font-bold text-sm flex-shrink-0 shadow-lg shadow-[#10B981]/20">
           W
         </div>
         {!collapsed && (
@@ -81,17 +82,17 @@ export function Sidebar({ collapsed = false }: SidebarProps) {
               title={collapsed ? item.label : undefined}
               className={`
                 relative flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all duration-200 text-sm font-medium
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5865f2]/50 focus-visible:ring-inset
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981]/40 focus-visible:ring-inset
                 ${collapsed ? 'justify-center' : ''}
                 ${isActive
-                  ? 'bg-[#5865f2]/15 text-[#5865f2]'
-                  : 'text-white/50 hover:text-white hover:bg-white/[0.06]'
+                  ? 'bg-[#10B981]/[0.12] text-[#10B981]'
+                  : 'text-white/45 hover:text-white/80 hover:bg-white/[0.05]'
                 }
               `}
             >
-              {/* Left accent bar */}
+              {/* Left accent bar for active item */}
               {isActive && (
-                <span className="absolute left-0 top-2.5 bottom-2.5 w-0.5 bg-[#5865f2] rounded-full" />
+                <span className="absolute left-0 top-2.5 bottom-2.5 w-0.5 bg-[#10B981] rounded-full" />
               )}
               {item.icon}
               {!collapsed && <span>{item.label}</span>}
@@ -102,9 +103,9 @@ export function Sidebar({ collapsed = false }: SidebarProps) {
 
       {/* User footer */}
       {!collapsed && nickname && (
-        <div className="px-4 py-4 border-t border-white/8 flex-shrink-0">
-          <p className="text-[10px] text-white/25 uppercase tracking-wider font-medium mb-0.5">Signed in as</p>
-          <p className="text-sm text-white/60 font-medium truncate">{nickname}</p>
+        <div className="px-4 py-4 border-t border-white/[0.07] flex-shrink-0">
+          <p className="text-[10px] text-white/20 uppercase tracking-wider font-medium mb-0.5">Signed in as</p>
+          <p className="text-sm text-white/55 font-medium truncate">{nickname}</p>
         </div>
       )}
     </aside>

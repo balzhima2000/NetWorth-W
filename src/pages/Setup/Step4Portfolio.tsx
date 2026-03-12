@@ -53,7 +53,7 @@ export default function Step4Portfolio({ onNext, onBack }: Step4PortfolioProps) 
           onClick={() => setMode('simple')}
           hover
           padding="lg"
-          className={`cursor-pointer transition-all ${mode === 'simple' ? 'ring-2 ring-[#5865f2]' : ''}`}
+          className={`cursor-pointer transition-all ${mode === 'simple' ? 'ring-2 ring-[#10B981]' : ''}`}
         >
           <div className="text-left space-y-3">
             <h3 className="text-xl font-semibold text-white">Simple</h3>
@@ -90,7 +90,7 @@ export default function Step4Portfolio({ onNext, onBack }: Step4PortfolioProps) 
           onClick={() => setMode('detailed')}
           hover
           padding="lg"
-          className={`cursor-pointer transition-all ${mode === 'detailed' ? 'ring-2 ring-[#5865f2]' : ''}`}
+          className={`cursor-pointer transition-all ${mode === 'detailed' ? 'ring-2 ring-[#10B981]' : ''}`}
         >
           <div className="text-left space-y-3">
             <h3 className="text-xl font-semibold text-white">Detailed</h3>

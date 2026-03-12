@@ -36,7 +36,7 @@ export function CompoundInterestChart({ data, currency }: CompoundInterestChartP
         />
         <Tooltip
           contentStyle={{
-            background: '#13131f',
+            background: '#111111',
             border: '1px solid rgba(255,255,255,0.1)',
             borderRadius: 12,
             color: 'white',
@@ -52,17 +52,17 @@ export function CompoundInterestChart({ data, currency }: CompoundInterestChartP
           type="monotone"
           dataKey="contributed"
           stackId="1"
-          stroke="#5865f2"
-          fill="#5865f2"
-          fillOpacity={0.4}
+          stroke="#3B82F6"
+          fill="#3B82F6"
+          fillOpacity={0.30}
         />
         <Area
           type="monotone"
           dataKey="growth"
           stackId="1"
-          stroke="#00d632"
-          fill="#00d632"
-          fillOpacity={0.4}
+          stroke="#10B981"
+          fill="#10B981"
+          fillOpacity={0.35}
         />
       </AreaChart>
     </ResponsiveContainer>

@@ -10,13 +10,13 @@ interface BadgeProps {
 }
 
 const variantStyles: Record<BadgeVariant, string> = {
-  default: 'bg-white/10 text-white/80',
-  green: 'bg-[#00d632]/20 text-[#00d632]',
-  red: 'bg-[#ff4757]/20 text-[#ff4757]',
-  blue: 'bg-[#5865f2]/20 text-[#5865f2]',
-  amber: 'bg-amber-500/20 text-amber-400',
-  purple: 'bg-purple-500/20 text-purple-400',
-  gray: 'bg-white/5 text-white/50',
+  default: 'bg-white/[0.08] text-white/75',
+  green:   'bg-[#22C55E]/[0.14] text-[#22C55E]',
+  red:     'bg-[#EF4444]/[0.14] text-[#EF4444]',
+  blue:    'bg-[#3B82F6]/[0.14] text-[#3B82F6]',
+  amber:   'bg-amber-500/[0.14] text-amber-400',
+  purple:  'bg-purple-500/[0.14] text-purple-400',
+  gray:    'bg-white/[0.05] text-white/45',
 };
 
 const sizeStyles = {

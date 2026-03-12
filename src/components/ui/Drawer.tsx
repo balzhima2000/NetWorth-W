@@ -51,7 +51,7 @@ export function Drawer({ isOpen, onClose, title, children, width = 'md' }: Drawe
        */}
       <div
         className={`
-          fixed z-50 bg-[#0f0f1a] flex flex-col
+          fixed z-50 bg-[#0C0C0C] flex flex-col
           transition-transform duration-300 ease-out
 
           bottom-0 left-0 w-full max-h-[90vh]

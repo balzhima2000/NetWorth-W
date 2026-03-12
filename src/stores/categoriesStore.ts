@@ -15,13 +15,13 @@ const DEFAULT_EXPENSE_CATEGORIES: SpendingCategory[] = [
 ];
 
 const DEFAULT_INCOME_CATEGORIES: SpendingCategory[] = [
-  { id: 'salary', name: 'Salary', emoji: '💼', color: '#00d632', isDefault: true },
-  { id: 'freelance', name: 'Freelance', emoji: '🧑‍💻', color: '#00d632', isDefault: true },
-  { id: 'investment', name: 'Dividends & Investments', emoji: '📈', color: '#00d632', isDefault: true },
-  { id: 'rental', name: 'Rental Income', emoji: '🏘️', color: '#00d632', isDefault: true },
-  { id: 'bonus', name: 'Bonus', emoji: '🎯', color: '#00d632', isDefault: true },
-  { id: 'gift', name: 'Gift', emoji: '🎁', color: '#00d632', isDefault: true },
-  { id: 'business', name: 'Business Income', emoji: '🏢', color: '#00d632', isDefault: true },
+  { id: 'salary', name: 'Salary', emoji: '💼', color: '#10B981', isDefault: true },
+  { id: 'freelance', name: 'Freelance', emoji: '🧑‍💻', color: '#10B981', isDefault: true },
+  { id: 'investment', name: 'Dividends & Investments', emoji: '📈', color: '#10B981', isDefault: true },
+  { id: 'rental', name: 'Rental Income', emoji: '🏘️', color: '#10B981', isDefault: true },
+  { id: 'bonus', name: 'Bonus', emoji: '🎯', color: '#10B981', isDefault: true },
+  { id: 'gift', name: 'Gift', emoji: '🎁', color: '#10B981', isDefault: true },
+  { id: 'business', name: 'Business Income', emoji: '🏢', color: '#10B981', isDefault: true },
   { id: 'other_income', name: 'Other', emoji: '💰', color: '#6b7280', isDefault: true },
 ];
 

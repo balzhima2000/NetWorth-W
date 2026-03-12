@@ -147,7 +147,7 @@ export default function Step1Name({ onNext }: Step1NameProps) {
           </div>
 
           {restoreError && (
-            <p className="text-[#ff4757] text-sm">{restoreError}</p>
+            <p className="text-[#EF4444] text-sm">{restoreError}</p>
           )}
         </div>
 
@@ -196,7 +196,7 @@ export default function Step1Name({ onNext }: Step1NameProps) {
           onChange={handleFileSelected}
         />
         {restoreError && (
-          <p className="text-[#ff4757] text-xs mt-1 text-left">{restoreError}</p>
+          <p className="text-[#EF4444] text-xs mt-1 text-left">{restoreError}</p>
         )}
       </div>
 

@@ -13,17 +13,28 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
-  primary:   'bg-[#5865f2] hover:bg-[#4752c4] active:bg-[#3d47b0] text-white border-transparent',
-  secondary: 'bg-white/10 hover:bg-white/15 active:bg-white/20 text-white border-white/15',
-  ghost:     'bg-transparent hover:bg-white/10 active:bg-white/15 text-white/70 hover:text-white border-transparent',
-  danger:    'bg-[#ff4757]/20 hover:bg-[#ff4757]/30 active:bg-[#ff4757]/40 text-[#ff4757] border-[#ff4757]/30',
-  success:   'bg-[#00d632]/20 hover:bg-[#00d632]/30 active:bg-[#00d632]/40 text-[#00d632] border-[#00d632]/30',
+  // Primary — emerald, with a very subtle ambient glow that feels premium on OLED
+  primary:
+    'bg-[#10B981] hover:bg-[#0EA571] active:bg-[#0D9468] text-white border-transparent ' +
+    'shadow-[0_0_18px_rgba(16,185,129,0.22)] hover:shadow-[0_0_24px_rgba(16,185,129,0.30)]',
+  // Secondary — slightly elevated surface, refined border
+  secondary:
+    'bg-white/[0.07] hover:bg-white/[0.11] active:bg-white/[0.15] text-white border-white/[0.10]',
+  // Ghost — transparent, low-key
+  ghost:
+    'bg-transparent hover:bg-white/[0.07] active:bg-white/[0.11] text-white/60 hover:text-white border-transparent',
+  // Danger — muted red tint
+  danger:
+    'bg-[#EF4444]/15 hover:bg-[#EF4444]/25 active:bg-[#EF4444]/35 text-[#EF4444] border-[#EF4444]/25',
+  // Success — positive green tint
+  success:
+    'bg-[#22C55E]/15 hover:bg-[#22C55E]/25 active:bg-[#22C55E]/35 text-[#22C55E] border-[#22C55E]/25',
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
-  // sm stays compact — used for inline/toolbar contexts where space matters
+  // sm — compact, for toolbars and inline contexts
   sm: 'px-3 py-2 text-xs gap-1.5 min-h-[36px]',
-  // md and lg enforce 44px minimum touch target (WCAG 2.5.5)
+  // md + lg — 44px touch target (WCAG 2.5.5)
   md: 'px-4 py-2.5 text-sm gap-2 min-h-[44px]',
   lg: 'px-6 py-3 text-base gap-2.5 min-h-[44px]',
 };
@@ -47,7 +58,7 @@ export function Button({
         transition-all duration-150 select-none
         active:scale-[0.96]
         disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100
-        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5865f2]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0a0f]
+        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#000000]
         ${variantStyles[variant]}
         ${sizeStyles[size]}
         ${fullWidth ? 'w-full' : ''}
@@ -63,7 +74,7 @@ export function Button({
         </svg>
       ) : (
         <>
-          {icon && iconPosition === 'left' && <span className="flex-shrink-0">{icon}</span>}
+          {icon && iconPosition === 'left'  && <span className="flex-shrink-0">{icon}</span>}
           {children && <span>{children}</span>}
           {icon && iconPosition === 'right' && <span className="flex-shrink-0">{icon}</span>}
         </>

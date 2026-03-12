@@ -437,8 +437,8 @@ export default function Settings() {
                     Save Without Testing
                   </Button>
                 </div>
-                {stocksKeyStatus === 'valid' && <p className="text-[#00d632] text-xs">✅ Valid — saved!</p>}
-                {stocksKeyStatus === 'invalid' && <p className="text-[#ff4757] text-xs">❌ Invalid key</p>}
+                {stocksKeyStatus === 'valid' && <p className="text-[#22C55E] text-xs">✅ Valid — saved!</p>}
+                {stocksKeyStatus === 'invalid' && <p className="text-[#EF4444] text-xs">❌ Invalid key</p>}
               </>
             )}
             <div className="text-xs text-white/30 space-y-0.5">
@@ -462,15 +462,15 @@ export default function Settings() {
               <span className="text-xs text-white/50">Provider:</span>
               <button
                 onClick={() => { setFxProvider('alpha-vantage'); setFxKeyStatus('idle'); }}
-                className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${fxProvider === 'alpha-vantage' ? 'bg-[#5865f2]/20 border-[#5865f2]/50 text-white' : 'border-white/10 text-white/40 hover:text-white/70'}`}
+                className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${fxProvider === 'alpha-vantage' ? 'bg-[#10B981]/20 border-[#10B981]/50 text-white' : 'border-white/10 text-white/40 hover:text-white/70'}`}
               >Alpha Vantage</button>
               <button
                 onClick={() => { setFxProvider('massive'); setFxKeyStatus('idle'); }}
-                className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${fxProvider === 'massive' ? 'bg-[#5865f2]/20 border-[#5865f2]/50 text-white' : 'border-white/10 text-white/40 hover:text-white/70'}`}
+                className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${fxProvider === 'massive' ? 'bg-[#10B981]/20 border-[#10B981]/50 text-white' : 'border-white/10 text-white/40 hover:text-white/70'}`}
               >Massive (Polygon)</button>
               <button
                 onClick={() => { setFxProvider('boi'); setFxKeyStatus('idle'); }}
-                className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${fxProvider === 'boi' ? 'bg-[#5865f2]/20 border-[#5865f2]/50 text-white' : 'border-white/10 text-white/40 hover:text-white/70'}`}
+                className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${fxProvider === 'boi' ? 'bg-[#10B981]/20 border-[#10B981]/50 text-white' : 'border-white/10 text-white/40 hover:text-white/70'}`}
               >Free Rates 🆓</button>
             </div>
             {fxProvider === 'boi' ? (
@@ -479,7 +479,7 @@ export default function Settings() {
                 <Button variant="secondary" size="sm" onClick={handleRefreshAllRates} disabled={refreshingRates}>
                   {refreshingRates ? 'Refreshing...' : '🔄 Refresh Rates'}
                 </Button>
-                <p className="text-xs text-[#00d632]/80">✓ Free — no API key required</p>
+                <p className="text-xs text-[#22C55E]/80">✓ Free — no API key required</p>
               </div>
             ) : fxApiKey ? (
               <>
@@ -507,8 +507,8 @@ export default function Settings() {
                     Save Without Testing
                   </Button>
                 </div>
-                {fxKeyStatus === 'valid' && <p className="text-[#00d632] text-xs">✅ Valid — saved!</p>}
-                {fxKeyStatus === 'invalid' && <p className="text-[#ff4757] text-xs">❌ Invalid key</p>}
+                {fxKeyStatus === 'valid' && <p className="text-[#22C55E] text-xs">✅ Valid — saved!</p>}
+                {fxKeyStatus === 'invalid' && <p className="text-[#EF4444] text-xs">❌ Invalid key</p>}
               </>
             )}
             <div className="text-xs text-white/30 space-y-0.5">
@@ -548,8 +548,8 @@ export default function Settings() {
                     Save Without Testing
                   </Button>
                 </div>
-                {israeliKeyStatus === 'valid' && <p className="text-[#00d632] text-xs">✅ Valid — saved!</p>}
-                {israeliKeyStatus === 'invalid' && <p className="text-[#ff4757] text-xs">❌ Invalid key</p>}
+                {israeliKeyStatus === 'valid' && <p className="text-[#22C55E] text-xs">✅ Valid — saved!</p>}
+                {israeliKeyStatus === 'invalid' && <p className="text-[#EF4444] text-xs">❌ Invalid key</p>}
               </>
             )}
             <div className="text-xs text-white/30 space-y-0.5">
@@ -590,7 +590,7 @@ export default function Settings() {
                 {exchangeRates.map((rate) => (
                   <div key={rate.currency} className="flex items-center justify-between p-2.5 bg-white/5 rounded-xl border border-white/8">
                     <span className="text-white font-mono text-sm">1 {rate.currency} = {rate.rateToDefault} {defaultCurrency}</span>
-                    <button onClick={() => removeExchangeRate(rate.currency)} className="text-white/30 hover:text-[#ff4757] transition-colors text-xs px-2 py-1 rounded-lg hover:bg-[#ff4757]/10">Remove</button>
+                    <button onClick={() => removeExchangeRate(rate.currency)} className="text-white/30 hover:text-[#EF4444] transition-colors text-xs px-2 py-1 rounded-lg hover:bg-[#EF4444]/10">Remove</button>
                   </div>
                 ))}
               </div>
@@ -622,7 +622,7 @@ export default function Settings() {
                 <button
                   onClick={() => !catHasTransactions(cat.id) && confirmDeleteCat(cat.id, 'expense')}
                   disabled={catHasTransactions(cat.id)}
-                  className={`p-1.5 rounded-lg transition-colors ${catHasTransactions(cat.id) ? 'text-white/15 cursor-not-allowed' : 'text-white/30 hover:text-[#ff4757] hover:bg-[#ff4757]/10'}`}
+                  className={`p-1.5 rounded-lg transition-colors ${catHasTransactions(cat.id) ? 'text-white/15 cursor-not-allowed' : 'text-white/30 hover:text-[#EF4444] hover:bg-[#EF4444]/10'}`}
                   title={catHasTransactions(cat.id) ? 'Category is used in transactions' : 'Delete'}
                 >
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
@@ -654,7 +654,7 @@ export default function Settings() {
                 <button
                   onClick={() => !catHasTransactions(cat.id) && confirmDeleteCat(cat.id, 'income')}
                   disabled={catHasTransactions(cat.id)}
-                  className={`p-1.5 rounded-lg transition-colors ${catHasTransactions(cat.id) ? 'text-white/15 cursor-not-allowed' : 'text-white/30 hover:text-[#ff4757] hover:bg-[#ff4757]/10'}`}
+                  className={`p-1.5 rounded-lg transition-colors ${catHasTransactions(cat.id) ? 'text-white/15 cursor-not-allowed' : 'text-white/30 hover:text-[#EF4444] hover:bg-[#EF4444]/10'}`}
                   title={catHasTransactions(cat.id) ? 'Category is used in transactions' : 'Delete'}
                 >
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
@@ -675,7 +675,7 @@ export default function Settings() {
           {/* Cash (built-in) */}
           <div className="flex items-center justify-between p-2.5 bg-white/5 rounded-xl border border-white/8 opacity-60">
             <div className="flex items-center gap-3">
-              <div className="w-5 h-5 rounded-full bg-[#00d632]" />
+              <div className="w-5 h-5 rounded-full bg-[#22C55E]" />
               <span className="text-white text-sm font-medium">💵 Cash</span>
               <span className="text-xs text-white/30">built-in</span>
             </div>
@@ -694,7 +694,7 @@ export default function Settings() {
                 <button onClick={() => openEditCard(card)} className="p-1.5 rounded-lg text-white/30 hover:text-white/70 hover:bg-white/10 transition-colors">
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                 </button>
-                <button onClick={() => setDeleteCardId(card.id)} className="p-1.5 rounded-lg text-white/30 hover:text-[#ff4757] hover:bg-[#ff4757]/10 transition-colors">
+                <button onClick={() => setDeleteCardId(card.id)} className="p-1.5 rounded-lg text-white/30 hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                 </button>
               </div>
@@ -712,7 +712,7 @@ export default function Settings() {
         {/* Assets */}
         <div className="mb-5">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-base font-semibold text-[#00d632]">Assets</h3>
+            <h3 className="text-base font-semibold text-[#22C55E]">Assets</h3>
             <Button variant="ghost" size="sm" onClick={() => openAddEntry(false)}>+ Add Asset</Button>
           </div>
           {assets.length > 0 ? (
@@ -724,11 +724,11 @@ export default function Settings() {
                     <p className="text-white/40 text-xs">{getAssetCatLabel(entry.assetCategory)} · Updated {formatDate(entry.lastUpdated, 'short')}</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <p className="text-[#00d632] font-mono text-sm font-semibold">{formatCurrency(entry.value, defaultCurrency, true)}</p>
+                    <p className="text-[#22C55E] font-mono text-sm font-semibold">{formatCurrency(entry.value, defaultCurrency, true)}</p>
                     <button onClick={() => openEditEntry(entry)} className="p-1.5 rounded-lg text-white/30 hover:text-white/70 hover:bg-white/10 transition-colors">
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                     </button>
-                    <button onClick={() => setDeleteEntryId(entry.id)} className="p-1.5 rounded-lg text-white/30 hover:text-[#ff4757] hover:bg-[#ff4757]/10 transition-colors">
+                    <button onClick={() => setDeleteEntryId(entry.id)} className="p-1.5 rounded-lg text-white/30 hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                     </button>
                   </div>
@@ -743,7 +743,7 @@ export default function Settings() {
         {/* Liabilities */}
         <div>
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-base font-semibold text-[#ff4757]">Liabilities</h3>
+            <h3 className="text-base font-semibold text-[#EF4444]">Liabilities</h3>
             <Button variant="ghost" size="sm" onClick={() => openAddEntry(true)}>+ Add Liability</Button>
           </div>
           {liabilities.length > 0 ? (
@@ -755,11 +755,11 @@ export default function Settings() {
                     <p className="text-white/40 text-xs">{getAssetCatLabel(entry.assetCategory)} · Updated {formatDate(entry.lastUpdated, 'short')}</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <p className="text-[#ff4757] font-mono text-sm font-semibold">-{formatCurrency(entry.value, defaultCurrency, true)}</p>
+                    <p className="text-[#EF4444] font-mono text-sm font-semibold">-{formatCurrency(entry.value, defaultCurrency, true)}</p>
                     <button onClick={() => openEditEntry(entry)} className="p-1.5 rounded-lg text-white/30 hover:text-white/70 hover:bg-white/10 transition-colors">
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                     </button>
-                    <button onClick={() => setDeleteEntryId(entry.id)} className="p-1.5 rounded-lg text-white/30 hover:text-[#ff4757] hover:bg-[#ff4757]/10 transition-colors">
+                    <button onClick={() => setDeleteEntryId(entry.id)} className="p-1.5 rounded-lg text-white/30 hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                     </button>
                   </div>
@@ -787,8 +787,8 @@ export default function Settings() {
       </GlassCard>
 
       {/* ── DANGER ZONE ── */}
-      <GlassCard padding="lg" className="border border-[#ff4757]/20">
-        <h2 className="text-xl font-semibold text-[#ff4757] mb-2">⚠️ Danger Zone</h2>
+      <GlassCard padding="lg" className="border border-[#EF4444]/20">
+        <h2 className="text-xl font-semibold text-[#EF4444] mb-2">⚠️ Danger Zone</h2>
         <p className="text-white/40 text-sm mb-4">This will delete ALL your data and return you to the setup screen. This cannot be undone.</p>
         <Button variant="danger" onClick={() => { setClearText(''); setShowClearConfirm(true); }} fullWidth>
           Clear All Data
@@ -808,7 +808,7 @@ export default function Settings() {
                   key={emoji}
                   type="button"
                   onClick={() => setCatEmoji(emoji)}
-                  className={`text-xl p-1.5 rounded-lg transition-all hover:bg-white/10 ${catEmoji === emoji ? 'bg-[#5865f2]/30 ring-1 ring-[#5865f2]' : ''}`}
+                  className={`text-xl p-1.5 rounded-lg transition-all hover:bg-white/10 ${catEmoji === emoji ? 'bg-[#10B981]/30 ring-1 ring-[#10B981]' : ''}`}
                 >
                   {emoji}
                 </button>
@@ -819,8 +819,8 @@ export default function Settings() {
           <div>
             <p className="text-sm font-medium text-white/70 mb-2">Color</p>
             <div className="flex flex-wrap gap-2">
-              {['#5865f2','#00d632','#ff4757','#f59e0b','#06b6d4','#ec4899','#8b5cf6','#10b981','#f97316','#6b7280','#ef4444','#3b82f6'].map(c => (
-                <button key={c} onClick={() => setCatColor(c)} className={`w-7 h-7 rounded-full transition-transform hover:scale-110 ${catColor === c ? 'ring-2 ring-white ring-offset-2 ring-offset-[#13131f] scale-110' : ''}`} style={{ background: c }} />
+              {['#10B981','#22C55E','#EF4444','#f59e0b','#06b6d4','#ec4899','#8b5cf6','#10b981','#f97316','#6b7280','#ef4444','#3b82f6'].map(c => (
+                <button key={c} onClick={() => setCatColor(c)} className={`w-7 h-7 rounded-full transition-transform hover:scale-110 ${catColor === c ? 'ring-2 ring-white ring-offset-2 ring-offset-[#111111] scale-110' : ''}`} style={{ background: c }} />
               ))}
             </div>
           </div>
@@ -836,7 +836,7 @@ export default function Settings() {
             <p className="text-sm font-medium text-white/70 mb-2">Card Color</p>
             <div className="flex flex-wrap gap-2">
               {CARD_COLORS.map(c => (
-                <button key={c} onClick={() => setCardColor(c)} className={`w-8 h-8 rounded-full transition-transform hover:scale-110 ${cardColor === c ? 'ring-2 ring-white ring-offset-2 ring-offset-[#13131f] scale-110' : ''}`} style={{ background: c }} />
+                <button key={c} onClick={() => setCardColor(c)} className={`w-8 h-8 rounded-full transition-transform hover:scale-110 ${cardColor === c ? 'ring-2 ring-white ring-offset-2 ring-offset-[#111111] scale-110' : ''}`} style={{ background: c }} />
               ))}
             </div>
           </div>

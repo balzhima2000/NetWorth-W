@@ -38,7 +38,7 @@ export function AllocationPieChart({ data, currency, size = 200 }: AllocationPie
         </Pie>
         <Tooltip
           contentStyle={{
-            background: '#13131f',
+            background: '#111111',
             border: '1px solid rgba(255,255,255,0.1)',
             borderRadius: 12,
             color: 'white',

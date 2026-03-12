@@ -352,13 +352,13 @@ export default function Portfolio() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-white/40 text-xs mb-0.5">Unrealized Gain</p>
-                <p className={`text-lg font-semibold font-mono ${totalGain >= 0 ? 'text-[#00d632]' : 'text-[#ff4757]'}`}>
+                <p className={`text-lg font-semibold font-mono ${totalGain >= 0 ? 'text-[#22C55E]' : 'text-[#EF4444]'}`}>
                   {totalGain >= 0 ? '+' : ''}{formatCurrency(totalGain, defaultCurrency, true)}
                 </p>
               </div>
               <div>
                 <p className="text-white/40 text-xs mb-0.5">Return</p>
-                <p className={`text-lg font-semibold font-mono ${totalGainPct >= 0 ? 'text-[#00d632]' : 'text-[#ff4757]'}`}>
+                <p className={`text-lg font-semibold font-mono ${totalGainPct >= 0 ? 'text-[#22C55E]' : 'text-[#EF4444]'}`}>
                   {totalGainPct >= 0 ? '+' : ''}{totalGainPct.toFixed(2)}%
                 </p>
               </div>
@@ -381,7 +381,7 @@ export default function Portfolio() {
             </div>
             {!canRefreshPrices && !refreshing && <p className="text-white/30 text-xs">Add a Stocks or TASE API key in Settings to enable live price refresh</p>}
             {stocksApiKey && <p className="text-white/30 text-xs">{requestsRemaining}/{ALPHA_VANTAGE_MAX_REQUESTS} global API requests remaining today</p>}
-            {refreshProgress && <p className="text-[#00d632] text-xs animate-pulse">{refreshProgress}</p>}
+            {refreshProgress && <p className="text-[#22C55E] text-xs animate-pulse">{refreshProgress}</p>}
           </div>
 
           {pieData.length > 0 && (
@@ -451,7 +451,7 @@ export default function Portfolio() {
                         <div className="flex flex-col items-end gap-1">
                           <AssetCategoryBadge category={h.assetCategory} />
                           {driftInfo && Math.abs(driftInfo.drift) >= 2 && (
-                            <span className={`text-xs px-2 py-0.5 rounded-full font-mono ${Math.abs(driftInfo.drift) > 5 ? 'bg-[#ff4757]/15 text-[#ff4757]' : 'bg-amber-500/15 text-amber-400'}`}>
+                            <span className={`text-xs px-2 py-0.5 rounded-full font-mono ${Math.abs(driftInfo.drift) > 5 ? 'bg-[#EF4444]/15 text-[#EF4444]' : 'bg-amber-500/15 text-amber-400'}`}>
                               {driftInfo.drift > 0 ? '+' : ''}{driftInfo.drift.toFixed(1)}%
                             </span>
                           )}
@@ -482,7 +482,7 @@ export default function Portfolio() {
                         </div>
                       </div>
 
-                      <div className={`flex items-center justify-between pt-2 border-t border-white/5 ${h.unrealizedGain >= 0 ? 'text-[#00d632]' : 'text-[#ff4757]'}`}>
+                      <div className={`flex items-center justify-between pt-2 border-t border-white/5 ${h.unrealizedGain >= 0 ? 'text-[#22C55E]' : 'text-[#EF4444]'}`}>
                         <span className="text-sm font-mono font-semibold">
                           {h.unrealizedGain >= 0 ? '+' : ''}{formatCurrency(h.unrealizedGain, defaultCurrency)}
                         </span>
@@ -528,7 +528,7 @@ export default function Portfolio() {
                   <div key={trade.id} className="p-3 bg-white/5 rounded-xl border border-white/10">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
-                        <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${isSell ? 'bg-[#ff4757]/20 text-[#ff4757]' : 'bg-[#00d632]/20 text-[#00d632]'}`}>
+                        <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${isSell ? 'bg-[#EF4444]/20 text-[#EF4444]' : 'bg-[#22C55E]/20 text-[#22C55E]'}`}>
                           {isSell ? 'SELL' : 'BUY'}
                         </span>
                         <span className="text-white font-mono text-sm">{trade.quantity} shares</span>
@@ -537,7 +537,7 @@ export default function Portfolio() {
                         <button onClick={() => { openEditTrade(trade); setDrawerTicker(null); }} className="w-9 h-9 flex items-center justify-center rounded-lg text-white/30 hover:text-white/70 hover:bg-white/10 active:bg-white/15 active:scale-[0.92] transition-all duration-150">
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                         </button>
-                        <button onClick={() => { setDeleteTradeId(trade.id); }} className="w-9 h-9 flex items-center justify-center rounded-lg text-white/30 hover:text-[#ff4757] hover:bg-[#ff4757]/10 active:bg-[#ff4757]/20 active:scale-[0.92] transition-all duration-150">
+                        <button onClick={() => { setDeleteTradeId(trade.id); }} className="w-9 h-9 flex items-center justify-center rounded-lg text-white/30 hover:text-[#EF4444] hover:bg-[#EF4444]/10 active:bg-[#EF4444]/20 active:scale-[0.92] transition-all duration-150">
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                         </button>
                       </div>
@@ -561,15 +561,15 @@ export default function Portfolio() {
         footer={<><Button variant="ghost" onClick={() => setShowTradeModal(false)}>Cancel</Button><Button variant="primary" onClick={handleSaveTrade} disabled={!ticker || !quantity || !price}>{editingTrade ? 'Save Changes' : tradeType === 'buy' ? 'Add Buy' : 'Add Sell'}</Button></>}>
         <div className="space-y-4">
           <div className="flex gap-2">
-            <button onClick={() => setTradeType('buy')} className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all active:scale-[0.97] ${tradeType === 'buy' ? 'bg-[#00d632] text-black' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Buy</button>
-            <button onClick={() => setTradeType('sell')} className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all active:scale-[0.97] ${tradeType === 'sell' ? 'bg-[#ff4757] text-white' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Sell</button>
+            <button onClick={() => setTradeType('buy')} className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all active:scale-[0.97] ${tradeType === 'buy' ? 'bg-[#22C55E] text-black' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Buy</button>
+            <button onClick={() => setTradeType('sell')} className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all active:scale-[0.97] ${tradeType === 'sell' ? 'bg-[#EF4444] text-white' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Sell</button>
           </div>
           <label className="flex items-center gap-2 text-sm text-white/60 cursor-pointer select-none w-fit">
             <input
               type="checkbox"
               checked={tradeMkt === 'tase'}
               onChange={(e) => { const mkt = e.target.checked ? 'tase' : 'global'; setTradeMkt(mkt); setTradeCurrency(mkt === 'tase' ? 'ILS' : 'USD'); setTicker(''); setCompanyName(''); setTickerError(''); }}
-              className="w-4 h-4 rounded accent-[#5865f2]"
+              className="w-4 h-4 rounded accent-[#10B981]"
             />
             🇮🇱 Tel Aviv Stock Exchange (TASE)
           </label>
@@ -627,7 +627,7 @@ export default function Portfolio() {
           <p className="text-white/50 text-sm">Set target percentages to track drift from your ideal portfolio allocation.</p>
           <div className="space-y-2">
             {(['none', 'category', 'individual'] as const).map((mode) => (
-              <button key={mode} onClick={() => setAllocMode(mode)} className={`w-full text-left p-3 rounded-xl border transition-all ${allocMode === mode ? 'border-[#5865f2] bg-[#5865f2]/10' : 'border-white/10 bg-white/5 hover:bg-white/8'}`}>
+              <button key={mode} onClick={() => setAllocMode(mode)} className={`w-full text-left p-3 rounded-xl border transition-all ${allocMode === mode ? 'border-[#10B981] bg-[#10B981]/10' : 'border-white/10 bg-white/5 hover:bg-white/8'}`}>
                 <p className="text-white font-medium">{mode === 'none' ? '❌ None — No targets' : mode === 'category' ? '📦 By Category — Stocks / Bonds / Crypto / Other' : '🎯 By Individual Asset — Per ticker'}</p>
               </button>
             ))}

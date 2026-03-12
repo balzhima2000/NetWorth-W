@@ -38,7 +38,7 @@ export function FireProjectionChart({ data, fireTarget, currency }: FireProjecti
         />
         <Tooltip
           contentStyle={{
-            background: '#13131f',
+            background: '#111111',
             border: '1px solid rgba(255,255,255,0.1)',
             borderRadius: 12,
             color: 'white',
@@ -62,10 +62,10 @@ export function FireProjectionChart({ data, fireTarget, currency }: FireProjecti
         <Line
           type="monotone"
           dataKey="portfolioValue"
-          stroke="#00d632"
+          stroke="#10B981"
           strokeWidth={2}
           dot={false}
-          activeDot={{ r: 5, fill: '#00d632' }}
+          activeDot={{ r: 5, fill: '#10B981' }}
         />
       </LineChart>
     </ResponsiveContainer>

@@ -395,7 +395,7 @@ export default function Spending() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <GlassCard padding="md">
           <p className="text-white/50 text-sm mb-1">This Month Spent</p>
-          <h3 className="text-2xl font-bold text-[#ff4757] font-mono">{formatCurrency(monthSpending, defaultCurrency, true)}</h3>
+          <h3 className="text-2xl font-bold text-[#EF4444] font-mono">{formatCurrency(monthSpending, defaultCurrency, true)}</h3>
           <p className="text-xs text-white/30 mt-1">{monthTransactions.filter(t => t.type === 'expense').length} expenses</p>
           {upcomingCount > 0 && (
             <p className="text-xs text-amber-400/70 mt-1">
@@ -410,12 +410,12 @@ export default function Spending() {
         </GlassCard>
         <GlassCard padding="md">
           <p className="text-white/50 text-sm mb-1">This Month Income</p>
-          <h3 className="text-2xl font-bold text-[#00d632] font-mono">{formatCurrency(monthIncome, defaultCurrency, true)}</h3>
+          <h3 className="text-2xl font-bold text-[#22C55E] font-mono">{formatCurrency(monthIncome, defaultCurrency, true)}</h3>
           <p className="text-xs text-white/30 mt-1">{monthTransactions.filter(t => t.type === 'income').length} income entries</p>
         </GlassCard>
         <GlassCard padding="md">
           <p className="text-white/50 text-sm mb-1">Net This Month</p>
-          <h3 className={`text-2xl font-bold font-mono ${monthIncome - monthSpending >= 0 ? 'text-[#00d632]' : 'text-[#ff4757]'}`}>
+          <h3 className={`text-2xl font-bold font-mono ${monthIncome - monthSpending >= 0 ? 'text-[#22C55E]' : 'text-[#EF4444]'}`}>
             {monthIncome - monthSpending >= 0 ? '+' : ''}{formatCurrency(monthIncome - monthSpending, defaultCurrency, true)}
           </h3>
           <p className="text-xs text-white/30 mt-1">income − expenses</p>
@@ -429,7 +429,7 @@ export default function Spending() {
         <div className="space-y-4">
           <div className="flex items-center gap-3">
             <Button variant={showFilters ? 'secondary' : 'ghost'} size="sm" onClick={() => setShowFilters(!showFilters)}>
-              🔍 Filters {hasFilters && <span className="ml-1 px-1.5 py-0.5 bg-[#5865f2] rounded text-xs">On</span>}
+              🔍 Filters {hasFilters && <span className="ml-1 px-1.5 py-0.5 bg-[#10B981] rounded text-xs">On</span>}
             </Button>
             {hasFilters && <Button variant="ghost" size="sm" onClick={() => { setFilterDateFrom(''); setFilterDateTo(''); setFilterCategory(''); setFilterType('all'); setFilterPayment('all'); }}>✕ Clear</Button>}
             <span className="text-white/30 text-sm ml-auto">{filteredTx.length} transactions</span>
@@ -475,7 +475,7 @@ export default function Spending() {
                         </div>
                       </div>
                       <div className="flex items-center gap-2 flex-shrink-0">
-                        <p className={`font-mono font-semibold ${tx.type === 'expense' ? 'text-[#ff4757]' : 'text-[#00d632]'}`}>
+                        <p className={`font-mono font-semibold ${tx.type === 'expense' ? 'text-[#EF4444]' : 'text-[#22C55E]'}`}>
                           {tx.type === 'expense' ? '-' : '+'}{formatCurrency(txToDefault(tx), defaultCurrency)}
                           {tx.currency !== defaultCurrency && <span className="text-white/30 text-xs ml-1">({formatCurrency(tx.amount, tx.currency)})</span>}
                         </p>
@@ -484,7 +484,7 @@ export default function Spending() {
                             <button onClick={() => openEditTx(tx)} className="p-1.5 rounded-lg text-white/30 hover:text-white/70 hover:bg-white/10 transition-colors">
                               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                             </button>
-                            <button onClick={() => setDeleteTxId(tx.id)} className="p-1.5 rounded-lg text-white/30 hover:text-[#ff4757] hover:bg-[#ff4757]/10 transition-colors">
+                            <button onClick={() => setDeleteTxId(tx.id)} className="p-1.5 rounded-lg text-white/30 hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
                               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                             </button>
                           </>
@@ -529,15 +529,15 @@ export default function Spending() {
                       </div>
                       <div className="flex items-center gap-3">
                         <span className="text-sm font-mono">
-                          <span className={spent > 0 ? (progress && progress >= 100 ? 'text-[#ff4757]' : 'text-white') : 'text-white/30'}>
+                          <span className={spent > 0 ? (progress && progress >= 100 ? 'text-[#EF4444]' : 'text-white') : 'text-white/30'}>
                             {formatCurrency(spent, defaultCurrency, true)}
                           </span>
                           {budget && <span className="text-white/30"> / {formatCurrency(budget.amount, defaultCurrency, true)}</span>}
                         </span>
-                        <button onClick={() => openSetBudget(cat.id)} className="text-xs text-[#5865f2] hover:text-[#5865f2]/70 underline transition-colors">
+                        <button onClick={() => openSetBudget(cat.id)} className="text-xs text-[#10B981] hover:text-[#10B981]/70 underline transition-colors">
                           {budget ? 'Edit' : 'Set'}
                         </button>
-                        {budget && <button onClick={() => deleteBudget(budget.id)} className="text-xs text-[#ff4757]/40 hover:text-[#ff4757] transition-colors">✕</button>}
+                        {budget && <button onClick={() => deleteBudget(budget.id)} className="text-xs text-[#EF4444]/40 hover:text-[#EF4444] transition-colors">✕</button>}
                       </div>
                     </div>
                     {budget ? (
@@ -575,7 +575,7 @@ export default function Spending() {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
                             <p className="text-white font-medium">{p.name}</p>
-                            <span className={`text-xs px-2 py-0.5 rounded-full ${p.isActive ? 'bg-[#00d632]/15 text-[#00d632]' : 'bg-white/10 text-white/40'}`}>
+                            <span className={`text-xs px-2 py-0.5 rounded-full ${p.isActive ? 'bg-[#22C55E]/15 text-[#22C55E]' : 'bg-white/10 text-white/40'}`}>
                               {p.isActive ? 'Active' : 'Paused'}
                             </span>
                           </div>
@@ -589,7 +589,7 @@ export default function Spending() {
                         </div>
                         <div className="flex items-center gap-1 flex-shrink-0">
                           <div className="mr-2 text-right">
-                            <p className={`font-mono font-semibold ${p.type === 'expense' ? 'text-[#ff4757]' : 'text-[#00d632]'}`}>
+                            <p className={`font-mono font-semibold ${p.type === 'expense' ? 'text-[#EF4444]' : 'text-[#22C55E]'}`}>
                               {p.type === 'expense' ? '-' : '+'}{formatCurrency(p.amount, p.currency ?? defaultCurrency)}
                             </p>
                             {(() => {
@@ -611,7 +611,7 @@ export default function Spending() {
                           <button onClick={() => openEditRecurring(p)} className="p-1.5 rounded-lg text-white/30 hover:text-white/70 hover:bg-white/10 transition-colors">
                             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                           </button>
-                          <button onClick={() => setDeleteRecurringId(p.id)} className="p-1.5 rounded-lg text-white/30 hover:text-[#ff4757] hover:bg-[#ff4757]/10 transition-colors">
+                          <button onClick={() => setDeleteRecurringId(p.id)} className="p-1.5 rounded-lg text-white/30 hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
                             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                           </button>
                         </div>
@@ -647,7 +647,7 @@ export default function Spending() {
                             <p className="text-white font-medium">{p.name}</p>
                             <div className="flex items-center gap-2">
                               <p className="text-white/60 font-mono text-sm">{formatCurrency(p.installmentAmount, defaultCurrency)}/mo</p>
-                              <button onClick={() => setDeleteInstId(p.id)} className="p-1.5 rounded-lg text-white/30 hover:text-[#ff4757] hover:bg-[#ff4757]/10 transition-colors">
+                              <button onClick={() => setDeleteInstId(p.id)} className="p-1.5 rounded-lg text-white/30 hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
                                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                               </button>
                             </div>
@@ -672,8 +672,8 @@ export default function Spending() {
         footer={<><Button variant="ghost" onClick={() => setShowAddTx(false)}>Cancel</Button><Button variant="primary" onClick={handleSaveTx} disabled={!txAmount || !txCategory}>{editingTx ? 'Save Changes' : 'Add Transaction'}</Button></>}>
         <div className="space-y-4">
           <div className="flex gap-2">
-            <button onClick={() => { setTxType('expense'); setTxCategory(''); }} className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${txType === 'expense' ? 'bg-[#ff4757] text-white' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Expense</button>
-            <button onClick={() => { setTxType('income'); setTxCategory(''); }} className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${txType === 'income' ? 'bg-[#00d632] text-black' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Income</button>
+            <button onClick={() => { setTxType('expense'); setTxCategory(''); }} className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${txType === 'expense' ? 'bg-[#EF4444] text-white' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Expense</button>
+            <button onClick={() => { setTxType('income'); setTxCategory(''); }} className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${txType === 'income' ? 'bg-[#22C55E] text-black' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Income</button>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <Input label="Amount" type="number" inputMode="decimal" placeholder="0.00" value={txAmount} onChange={(e) => setTxAmount(e.target.value)} required />
@@ -726,8 +726,8 @@ export default function Spending() {
         footer={<><Button variant="ghost" onClick={() => setShowAddRecurring(false)}>Cancel</Button><Button variant="primary" onClick={handleSaveRecurring} disabled={!recName || !recAmount}>{editingRecurring ? 'Save Changes' : 'Add Recurring'}</Button></>}>
         <div className="space-y-4">
           <div className="flex gap-2">
-            <button onClick={() => { setRecType('expense'); setRecCategory(''); }} className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${recType === 'expense' ? 'bg-[#ff4757] text-white' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Expense</button>
-            <button onClick={() => { setRecType('income'); setRecCategory(''); }} className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${recType === 'income' ? 'bg-[#00d632] text-black' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Income</button>
+            <button onClick={() => { setRecType('expense'); setRecCategory(''); }} className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${recType === 'expense' ? 'bg-[#EF4444] text-white' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Expense</button>
+            <button onClick={() => { setRecType('income'); setRecCategory(''); }} className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${recType === 'income' ? 'bg-[#22C55E] text-black' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Income</button>
           </div>
           <Input label="Name" placeholder="Netflix, Rent, Salary..." value={recName} onChange={e => setRecName(e.target.value)} required />
           <div className="grid grid-cols-2 gap-3">
@@ -753,7 +753,7 @@ export default function Spending() {
             <Input label="# Installments" type="number" inputMode="numeric" placeholder="12" value={instCount} onChange={e => setInstCount(e.target.value)} required />
           </div>
           {instTotal && instCount && parseInt(instCount) > 0 && (
-            <p className="text-[#00d632] text-sm font-mono">{formatCurrency(parseFloat(instTotal) / parseInt(instCount), defaultCurrency)} per installment</p>
+            <p className="text-[#22C55E] text-sm font-mono">{formatCurrency(parseFloat(instTotal) / parseInt(instCount), defaultCurrency)} per installment</p>
           )}
           <Select label="Category" value={instCategory} onChange={e => setInstCategory(e.target.value)} options={categories.map(c => ({ value: c.id, label: `${c.emoji} ${c.name}` }))} />
 

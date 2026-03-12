@@ -11,13 +11,13 @@ export function TopBar({ title, actions, onToggleSidebar }: TopBarProps) {
   const nickname = useSettingsStore((s) => s.userNickname);
 
   return (
-    <header className="flex items-center justify-between h-16 px-3 sm:px-6 border-b border-white/8 bg-[#0a0a0f] flex-shrink-0">
+    <header className="flex items-center justify-between h-16 px-3 sm:px-6 border-b border-white/[0.07] bg-[#080808] flex-shrink-0">
       <div className="flex items-center gap-3 sm:gap-4 min-w-0">
         {onToggleSidebar && (
           <div className="hidden lg:block">
             <button
               onClick={onToggleSidebar}
-              className="p-2 rounded-lg text-white/40 hover:text-white hover:bg-white/8 transition-all duration-150 flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5865f2]/50"
+              className="p-2 rounded-lg text-white/35 hover:text-white hover:bg-white/[0.07] transition-all duration-150 flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981]/40"
               aria-label="Toggle sidebar"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -31,8 +31,8 @@ export function TopBar({ title, actions, onToggleSidebar }: TopBarProps) {
       <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
         {actions}
         {nickname && (
-          <span className="hidden sm:inline text-sm text-white/50">
-            Hello, <span className="text-white/70 font-semibold">{nickname}</span>
+          <span className="hidden sm:inline text-sm text-white/40">
+            Hello, <span className="text-white/65 font-semibold">{nickname}</span>
           </span>
         )}
       </div>

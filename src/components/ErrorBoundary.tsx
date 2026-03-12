@@ -34,7 +34,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex items-center justify-center h-screen bg-[#0a0a0f]">
+        <div className="flex items-center justify-center h-screen bg-[#000000]">
           <div className="text-center max-w-md px-6">
             {/* Icon */}
             <div className="text-6xl mb-6">⚠️</div>
@@ -70,7 +70,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
               </button>
               <button
                 onClick={this.handleReload}
-                className="px-5 py-2.5 rounded-xl bg-[#5865f2] hover:bg-[#4752c4] text-white text-sm font-medium transition-colors"
+                className="px-5 py-2.5 rounded-xl bg-[#10B981] hover:bg-[#4752c4] text-white text-sm font-medium transition-colors"
               >
                 Reload app
               </button>
