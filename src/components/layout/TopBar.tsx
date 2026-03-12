@@ -1,5 +1,4 @@
 import React from 'react';
-import { useSettingsStore } from '../../stores/settingsStore';
 
 interface TopBarProps {
   title?: string;
@@ -8,8 +7,6 @@ interface TopBarProps {
 }
 
 export function TopBar({ title, actions, onToggleSidebar }: TopBarProps) {
-  const nickname = useSettingsStore((s) => s.userNickname);
-
   return (
     <header className="flex items-center justify-between h-16 px-3 sm:px-6 border-b border-white/[0.07] bg-[#080808] flex-shrink-0">
       <div className="flex items-center gap-3 sm:gap-4 min-w-0">
@@ -30,11 +27,6 @@ export function TopBar({ title, actions, onToggleSidebar }: TopBarProps) {
       </div>
       <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
         {actions}
-        {nickname && (
-          <span className="hidden sm:inline text-sm text-white/40">
-            Hello, <span className="text-white/65 font-semibold">{nickname}</span>
-          </span>
-        )}
       </div>
     </header>
   );
