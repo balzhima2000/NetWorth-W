@@ -395,7 +395,7 @@ export default function Spending() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <GlassCard padding="md">
           <p className="text-white/50 text-sm mb-1">This Month Spent</p>
-          <h3 className="text-2xl font-bold text-[#EF4444] font-mono">{formatCurrency(monthSpending, defaultCurrency, true)}</h3>
+          <h3 className="text-2xl font-bold text-[#EF4444] font-mono">{formatCurrency(monthSpending, defaultCurrency)}</h3>
           <p className="text-xs text-white/30 mt-1">{monthTransactions.filter(t => t.type === 'expense').length} expenses</p>
           {upcomingCount > 0 && (
             <p className="text-xs text-amber-400/70 mt-1">
@@ -410,13 +410,13 @@ export default function Spending() {
         </GlassCard>
         <GlassCard padding="md">
           <p className="text-white/50 text-sm mb-1">This Month Income</p>
-          <h3 className="text-2xl font-bold text-[#22C55E] font-mono">{formatCurrency(monthIncome, defaultCurrency, true)}</h3>
+          <h3 className="text-2xl font-bold text-[#22C55E] font-mono">{formatCurrency(monthIncome, defaultCurrency)}</h3>
           <p className="text-xs text-white/30 mt-1">{monthTransactions.filter(t => t.type === 'income').length} income entries</p>
         </GlassCard>
         <GlassCard padding="md">
           <p className="text-white/50 text-sm mb-1">Net This Month</p>
           <h3 className={`text-2xl font-bold font-mono ${monthIncome - monthSpending >= 0 ? 'text-[#22C55E]' : 'text-[#EF4444]'}`}>
-            {monthIncome - monthSpending >= 0 ? '+' : ''}{formatCurrency(monthIncome - monthSpending, defaultCurrency, true)}
+            {monthIncome - monthSpending >= 0 ? '+' : ''}{formatCurrency(monthIncome - monthSpending, defaultCurrency)}
           </h3>
           <p className="text-xs text-white/30 mt-1">income − expenses</p>
         </GlassCard>
