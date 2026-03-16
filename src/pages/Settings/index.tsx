@@ -348,7 +348,7 @@ export default function Settings() {
   };
 
   const handleExportCSV = () => {
-    exportTransactionsCSV(transactions);
+    exportTransactionsCSV(transactions, cards);
     toast.success('Transactions CSV downloaded.');
   };
 

@@ -45,7 +45,9 @@ export function exportFullBackup(data: Omit<FullBackup, 'version' | 'exportDate'
   URL.revokeObjectURL(url);
 }
 
-export function exportTransactionsCSV(transactions: Transaction[]): void {
+export function exportTransactionsCSV(transactions: Transaction[], cards: Card[] = []): void {
+  const cardMap = new Map(cards.map((c) => [c.id, c.name]));
+
   const headers = [
     'Date', 'Amount', 'Currency', 'Converted Amount', 'Category',
     'Type', 'Payment Method', 'Notes', 'Is Recurring', 'Installment Info',
@@ -58,7 +60,7 @@ export function exportTransactionsCSV(transactions: Transaction[]): void {
     tx.convertedAmount.toFixed(2),
     tx.category,
     tx.type,
-    tx.paymentMethod,
+    cardMap.get(tx.paymentMethod) ?? tx.paymentMethod,
     tx.notes,
     tx.isAutoAdded ? 'Yes' : 'No',
     tx.installmentPlanId
@@ -70,7 +72,9 @@ export function exportTransactionsCSV(transactions: Transaction[]): void {
     .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(','))
     .join('\n');
 
-  const blob = new Blob([csvContent], { type: 'text/csv' });
+  // UTF-8 BOM ensures Hebrew and other non-ASCII characters display correctly in Excel
+  const bom = '\uFEFF';
+  const blob = new Blob([bom + csvContent], { type: 'text/csv;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
