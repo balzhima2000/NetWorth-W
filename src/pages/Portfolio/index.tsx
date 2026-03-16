@@ -15,6 +15,7 @@ import { calculateCurrentHoldings } from '../../utils/calculations';
 import { ASSET_CATEGORIES, ALPHA_VANTAGE_MAX_REQUESTS, CURRENCIES } from '../../utils/constants';
 import { fetchStockQuote, searchSymbol, fetchHistoricalPrice } from '../../services/alphaVantage';
 import { fetchTaseSecurityPrice, fetchTaseHistoricalPrice } from '../../services/taseDataHub';
+import { searchCoin, fetchCoinPrices, fetchCoinHistoricalPrice } from '../../services/coinGecko';
 import { useAutoFetchExchangeRates } from '../../hooks/useAutoFetchExchangeRates';
 import { ExcelImportModal } from './ExcelImportModal';
 import type { ImportRow } from '../../services/excelImport';
@@ -153,7 +154,20 @@ export default function Portfolio() {
   };
 
   const handleTickerBlur = async () => {
-    if (!ticker || !stocksApiKey || companyName) return;
+    if (!ticker || companyName) return;
+    if (assetCategory === 'crypto') {
+      setLookingUpName(true);
+      try {
+        const results = await searchCoin(ticker);
+        if (results.length > 0) {
+          setCompanyName(results[0].name);
+          setTicker(results[0].id);
+        }
+      } catch {}
+      setLookingUpName(false);
+      return;
+    }
+    if (!stocksApiKey) return;
     setLookingUpName(true);
     try {
       const result = await searchSymbol(ticker, stocksApiKey);
@@ -164,10 +178,11 @@ export default function Portfolio() {
 
   const validateSell = (): boolean => {
     if (tradeType !== 'sell') return true;
-    const holding = holdings.find((h) => h.ticker === ticker.toUpperCase());
+    const finalTick = assetCategory === 'crypto' ? ticker.toLowerCase() : ticker.toUpperCase();
+    const holding = holdings.find((h) => h.ticker === finalTick);
     const qty = parseFloat(quantity);
     if (!holding || qty > holding.sharesHeld) {
-      setTickerError(`You only hold ${holding?.sharesHeld ?? 0} shares of ${ticker.toUpperCase()}`);
+      setTickerError(`You only hold ${holding?.sharesHeld ?? 0} of ${finalTick}`);
       return false;
     }
     setTickerError('');
@@ -179,7 +194,9 @@ export default function Portfolio() {
     setFetchingHistoricalPrice(true);
     try {
       let fetched: number;
-      if (tradeMkt === 'tase') {
+      if (assetCategory === 'crypto') {
+        fetched = await fetchCoinHistoricalPrice(ticker, tradeDate, tradeCurrency);
+      } else if (tradeMkt === 'tase') {
         if (!israeliApiKey) throw new Error('Add your TASE API key in Settings first.');
         fetched = await fetchTaseHistoricalPrice(parseInt(ticker), tradeDate, israeliApiKey);
       } else {
@@ -199,7 +216,7 @@ export default function Portfolio() {
   const handleSaveTrade = () => {
     if (!ticker || !quantity || !price) return;
     if (!validateSell()) return;
-    const upperTicker = ticker.toUpperCase();
+    const upperTicker = assetCategory === 'crypto' ? ticker.toLowerCase() : ticker.toUpperCase();
     const qty = parseFloat(quantity);
     const px = parseFloat(price); // stored in native currency (tradeCurrency), no conversion
     if (editingTrade) {
@@ -223,13 +240,14 @@ export default function Portfolio() {
       });
     }
     setShowTradeModal(false);
-    toast.success(editingTrade ? 'Trade updated.' : `${tradeType === 'buy' ? 'Buy' : 'Sell'} trade recorded for ${ticker.toUpperCase()}.`);
+    toast.success(editingTrade ? 'Trade updated.' : `${tradeType === 'buy' ? 'Buy' : 'Sell'} trade recorded for ${upperTicker}.`);
   };
 
   const handleRefreshPrices = async () => {
-    const globalHoldings = holdings.filter((h) => (h.market ?? 'global') === 'global');
+    const cryptoHoldings = holdings.filter((h) => h.assetCategory === 'crypto');
+    const globalHoldings = holdings.filter((h) => (h.market ?? 'global') === 'global' && h.assetCategory !== 'crypto');
     const taseHoldings = holdings.filter((h) => h.market === 'tase');
-    if (globalHoldings.length > 0 && !stocksApiKey && taseHoldings.length === 0) {
+    if (globalHoldings.length > 0 && !stocksApiKey && taseHoldings.length === 0 && cryptoHoldings.length === 0) {
       toast.error('Add your Alpha Vantage Stocks API key in Settings first.');
       return;
     }
@@ -268,6 +286,18 @@ export default function Portfolio() {
         done++;
       } catch { /* silent fail per holding */ }
       await new Promise((r) => setTimeout(r, 300));
+    }
+
+    // ── Crypto holdings (CoinGecko) ──
+    if (cryptoHoldings.length > 0) {
+      setRefreshProgress('Updating crypto prices...');
+      try {
+        const prices = await fetchCoinPrices(cryptoHoldings.map((h) => h.ticker), 'usd');
+        for (const h of cryptoHoldings) {
+          const p = prices[h.ticker];
+          if (p != null) { updateCurrentPrice(h.ticker, p); done++; }
+        }
+      } catch { /* silent fail */ }
     }
 
     if (done === total) {
@@ -564,32 +594,34 @@ export default function Portfolio() {
             <button onClick={() => setTradeType('buy')} className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all active:scale-[0.97] ${tradeType === 'buy' ? 'bg-[#22C55E] text-black' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Buy</button>
             <button onClick={() => setTradeType('sell')} className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all active:scale-[0.97] ${tradeType === 'sell' ? 'bg-[#EF4444] text-white' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Sell</button>
           </div>
-          <label className="flex items-center gap-2 text-sm text-white/60 cursor-pointer select-none w-fit">
-            <input
-              type="checkbox"
-              checked={tradeMkt === 'tase'}
-              onChange={(e) => { const mkt = e.target.checked ? 'tase' : 'global'; setTradeMkt(mkt); setTradeCurrency(mkt === 'tase' ? 'ILS' : 'USD'); setTicker(''); setCompanyName(''); setTickerError(''); }}
-              className="w-4 h-4 rounded accent-[#10B981]"
-            />
-            🇮🇱 Tel Aviv Stock Exchange (TASE)
-          </label>
+          {assetCategory !== 'crypto' && (
+            <label className="flex items-center gap-2 text-sm text-white/60 cursor-pointer select-none w-fit">
+              <input
+                type="checkbox"
+                checked={tradeMkt === 'tase'}
+                onChange={(e) => { const mkt = e.target.checked ? 'tase' : 'global'; setTradeMkt(mkt); setTradeCurrency(mkt === 'tase' ? 'ILS' : 'USD'); setTicker(''); setCompanyName(''); setTickerError(''); }}
+                className="w-4 h-4 rounded accent-[#10B981]"
+              />
+              🇮🇱 Tel Aviv Stock Exchange (TASE)
+            </label>
+          )}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Input
-              label={tradeMkt === 'tase' ? 'Security ID' : 'Ticker Symbol'}
-              placeholder={tradeMkt === 'tase' ? 'e.g. 1159235' : 'AAPL'}
+              label={assetCategory === 'crypto' ? 'Coin ID' : tradeMkt === 'tase' ? 'Security ID' : 'Ticker Symbol'}
+              placeholder={assetCategory === 'crypto' ? 'e.g. bitcoin, ethereum' : tradeMkt === 'tase' ? 'e.g. 1159235' : 'AAPL'}
               value={ticker}
-              onChange={(e) => { setTicker(tradeMkt === 'tase' ? e.target.value : e.target.value.toUpperCase()); setCompanyName(''); setTickerError(''); }}
-              onBlur={tradeMkt === 'global' ? handleTickerBlur : undefined}
+              onChange={(e) => { setTicker(assetCategory === 'crypto' ? e.target.value.toLowerCase() : tradeMkt === 'tase' ? e.target.value : e.target.value.toUpperCase()); setCompanyName(''); setTickerError(''); }}
+              onBlur={handleTickerBlur}
               error={tickerError}
               required
             />
             <Input label={lookingUpName ? 'Looking up...' : 'Security Name'} placeholder={tradeMkt === 'tase' ? 'iShares MSCI ACWI...' : 'Apple Inc.'} value={companyName} onChange={(e) => setCompanyName(e.target.value)} disabled={lookingUpName} />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Input label="Shares" type="number" inputMode="decimal" placeholder="10" value={quantity} onChange={(e) => setQuantity(e.target.value)} required />
+            <Input label={assetCategory === 'crypto' ? 'Amount' : 'Shares'} type="number" inputMode="decimal" placeholder="10" value={quantity} onChange={(e) => setQuantity(e.target.value)} required />
             <div className="flex gap-2 items-end">
               <Input label={tradeType === 'sell' ? 'Sell Price' : 'Buy Price'} type="number" inputMode="decimal" placeholder="150.00" value={price} onChange={(e) => setPrice(e.target.value)} required />
-              {(tradeMkt === 'global' ? stocksApiKey : israeliApiKey) && ticker && (
+              {(assetCategory === 'crypto' || (tradeMkt === 'global' ? stocksApiKey : israeliApiKey)) && ticker && (
                 <Button
                   variant="ghost"
                   size="sm"
@@ -615,7 +647,11 @@ export default function Portfolio() {
             </span></p>
           )}
           <Input label="Date" type="date" value={tradeDate} onChange={(e) => setTradeDate(e.target.value)} />
-          <Select label="Asset Category" value={assetCategory} onChange={(e) => setAssetCategory(e.target.value as AssetCategory)} options={ASSET_CATEGORIES.map((c) => ({ value: c.id, label: c.label }))} />
+          <Select label="Asset Category" value={assetCategory} onChange={(e) => {
+            const cat = e.target.value as AssetCategory;
+            setAssetCategory(cat);
+            if (cat === 'crypto') { setTradeMkt('global'); setTradeCurrency('USD'); setTicker(''); setCompanyName(''); }
+          }} options={ASSET_CATEGORIES.map((c) => ({ value: c.id, label: c.label }))} />
           <Input label="Notes (optional)" placeholder="Any notes..." value={tradeNotes} onChange={(e) => setTradeNotes(e.target.value)} />
         </div>
       </Modal>
