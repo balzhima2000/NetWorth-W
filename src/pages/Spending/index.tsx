@@ -113,6 +113,126 @@ function BudgetStatusBadge({ status, pct }: BudgetStatusBadgeProps) {
   );
 }
 
+interface SpendingCategory { id: string; name: string; emoji: string; color: string }
+interface MonthlyBudget { id: string; category: string; amount: number; month: number; year: number }
+
+interface BudgetCardProps {
+  cat: SpendingCategory;
+  budget: MonthlyBudget | undefined;
+  spent: number;
+  status: BudgetStatus;
+  pct: number;
+  defaultCurrency: string;
+  onEdit: () => void;
+  onDelete: () => void;
+}
+function BudgetCard({ cat, budget, spent, status, pct, defaultCurrency, onEdit, onDelete }: BudgetCardProps) {
+  const overAmount  = budget ? spent - budget.amount : 0;
+  const remaining   = budget ? budget.amount - spent : 0;
+  const fillWidth   = budget ? Math.min(pct, 100) : 0;
+
+  const colors: Record<BudgetStatus, { accent: string; track: string; fill: string; metaColor: string }> = {
+    exceeded: { accent: 'rgba(239,68,68,0.40)',  track: 'rgba(239,68,68,0.10)',  fill: '#EF4444',             metaColor: '#EF4444' },
+    warning:  { accent: 'rgba(245,158,11,0.38)', track: 'rgba(245,158,11,0.10)', fill: '#F59E0B',             metaColor: '#F59E0B' },
+    caution:  { accent: 'rgba(234,179,8,0.32)',  track: 'rgba(234,179,8,0.09)',  fill: '#EAB308',             metaColor: '#EAB308' },
+    healthy:  { accent: 'transparent',            track: 'rgba(255,255,255,0.07)', fill: '#10B981',            metaColor: 'rgba(34,197,94,0.75)' },
+    none:     { accent: 'transparent',            track: 'rgba(255,255,255,0.04)', fill: 'rgba(255,255,255,0.18)', metaColor: 'rgba(255,255,255,0.28)' },
+  };
+  const c = colors[status];
+
+  let metaText: string;
+  if (!budget) {
+    metaText = spent > 0 ? `${formatCurrency(spent, defaultCurrency, true)} spent · no limit set` : 'No budget set';
+  } else if (status === 'exceeded') {
+    metaText = `Over by ${formatCurrency(overAmount, defaultCurrency, true)}`;
+  } else {
+    metaText = `${formatCurrency(remaining, defaultCurrency, true)} remaining`;
+  }
+
+  return (
+    <div
+      className="glass rounded-2xl overflow-hidden"
+      style={{ borderLeft: `3px solid ${c.accent}` }}
+    >
+      <div className="p-4">
+        {/* Header row */}
+        <div className="flex items-start justify-between gap-3 mb-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <div
+              className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0"
+              style={{ background: `${cat.color}1a` }}
+            >
+              {cat.emoji}
+            </div>
+            <div className="min-w-0">
+              <p className="text-white/85 text-sm font-medium leading-tight truncate">{cat.name}</p>
+              <p className="text-xs mt-0.5 leading-tight" style={{ color: c.metaColor }}>
+                {metaText}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1.5 flex-shrink-0">
+            {budget && <BudgetStatusBadge status={status} pct={pct} />}
+            <button
+              onClick={onEdit}
+              className="text-xs px-2.5 py-1.5 rounded-lg font-medium transition-all"
+              style={{
+                background: 'rgba(255,255,255,0.06)',
+                color: 'rgba(255,255,255,0.60)',
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.11)'; (e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.85)'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.06)'; (e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.60)'; }}
+            >
+              {budget ? 'Edit' : 'Set budget'}
+            </button>
+            {budget && (
+              <button
+                onClick={onDelete}
+                className="p-1.5 rounded-lg text-white/20 hover:text-[#EF4444]/70 hover:bg-[#EF4444]/8 transition-colors"
+                title="Remove budget"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Progress section */}
+        {budget ? (
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-xs font-mono text-white/40">
+                {formatCurrency(spent, defaultCurrency, true)}
+                <span className="text-white/20"> / {formatCurrency(budget.amount, defaultCurrency, true)}</span>
+              </span>
+              <span className="text-xs font-mono font-medium" style={{ color: c.metaColor }}>
+                {Math.round(pct)}%
+              </span>
+            </div>
+            <div className="h-2 rounded-full overflow-hidden" style={{ background: c.track }}>
+              <div
+                className="h-full rounded-full transition-all duration-700 ease-out"
+                style={{ width: `${fillWidth}%`, background: c.fill }}
+              />
+            </div>
+          </div>
+        ) : (
+          /* Dashed empty track for unset budgets */
+          <div
+            className="h-2 rounded-full"
+            style={{
+              background: 'repeating-linear-gradient(90deg, rgba(255,255,255,0.06) 0px, rgba(255,255,255,0.06) 5px, transparent 5px, transparent 9px)',
+            }}
+          />
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ── Main Component ─────────────────────────────────────────────────────────
 
 export default function Spending() {
@@ -764,48 +884,6 @@ export default function Spending() {
       {(budgetAttention.length > 0 || pacingLabel || topCategories.length > 0) && (
         <div className="space-y-3">
 
-          {/* Budget alert callout */}
-          {budgetAttention.length > 0 && (
-            <GlassCard padding="md">
-              <div className="flex items-start gap-3">
-                <span className="text-lg flex-shrink-0 mt-0.5">
-                  {budgetAttention.some(x => x.status === 'exceeded') ? '🔴' : '🟡'}
-                </span>
-                <div className="flex-1 min-w-0">
-                  <p className="text-white/80 text-sm font-medium mb-1">
-                    {budgetAttention.length} budget{budgetAttention.length > 1 ? 's' : ''} need{budgetAttention.length === 1 ? 's' : ''} attention
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {budgetAttention.map(({ budget, spent, status }) => {
-                      const cat = getCategoryInfo(budget.category);
-                      const over = spent - budget.amount;
-                      return (
-                        <button
-                          key={budget.id}
-                          onClick={() => { setActiveTab('budgets'); }}
-                          className="text-xs px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 transition-colors text-left"
-                        >
-                          <span className="mr-1">{cat.emoji}</span>
-                          <span className={status === 'exceeded' ? 'text-[#EF4444]' : 'text-[#F59E0B]'}>
-                            {cat.name}
-                          </span>
-                          <span className="text-white/40 ml-1">
-                            {status === 'exceeded'
-                              ? `over by ${formatCurrency(over, defaultCurrency, true)}`
-                              : `at ${Math.round((spent / budget.amount) * 100)}%`}
-                          </span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-                <button onClick={() => setActiveTab('budgets')} className="text-xs text-[#10B981] hover:text-[#10B981]/70 transition-colors flex-shrink-0 mt-0.5">
-                  View →
-                </button>
-              </div>
-            </GlassCard>
-          )}
-
           {/* Category breakdown */}
           {topCategories.length > 0 && (
             <GlassCard padding="md">
@@ -997,103 +1075,64 @@ export default function Spending() {
       {/* BUDGETS TAB                                                        */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {activeTab === 'budgets' && (
-        <div className="space-y-4">
+        <div className="space-y-3">
 
-          {/* Budget summary row */}
-          {totalBudget > 0 && (
-            <div className="grid grid-cols-3 gap-3">
-              <MetricTile
-                label="Total budget"
-                value={formatCurrency(totalBudget, defaultCurrency, true)}
-                sub={`${currentMonthBudgets.length} categories`}
+          {/* Budget tab summary strip */}
+          {(() => {
+            const budgetedCount   = currentMonthBudgets.length;
+            const unsetCount      = categories.length - budgetedCount;
+            const attentionCount  = budgetAttention.length;
+            // Total remaining = sum of positive remaining per budgeted category
+            const totalPositiveRemaining = currentMonthBudgets.reduce((sum, b) => {
+              const s = categorySpend[b.category] ?? 0;
+              return sum + Math.max(0, b.amount - s);
+            }, 0);
+
+            return (
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                <MetricTile
+                  label="Active budgets"
+                  value={`${budgetedCount} / ${categories.length}`}
+                  sub="categories budgeted"
+                />
+                <MetricTile
+                  label="Need attention"
+                  value={attentionCount > 0 ? String(attentionCount) : '✓ All good'}
+                  sub={attentionCount > 0 ? `over limit or near it` : 'within limits'}
+                  valueColor={attentionCount > 0 ? 'text-[#F59E0B]' : 'text-[#22C55E]'}
+                />
+                <MetricTile
+                  label="Total remaining"
+                  value={budgetedCount > 0 ? formatCurrency(totalPositiveRemaining, defaultCurrency, true) : '—'}
+                  sub={budgetedCount > 0 ? `across ${budgetedCount} budget${budgetedCount > 1 ? 's' : ''}` : 'no budgets set'}
+                  valueColor={budgetedCount > 0 ? 'text-[#22C55E]' : 'text-white/30'}
+                />
+                <MetricTile
+                  label="Without budget"
+                  value={String(unsetCount)}
+                  sub={unsetCount > 0 ? 'categories untracked' : 'all categories set'}
+                  valueColor={unsetCount > 0 ? 'text-white/55' : 'text-[#22C55E]'}
+                />
+              </div>
+            );
+          })()}
+
+          {/* Budget cards sorted by severity */}
+          <div className="space-y-2">
+            {sortedBudgetRows.map(({ cat, budget, spent, status, pct }) => (
+              <BudgetCard
+                key={cat.id}
+                cat={cat}
+                budget={budget}
+                spent={spent}
+                status={status}
+                pct={pct}
+                defaultCurrency={defaultCurrency}
+                onEdit={() => openSetBudget(cat.id)}
+                onDelete={() => budget && deleteBudget(budget.id)}
               />
-              <MetricTile
-                label="Spent"
-                value={formatCurrency(monthSpending, defaultCurrency, true)}
-                sub={budgetUsedPct !== null ? `${Math.round(budgetUsedPct)}% used` : undefined}
-                valueColor="text-[#EF4444]"
-              />
-              <MetricTile
-                label={remainingBudget !== null && remainingBudget < 0 ? 'Over budget' : 'Remaining'}
-                value={remainingBudget !== null ? formatCurrency(Math.abs(remainingBudget), defaultCurrency, true) : '—'}
-                valueColor={remainingBudget !== null && remainingBudget < 0 ? 'text-[#EF4444]' : 'text-[#22C55E]'}
-              />
-            </div>
-          )}
-
-          {/* Budget rows sorted by severity */}
-          <GlassCard padding="lg">
-            <div className="flex items-center justify-between mb-5">
-              <h2 className="text-base font-semibold text-white">Monthly Budgets</h2>
-              <p className="text-white/35 text-xs">
-                {new Date(year, month - 1, 1).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-              </p>
-            </div>
-            <div className="space-y-5">
-              {sortedBudgetRows.map(({ cat, budget, spent, status, pct }) => {
-                const overAmount = budget ? spent - budget.amount : 0;
-                const remaining = budget ? budget.amount - spent : 0;
-                const progressColor = status === 'exceeded' ? 'red' : status === 'warning' || status === 'caution' ? 'amber' : 'green';
-
-                return (
-                  <div key={cat.id}>
-                    <div className="flex items-center justify-between mb-2 gap-2 flex-wrap">
-                      <div className="flex items-center gap-2 min-w-0">
-                        <span className="text-lg flex-shrink-0">{cat.emoji}</span>
-                        <span className="text-sm font-medium text-white/85 truncate">{cat.name}</span>
-                        {budget && <BudgetStatusBadge status={status} pct={pct} />}
-                      </div>
-                      <div className="flex items-center gap-2 flex-shrink-0">
-                        <span className="text-sm font-mono text-right">
-                          {budget ? (
-                            <>
-                              <span className={status === 'exceeded' ? 'text-[#EF4444]' : status === 'warning' ? 'text-[#F59E0B]' : 'text-white/75'}>
-                                {formatCurrency(spent, defaultCurrency, true)}
-                              </span>
-                              <span className="text-white/30"> / {formatCurrency(budget.amount, defaultCurrency, true)}</span>
-                            </>
-                          ) : (
-                            <span className={spent > 0 ? 'text-white/60' : 'text-white/25'}>
-                              {formatCurrency(spent, defaultCurrency, true)}
-                            </span>
-                          )}
-                        </span>
-                        <button
-                          onClick={() => openSetBudget(cat.id)}
-                          className="text-xs text-[#10B981] hover:text-[#10B981]/70 transition-colors underline"
-                        >
-                          {budget ? 'Edit' : 'Set'}
-                        </button>
-                        {budget && (
-                          <button onClick={() => deleteBudget(budget.id)} className="text-xs text-white/20 hover:text-[#EF4444] transition-colors">✕</button>
-                        )}
-                      </div>
-                    </div>
-
-                    {budget ? (
-                      <>
-                        <ProgressBar value={Math.min(spent, budget.amount)} max={budget.amount} color={progressColor} />
-                        <div className="flex items-center justify-between mt-1.5">
-                          {status === 'exceeded' ? (
-                            <span className="text-xs text-[#EF4444]/70">
-                              Over by {formatCurrency(overAmount, defaultCurrency, true)}
-                            </span>
-                          ) : (
-                            <span className="text-xs text-white/30">
-                              {formatCurrency(remaining, defaultCurrency, true)} remaining
-                            </span>
-                          )}
-                          <span className="text-xs text-white/25 font-mono">{Math.round(pct)}%</span>
-                        </div>
-                      </>
-                    ) : (
-                      <div className="h-1.5 rounded-full bg-white/5" />
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </GlassCard>
+            ))}
+          </div>
         </div>
       )}
 
