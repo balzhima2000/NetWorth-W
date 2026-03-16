@@ -95,6 +95,8 @@ export default function Portfolio() {
   const [tradeNotes, setTradeNotes] = useState('');
   const [tradeCurrency, setTradeCurrency] = useState('USD');
   const [fetchingHistoricalPrice, setFetchingHistoricalPrice] = useState(false);
+  const [inputMode, setInputMode] = useState<'units' | 'amount'>('units');
+  const [totalAmount, setTotalAmount] = useState('');
   const [lookingUpName, setLookingUpName] = useState(false);
   const [tickerError, setTickerError] = useState('');
   const [tradeMkt, setTradeMkt] = useState<'global' | 'tase'>('global');
@@ -137,6 +139,8 @@ export default function Portfolio() {
     setTickerError('');
     setTradeCurrency('USD');
     setTradeMkt('global');
+    setInputMode('units');
+    setTotalAmount('');
     setShowTradeModal(true);
   };
 
@@ -218,11 +222,12 @@ export default function Portfolio() {
   };
 
   const handleSaveTrade = () => {
-    if (!ticker || !quantity || !price) return;
+    const needsQty = inputMode === 'units' ? !quantity : !totalAmount;
+    if (!ticker || needsQty || !price) return;
     if (!validateSell()) return;
-    const upperTicker = ticker.toUpperCase();
-    const qty = parseFloat(quantity);
+    const upperTicker = assetCategory === 'crypto' ? ticker.toLowerCase() : ticker.toUpperCase();
     const px = parseFloat(price); // stored in native currency (tradeCurrency), no conversion
+    const qty = inputMode === 'amount' ? parseFloat(totalAmount) / px : parseFloat(quantity);
     if (editingTrade) {
       updateTrade(editingTrade.id, {
         ticker: upperTicker, name: companyName || upperTicker, quantity: qty,
@@ -598,7 +603,7 @@ export default function Portfolio() {
 
       {/* Add/Edit Trade Modal */}
       <Modal isOpen={showTradeModal} onClose={() => setShowTradeModal(false)} title={editingTrade ? 'Edit Trade' : 'Add Trade'} size="md"
-        footer={<><Button variant="ghost" onClick={() => setShowTradeModal(false)}>Cancel</Button><Button variant="primary" onClick={handleSaveTrade} disabled={!ticker || !quantity || !price}>{editingTrade ? 'Save Changes' : tradeType === 'buy' ? 'Add Buy' : 'Add Sell'}</Button></>}>
+        footer={<><Button variant="ghost" onClick={() => setShowTradeModal(false)}>Cancel</Button><Button variant="primary" onClick={handleSaveTrade} disabled={!ticker || (inputMode === 'units' ? !quantity : !totalAmount) || !price}>{editingTrade ? 'Save Changes' : tradeType === 'buy' ? 'Add Buy' : 'Add Sell'}</Button></>}>
         <div className="space-y-4">
           <div className="flex gap-2">
             <button onClick={() => setTradeType('buy')} className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all active:scale-[0.97] ${tradeType === 'buy' ? 'bg-[#22C55E] text-black' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Buy</button>
@@ -627,8 +632,28 @@ export default function Portfolio() {
             />
             <Input label={lookingUpName ? 'Looking up...' : 'Security Name'} placeholder={tradeMkt === 'tase' ? 'iShares MSCI ACWI...' : 'Apple Inc.'} value={companyName} onChange={(e) => setCompanyName(e.target.value)} disabled={lookingUpName} />
           </div>
+          {!editingTrade && (
+            <div className="flex gap-1 p-1 bg-white/5 rounded-xl w-fit">
+              <button
+                onClick={() => { setInputMode('units'); setTotalAmount(''); }}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${inputMode === 'units' ? 'bg-white/15 text-white' : 'text-white/40 hover:text-white/60'}`}
+              >
+                By Units
+              </button>
+              <button
+                onClick={() => { setInputMode('amount'); setQuantity(''); }}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${inputMode === 'amount' ? 'bg-white/15 text-white' : 'text-white/40 hover:text-white/60'}`}
+              >
+                By Amount
+              </button>
+            </div>
+          )}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Input label={assetCategory === 'crypto' ? 'Amount' : 'Shares'} type="number" inputMode="decimal" placeholder="10" value={quantity} onChange={(e) => setQuantity(e.target.value)} required />
+            {inputMode === 'units' ? (
+              <Input label={assetCategory === 'crypto' ? 'Amount' : 'Shares'} type="number" inputMode="decimal" placeholder="10" value={quantity} onChange={(e) => setQuantity(e.target.value)} required />
+            ) : (
+              <Input label={`Total ${tradeType === 'sell' ? 'Proceeds' : 'Investment'}`} type="number" inputMode="decimal" placeholder="500.00" value={totalAmount} onChange={(e) => setTotalAmount(e.target.value)} required />
+            )}
             <div className="flex gap-2 items-end">
               <Input label={tradeType === 'sell' ? 'Sell Price' : 'Buy Price'} type="number" inputMode="decimal" placeholder="150.00" value={price} onChange={(e) => setPrice(e.target.value)} required />
               {(assetCategory === 'crypto' ? cryptoApiKey : (tradeMkt === 'global' ? stocksApiKey : israeliApiKey)) && ticker && (
@@ -651,10 +676,13 @@ export default function Portfolio() {
             onChange={(e) => setTradeCurrency(e.target.value)}
             options={CURRENCIES.map(c => ({ value: c.code, label: `${c.code} — ${c.name}` }))}
           />
-          {quantity && price && parseFloat(quantity) > 0 && parseFloat(price) > 0 && (
+          {inputMode === 'units' && quantity && price && parseFloat(quantity) > 0 && parseFloat(price) > 0 && (
             <p className="text-white/40 text-sm">Total: <span className="text-white font-mono">
               {formatCurrency(parseFloat(quantity) * parseFloat(price), tradeCurrency)}
             </span></p>
+          )}
+          {inputMode === 'amount' && totalAmount && price && parseFloat(price) > 0 && (
+            <p className="text-white/40 text-sm">≈ <span className="text-white font-mono">{(parseFloat(totalAmount) / parseFloat(price)).toFixed(6)}</span> {assetCategory === 'crypto' ? 'coins' : 'shares'}</p>
           )}
           <Input label="Date" type="date" value={tradeDate} onChange={(e) => setTradeDate(e.target.value)} />
           <Select label="Asset Category" value={assetCategory} onChange={(e) => {
