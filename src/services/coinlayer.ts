@@ -35,8 +35,8 @@ export async function fetchCoinlayerLivePrices(
   const syms = symbols.join(',');
   const res = await fetch(`${BASE}/live?access_key=${apiKey}&symbols=${syms}&target=USD`);
   if (!res.ok) throw new Error(`Coinlayer live failed: HTTP ${res.status}`);
-  const data = await res.json() as CoinlayerLiveResponse;
-  if (!data.success) throw new Error('Coinlayer live request failed — check your API key.');
+  const data = await res.json() as CoinlayerLiveResponse & { error?: { type: string; info: string } };
+  if (!data.success) throw new Error(`Coinlayer: ${data.error?.info ?? 'Request failed — check your API key.'} (${data.error?.type ?? ''})`);
   return data.rates;
 }
 
@@ -54,8 +54,8 @@ export async function fetchCoinlayerHistoricalPrice(
 ): Promise<number> {
   const res = await fetch(`${BASE}/${date}?access_key=${apiKey}&symbols=${symbol}&target=USD`);
   if (!res.ok) throw new Error(`Coinlayer historical failed: HTTP ${res.status}`);
-  const data = await res.json() as CoinlayerHistoricalResponse;
-  if (!data.success) throw new Error('Coinlayer historical request failed — check your API key.');
+  const data = await res.json() as CoinlayerHistoricalResponse & { error?: { type: string; info: string } };
+  if (!data.success) throw new Error(`Coinlayer: ${data.error?.info ?? 'Request failed — check your API key.'} (${data.error?.type ?? ''})`);
   const price = data.rates[symbol];
   if (price == null) throw new Error(`No price data for ${symbol} on ${date}`);
   return price;
