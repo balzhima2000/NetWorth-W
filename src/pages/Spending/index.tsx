@@ -171,8 +171,8 @@ function BudgetCard({ cat, budget, spent, status, pct, defaultCurrency, onEdit, 
           <div className="flex items-center gap-3 flex-shrink-0">
             {budget && (
               <p className="text-sm font-mono text-white/50 tabular-nums">
-                {formatCurrency(spent, defaultCurrency, true)}
-                <span className="text-white/20"> / {formatCurrency(budget.amount, defaultCurrency, true)}</span>
+                {formatCurrency(spent, defaultCurrency)}
+                <span className="text-white/20"> / {formatCurrency(budget.amount, defaultCurrency)}</span>
               </p>
             )}
             <button
@@ -926,7 +926,7 @@ export default function Spending() {
                           <BudgetStatusBadge status={status} pct={budget ? (spent / budget.amount) * 100 : 0} />
                         )}
                         <span className={`text-sm font-mono ${status === 'exceeded' ? 'text-[#EF4444]' : 'text-white/70'}`}>
-                          {formatCurrency(spent, defaultCurrency, true)}
+                          {formatCurrency(spent, defaultCurrency)}
                         </span>
                       </div>
                     </div>
