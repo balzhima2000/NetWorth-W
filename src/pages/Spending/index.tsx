@@ -971,7 +971,7 @@ export default function Spending() {
               {(['all', 'expense', 'income'] as const).map(t => (
                 <button
                   key={t}
-                  onClick={() => setTxTypeFilter(t)}
+                  onClick={() => { setTxTypeFilter(t); setFilterPayment('all'); setFilterCategory(''); }}
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                     txTypeFilter === t
                       ? t === 'expense' ? 'bg-[#EF4444]/15 text-[#EF4444]'
@@ -1004,12 +1004,42 @@ export default function Spending() {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                 <Input label="From Date" type="date" value={filterDateFrom} onChange={e => setFilterDateFrom(e.target.value)} />
                 <Input label="To Date" type="date" value={filterDateTo} onChange={e => setFilterDateTo(e.target.value)} />
-                <Select label="Category" value={filterCategory} onChange={e => setFilterCategory(e.target.value)}
-                  options={[{ value: '', label: 'All Categories' }, ...allCategories.map(c => ({ value: c.id, label: `${c.emoji} ${c.name}` }))]} />
-                <Select label="Type" value={filterType} onChange={e => setFilterType(e.target.value)}
+                {(() => {
+                  const activeType = filterType !== 'all' ? filterType : txTypeFilter !== 'all' ? txTypeFilter : 'all';
+                  const catList = activeType === 'income' ? incomeCategories : activeType === 'expense' ? categories : allCategories;
+                  return (
+                    <Select label="Category" value={filterCategory} onChange={e => setFilterCategory(e.target.value)}
+                      options={[{ value: '', label: 'All Categories' }, ...catList.map(c => ({ value: c.id, label: `${c.emoji} ${c.name}` }))]} />
+                  );
+                })()}
+                <Select label="Type" value={filterType} onChange={e => { setFilterType(e.target.value); setFilterPayment('all'); setFilterCategory(''); }}
                   options={[{ value: 'all', label: 'All' }, { value: 'expense', label: 'Expenses' }, { value: 'income', label: 'Income' }]} />
-                <Select label="Payment Method" value={filterPayment} onChange={e => setFilterPayment(e.target.value)}
-                  options={[{ value: 'all', label: 'All Methods' }, { value: 'cash', label: '💵 Cash' }, ...cards.map(c => ({ value: c.id, label: `💳 ${c.name}` }))]} />
+                {(() => {
+                  // Derive active type from both filter signals
+                  const activeType = filterType !== 'all' ? filterType : txTypeFilter !== 'all' ? txTypeFilter : 'all';
+                  if (activeType === 'income') {
+                    return (
+                      <Select label="Destination" value={filterPayment} onChange={e => setFilterPayment(e.target.value)}
+                        options={[{ value: 'all', label: 'All Destinations' }, ...incomeDestinations.map(d => ({ value: d.id, label: `${d.icon} ${d.name}` }))]} />
+                    );
+                  }
+                  if (activeType === 'expense') {
+                    return (
+                      <Select label="Payment Method" value={filterPayment} onChange={e => setFilterPayment(e.target.value)}
+                        options={[{ value: 'all', label: 'All Methods' }, { value: 'cash', label: '💵 Cash' }, ...cards.map(c => ({ value: c.id, label: `💳 ${c.name}` }))]} />
+                    );
+                  }
+                  // All — show combined
+                  return (
+                    <Select label="Method / Destination" value={filterPayment} onChange={e => setFilterPayment(e.target.value)}
+                      options={[
+                        { value: 'all', label: 'All' },
+                        { value: 'cash', label: '💵 Cash' },
+                        ...cards.map(c => ({ value: c.id, label: `💳 ${c.name}` })),
+                        ...incomeDestinations.filter(d => d.id !== 'cash').map(d => ({ value: d.id, label: `${d.icon} ${d.name}` })),
+                      ]} />
+                  );
+                })()}
               </div>
               {hasFilters && (
                 <div className="mt-3 pt-3 border-t border-white/5 flex justify-end">
