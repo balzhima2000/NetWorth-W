@@ -35,7 +35,7 @@ const defaultSettings: Settings = {
   userName: '',
   userNickname: '',
   portfolioMode: 'detailed',
-  defaultCurrency: 'USD',
+  defaultCurrency: 'ILS',
   exchangeRates: [],
   stocksApiKey: '',
   stocksRequestsToday: 0,

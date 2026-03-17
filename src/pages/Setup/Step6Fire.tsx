@@ -9,18 +9,22 @@ interface Step6FireProps {
 }
 
 export default function Step6Fire({ onNext, onBack }: Step6FireProps) {
-  const [hasTarget, setHasTarget] = useState(true);
   const [target, setTarget] = useState('');
   const setFireTarget = useSettingsStore((s) => s.setFireTarget);
 
   const handleContinue = () => {
-    if (hasTarget && target) {
-      setFireTarget(parseFloat(target) || null);
-    } else {
-      setFireTarget(null);
-    }
+    const parsed = parseFloat(target);
+    if (!parsed || parsed <= 0) return;
+    setFireTarget(parsed);
     onNext();
   };
+
+  const handleSkip = () => {
+    setFireTarget(null);
+    onNext();
+  };
+
+  const isValid = parseFloat(target) > 0;
 
   return (
     <div className="text-center space-y-8 max-w-sm mx-auto">
@@ -29,35 +33,30 @@ export default function Step6Fire({ onNext, onBack }: Step6FireProps) {
         <p className="text-white/50">If you know your target, we'll show your progress on the Dashboard. You can calculate it precisely in the FIRE Calculators.</p>
       </div>
 
-      {hasTarget && (
-        <Input
-          type="number"
-          label="My FIRE target"
-          placeholder="1000000"
-          value={target}
-          onChange={(e) => setTarget(e.target.value)}
-          hint="Total amount needed to retire"
-        />
-      )}
-
-      <label className="flex items-center gap-3 text-white/70 cursor-pointer justify-center">
-        <input
-          type="checkbox"
-          checked={!hasTarget}
-          onChange={(e) => setHasTarget(!e.target.checked)}
-          className="w-5 h-5 accent-[#10B981]"
-        />
-        <span className="text-sm">I don't have a target yet</span>
-      </label>
+      <Input
+        type="number"
+        label="My FIRE target"
+        placeholder="1000000"
+        value={target}
+        onChange={(e) => setTarget(e.target.value)}
+        hint="Total amount needed to retire"
+      />
 
       <div className="flex gap-3">
         <Button variant="ghost" onClick={onBack} fullWidth>
           Back
         </Button>
-        <Button variant="primary" onClick={handleContinue} fullWidth>
+        <Button variant="primary" onClick={handleContinue} disabled={!isValid} fullWidth>
           Continue
         </Button>
       </div>
+
+      <button
+        onClick={handleSkip}
+        className="text-white/35 text-sm hover:text-white/60 transition-colors underline underline-offset-2"
+      >
+        I don't have a target yet
+      </button>
     </div>
   );
 }

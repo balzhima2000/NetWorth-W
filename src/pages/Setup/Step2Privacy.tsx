@@ -21,9 +21,9 @@ export default function Step2Privacy({ onNext, onBack }: Step2PrivacyProps) {
         <div className="flex items-start gap-3">
           <span className="text-2xl flex-shrink-0">🔒</span>
           <div>
-            <h2 className="text-xl font-semibold text-white mb-2">Your data never leaves your device</h2>
+            <h2 className="text-xl font-semibold text-white mb-2">Your data, your control</h2>
             <p className="text-white/60 text-sm leading-relaxed">
-              Everything you enter in this app - your portfolio, spending, and other data - is stored only in your browser's local storage. Nothing is sent to any server. Your financial data is completely private and stays on your computer.
+              All your financial data is stored locally on your device first. You can optionally sign in to enable cloud backup and sync across devices — but it's entirely up to you.
             </p>
           </div>
         </div>
@@ -31,19 +31,23 @@ export default function Step2Privacy({ onNext, onBack }: Step2PrivacyProps) {
         <div className="space-y-3 pt-4">
           <div className="flex items-center gap-2">
             <span className="text-green-500">✅</span>
-            <span className="text-white/70 text-sm">No account or sign-up needed</span>
+            <span className="text-white/70 text-sm">Data lives in your browser's local storage by default</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-green-500">✅</span>
-            <span className="text-white/70 text-sm">Works offline</span>
+            <span className="text-white/70 text-sm">Optional cloud sync via magic-link sign-in — no password needed</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-green-500">✅</span>
-            <span className="text-white/70 text-sm">You can export a backup anytime from Settings</span>
+            <span className="text-white/70 text-sm">Works fully offline without an account</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-green-500">⚠️</span>
-            <span className="text-red-500 text-sm">Clearing your browser data will erase the app data — keep backups!</span>
+            <span className="text-green-500">✅</span>
+            <span className="text-white/70 text-sm">Export a local backup anytime from Settings</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-[#F59E0B]">⚠️</span>
+            <span className="text-white/50 text-sm">Without cloud sync, clearing your browser data will erase the app — keep backups!</span>
           </div>
         </div>
       </GlassCard>
