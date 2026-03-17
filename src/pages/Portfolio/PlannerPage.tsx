@@ -19,14 +19,27 @@ interface TileLayout { id: string; rect: TileRect }
 
 // ── Squarified treemap algorithm ─────────────────────────────────────────────
 
-function squarify(items: Array<{ id: string; value: number }>, bounds: TileRect): TileLayout[] {
+function squarify(
+  items: Array<{ id: string; value: number }>,
+  bounds: TileRect,
+  minFraction = 0.04   // each tile gets at least this fraction of total area visually
+): TileLayout[] {
   if (!items.length) return [];
   const totalArea = bounds.w * bounds.h;
   const totalValue = items.reduce((s, i) => s + i.value, 0);
   if (totalValue === 0 || totalArea === 0) return [];
-  const scaled = [...items]
+
+  // 1. Proportional areas
+  const raw = [...items]
     .sort((a, b) => b.value - a.value)
     .map(i => ({ id: i.id, area: (i.value / totalValue) * totalArea }));
+
+  // 2. Apply per-item visual minimum, then renormalise back to totalArea
+  const minArea = totalArea * minFraction;
+  const bumped = raw.map(i => ({ ...i, area: Math.max(i.area, minArea) }));
+  const bumpedTotal = bumped.reduce((s, i) => s + i.area, 0);
+  const scaled = bumped.map(i => ({ ...i, area: (i.area / bumpedTotal) * totalArea }));
+
   return _squarifyStep(scaled, bounds, []);
 }
 
