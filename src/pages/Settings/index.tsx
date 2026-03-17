@@ -4,7 +4,6 @@ import { useSyncManager } from '../../hooks/useSyncManager';
 import { useSettingsStore } from '../../stores/settingsStore';
 import { useToast } from '../../hooks/useToast';
 import { useCardsStore } from '../../stores/cardsStore';
-import type { IncomeDestination } from '../../stores/cardsStore';
 import { usePortfolioStore } from '../../stores/portfolioStore';
 import { useTransactionStore } from '../../stores/transactionStore';
 import { useBudgetStore } from '../../stores/budgetStore';
