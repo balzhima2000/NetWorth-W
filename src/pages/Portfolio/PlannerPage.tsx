@@ -288,6 +288,10 @@ function TreemapTile({
 
 // ── Desktop treemap canvas ────────────────────────────────────────────────────
 
+const WORLD_W   = 1800;   // treemap always laid out at this "world" width
+const WORLD_H   = 680;    // and this height
+const VIEWPORT_H = 520;   // visible viewport height (fixed)
+
 function TreemapCanvas({
   categories,
   holdings,
@@ -308,8 +312,50 @@ function TreemapCanvas({
   onSelectTicker: (t: string | null) => void;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { width, height: containerHeight } = useContainerSize(containerRef);
-  const height = Math.max(380, Math.min(560, containerHeight || 480));
+  const { width: containerW } = useContainerSize(containerRef);
+
+  // ── Pan / zoom state ────────────────────────────────────────────────────
+  const [pan,  setPan]  = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragRef = useRef({ x: 0, y: 0, panX: 0, panY: 0, moved: false });
+
+  const fitToContainer = useCallback((w: number) => {
+    if (w === 0) return;
+    const z = Math.min(w / WORLD_W, VIEWPORT_H / WORLD_H) * 0.96;
+    setPan({ x: (w - WORLD_W * z) / 2, y: (VIEWPORT_H - WORLD_H * z) / 2 });
+    setZoom(z);
+  }, []);
+
+  useEffect(() => { fitToContainer(containerW); }, [containerW, fitToContainer]);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (e.button !== 0) return;
+    dragRef.current = { x: e.clientX, y: e.clientY, panX: pan.x, panY: pan.y, moved: false };
+    setIsDragging(true);
+  };
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    const dx = e.clientX - dragRef.current.x;
+    const dy = e.clientY - dragRef.current.y;
+    if (Math.hypot(dx, dy) > 4) dragRef.current.moved = true;
+    setPan({ x: dragRef.current.panX + dx, y: dragRef.current.panY + dy });
+  };
+  const handleMouseUp = () => setIsDragging(false);
+  const handleWheel = (e: React.WheelEvent) => {
+    e.preventDefault();
+    const factor = e.deltaY < 0 ? 1.12 : 0.9;
+    const newZoom = Math.min(4, Math.max(0.15, zoom * factor));
+    const rect = containerRef.current!.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    setPan({ x: mx - (mx - pan.x) * (newZoom / zoom), y: my - (my - pan.y) * (newZoom / zoom) });
+    setZoom(newZoom);
+  };
+
+  // Use world dimensions for layout (not container dimensions)
+  const width  = WORLD_W;
+  const height = WORLD_H;
 
   const primaryCats = useMemo(
     () => categories.filter(c => c.kind === 'primary').sort((a, b) => a.order - b.order),
@@ -355,16 +401,16 @@ function TreemapCanvas({
     return items;
   }, [grouped, primaryCats]);
 
-  // Layout: squarify primary groups
+  // Layout: squarify primary groups (always uses world dimensions)
   const groupLayouts = useMemo(() => {
-    if (width === 0) return [];
+    if (containerW === 0) return [];
     const items = groupItems.map(g => ({ id: String(g.id ?? '__unassigned__'), value: g.value }));
-    return squarify(items, { x: 0, y: 0, w: width, h: height });
-  }, [groupItems, width, height]);
+    return squarify(items, { x: 0, y: 0, w: WORLD_W, h: WORLD_H });
+  }, [groupItems, containerW]);
 
   // For each group, squarify holdings inside (with header offset + padding)
   const holdingLayouts = useMemo(() => {
-    if (width === 0) return new Map<string, TileLayout[]>();
+    if (containerW === 0) return new Map<string, TileLayout[]>();
     const result = new Map<string, TileLayout[]>();
 
     groupLayouts.forEach(gl => {
@@ -388,21 +434,44 @@ function TreemapCanvas({
     return result;
   }, [groupLayouts, grouped]);
 
-  if (width === 0) {
-    return (
-      <div ref={containerRef} style={{ height }} className="w-full bg-transparent" />
-    );
+  if (containerW === 0) {
+    return <div ref={containerRef} style={{ height: VIEWPORT_H }} className="w-full" />;
   }
+
+  const isPanning = isDragging && dragRef.current.moved;
 
   return (
     <div
       ref={containerRef}
-      style={{ height, position: 'relative' }}
-      className="w-full select-none"
-      onClick={e => {
-        if (e.target === containerRef.current) onSelectTicker(null);
+      className="w-full select-none rounded-xl overflow-hidden"
+      style={{
+        height: VIEWPORT_H,
+        position: 'relative',
+        cursor: isPanning ? 'grabbing' : 'grab',
+        // subtle dot-grid background
+        backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.055) 1px, transparent 1px)',
+        backgroundSize: '24px 24px',
+        backgroundColor: 'rgba(255,255,255,0.012)',
       }}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
+      onWheel={handleWheel}
     >
+      {/* Pannable world */}
+      <div
+        style={{
+          position: 'absolute',
+          left: 0, top: 0,
+          width: WORLD_W,
+          height: WORLD_H,
+          transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+          transformOrigin: '0 0',
+          willChange: 'transform',
+          pointerEvents: isPanning ? 'none' : 'auto',
+        }}
+      >
       {groupLayouts.map(gl => {
         const realId = gl.id === '__unassigned__' ? null : gl.id;
         const cat = realId ? primaryCats.find(c => c.id === realId) : null;
@@ -520,6 +589,42 @@ function TreemapCanvas({
           </div>
         );
       })}
+      </div>{/* end world */}
+
+      {/* Controls overlay */}
+      <div style={{ position: 'absolute', bottom: 12, right: 12, display: 'flex', gap: 6, pointerEvents: 'auto' }}>
+        {[
+          { label: '⊞', title: 'Fit to view', onClick: () => fitToContainer(containerW) },
+          { label: '+', title: 'Zoom in',  onClick: () => { const z = Math.min(4, zoom * 1.25); const cx = containerW / 2; const cy = VIEWPORT_H / 2; setPan({ x: cx - (cx - pan.x) * (z / zoom), y: cy - (cy - pan.y) * (z / zoom) }); setZoom(z); } },
+          { label: '−', title: 'Zoom out', onClick: () => { const z = Math.max(0.15, zoom * 0.8); const cx = containerW / 2; const cy = VIEWPORT_H / 2; setPan({ x: cx - (cx - pan.x) * (z / zoom), y: cy - (cy - pan.y) * (z / zoom) }); setZoom(z); } },
+        ].map(btn => (
+          <button
+            key={btn.label}
+            title={btn.title}
+            onClick={btn.onClick}
+            style={{
+              width: 28, height: 28,
+              borderRadius: 7,
+              background: 'rgba(255,255,255,0.07)',
+              border: '1px solid rgba(255,255,255,0.10)',
+              color: 'rgba(255,255,255,0.55)',
+              fontSize: 15,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer',
+              lineHeight: 1,
+            }}
+          >
+            {btn.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Hint shown until first interaction */}
+      {!isDragging && zoom > 0 && (
+        <div style={{ position: 'absolute', bottom: 12, left: 12, color: 'rgba(255,255,255,0.18)', fontSize: 11, pointerEvents: 'none', userSelect: 'none' }}>
+          drag to pan · scroll to zoom
+        </div>
+      )}
     </div>
   );
 }
