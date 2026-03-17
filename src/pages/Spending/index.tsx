@@ -976,13 +976,16 @@ export default function Spending() {
               ))}
             </div>
             <div className="flex items-center gap-2">
-              <Button variant={showFilters ? 'secondary' : 'ghost'} size="sm" onClick={() => setShowFilters(!showFilters)}>
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className={`inline-flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium transition-all border border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981]/50 ${showFilters ? 'bg-white/10 text-white' : 'bg-transparent text-white/60 hover:text-white hover:bg-white/[0.07]'}`}
+              >
                 Filters
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="flex-shrink-0">
                   <path d="M1 3h12M3 7h8M5 11h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                 </svg>
                 {hasFilters && <span className="px-1.5 py-0.5 bg-[#10B981] text-black rounded text-[10px] font-bold leading-none">{[filterDateFrom, filterDateTo, filterCategory, filterType !== 'all' && filterType, filterPayment !== 'all' && filterPayment].filter(Boolean).length}</span>}
-              </Button>
+              </button>
             </div>
           </div>
 
