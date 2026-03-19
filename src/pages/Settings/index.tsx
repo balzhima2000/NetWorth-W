@@ -93,6 +93,10 @@ export default function Settings() {
   const setCryptoApiKey = useSettingsStore((s) => s.setCryptoApiKey);
   const lastBackupDate = useSettingsStore((s) => s.lastBackupDate);
   const setLastBackupDate = useSettingsStore((s) => s.setLastBackupDate);
+  const defaultExpensePayment = useSettingsStore((s) => s.defaultExpensePayment);
+  const setDefaultExpensePayment = useSettingsStore((s) => s.setDefaultExpensePayment);
+  const defaultIncomeDestination = useSettingsStore((s) => s.defaultIncomeDestination);
+  const setDefaultIncomeDestination = useSettingsStore((s) => s.setDefaultIncomeDestination);
   const exchangeRates = useSettingsStore((s) => s.exchangeRates);
   const addExchangeRate = useSettingsStore((s) => s.addExchangeRate);
   const removeExchangeRate = useSettingsStore((s) => s.removeExchangeRate);
@@ -896,6 +900,23 @@ export default function Settings() {
           ))}
           {cards.length === 0 && <p className="text-white/30 text-sm">No cards added yet</p>}
         </div>
+        {/* Default payment method for expenses */}
+        <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between gap-4">
+          <div>
+            <p className="text-white/70 text-sm font-medium">Default for expenses</p>
+            <p className="text-white/35 text-xs mt-0.5">Pre-selected when adding an expense</p>
+          </div>
+          <select
+            value={defaultExpensePayment}
+            onChange={e => setDefaultExpensePayment(e.target.value)}
+            className="bg-white/7 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-[#10B981]/50 min-w-[140px]"
+          >
+            <option value="cash">💵 Cash</option>
+            {cards.filter(c => c.isActive).map(c => (
+              <option key={c.id} value={c.id}>💳 {c.name}</option>
+            ))}
+          </select>
+        </div>
       </GlassCard>
 
       {/* ── INCOME DESTINATIONS ── */}
@@ -966,6 +987,22 @@ export default function Settings() {
           {incomeDestinations.filter(d => d.id !== 'cash').length === 0 && !showNewDestInput && (
             <p className="text-white/30 text-sm">No accounts added yet</p>
           )}
+        </div>
+        {/* Default income destination */}
+        <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between gap-4">
+          <div>
+            <p className="text-white/70 text-sm font-medium">Default for income</p>
+            <p className="text-white/35 text-xs mt-0.5">Pre-selected when adding income</p>
+          </div>
+          <select
+            value={defaultIncomeDestination}
+            onChange={e => setDefaultIncomeDestination(e.target.value)}
+            className="bg-white/7 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-[#10B981]/50 min-w-[140px]"
+          >
+            {incomeDestinations.map(d => (
+              <option key={d.id} value={d.id}>{d.icon} {d.name}</option>
+            ))}
+          </select>
         </div>
       </GlassCard>
 

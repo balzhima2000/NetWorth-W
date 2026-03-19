@@ -212,7 +212,6 @@ export default function Spending() {
   const addTransaction = useTransactionStore((s) => s.addTransaction);
   const updateTransaction = useTransactionStore((s) => s.updateTransaction);
   const deleteTransaction = useTransactionStore((s) => s.deleteTransaction);
-  const lastUsedPaymentMethod = useTransactionStore((s) => s.lastUsedPaymentMethod);
   const setLastUsedPaymentMethod = useTransactionStore((s) => s.setLastUsedPaymentMethod);
 
   const budgets = useBudgetStore((s) => s.budgets);
@@ -225,6 +224,8 @@ export default function Spending() {
   const defaultCurrency = useSettingsStore((s) => s.defaultCurrency);
   const exchangeRates = useSettingsStore((s) => s.exchangeRates);
   const fxApiKey = useSettingsStore((s) => s.fxApiKey);
+  const defaultExpensePayment = useSettingsStore((s) => s.defaultExpensePayment);
+  const defaultIncomeDestination = useSettingsStore((s) => s.defaultIncomeDestination);
   const decrementFxRequests = useSettingsStore((s) => s.decrementFxRequests);
   const cards = useCardsStore((s) => s.cards).filter((c) => c.isActive);
   const incomeDestinations = useCardsStore((s) => s.incomeDestinations);
@@ -261,7 +262,7 @@ export default function Spending() {
   const [txCategory, setTxCategory] = useState('');
   const [txDate, setTxDate] = useState(getTodayISO());
   const [txNotes, setTxNotes] = useState('');
-  const [txPayment, setTxPayment] = useState(lastUsedPaymentMethod);
+  const [txPayment, setTxPayment] = useState(defaultExpensePayment);
   const [txCurrency, setTxCurrency] = useState(defaultCurrency);
   const [txRate, setTxRate] = useState('');
   const [fetchingTxRate, setFetchingTxRate] = useState(false);
@@ -620,7 +621,7 @@ export default function Spending() {
     setTxCategory((type === 'expense' ? categories[0] : incomeCategories[0])?.id ?? '');
     setTxDate(getTodayISO());
     setTxNotes('');
-    setTxPayment(type === 'income' ? (incomeDestinations[0]?.id ?? 'cash') : lastUsedPaymentMethod);
+    setTxPayment(type === 'income' ? defaultIncomeDestination : defaultExpensePayment);
     setTxCurrency(defaultCurrency);
     setTxRate('');
     setShowAddDestination(false);
@@ -1359,8 +1360,8 @@ export default function Spending() {
         footer={<><Button variant="ghost" onClick={() => setShowAddTx(false)}>Cancel</Button><Button variant="primary" onClick={handleSaveTx} disabled={!txAmount || !txCategory}>{editingTx ? 'Save Changes' : 'Add Transaction'}</Button></>}>
         <div className="space-y-4">
           <div className="flex gap-2">
-            <button onClick={() => { setTxType('expense'); setTxCategory(''); setTxPayment(lastUsedPaymentMethod); setShowAddDestination(false); setNewDestName(''); }} className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${txType === 'expense' ? 'bg-[#EF4444] text-white' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Expense</button>
-            <button onClick={() => { setTxType('income'); setTxCategory(''); setTxPayment(incomeDestinations[0]?.id ?? 'cash'); setShowAddDestination(false); setNewDestName(''); }} className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${txType === 'income' ? 'bg-[#22C55E] text-black' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Income</button>
+            <button onClick={() => { setTxType('expense'); setTxCategory(''); setTxPayment(defaultExpensePayment); setShowAddDestination(false); setNewDestName(''); }} className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${txType === 'expense' ? 'bg-[#EF4444] text-white' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Expense</button>
+            <button onClick={() => { setTxType('income'); setTxCategory(''); setTxPayment(defaultIncomeDestination); setShowAddDestination(false); setNewDestName(''); }} className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${txType === 'income' ? 'bg-[#22C55E] text-black' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}>Income</button>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <Input label="Amount" type="number" inputMode="decimal" placeholder="0.00" value={txAmount} onChange={e => setTxAmount(e.target.value)} required />

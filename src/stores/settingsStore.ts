@@ -29,6 +29,8 @@ interface SettingsStore extends Settings {
   setActivityFeedSettings: (settings: { showTransactions?: boolean; showTrades?: boolean; showRecurring?: boolean }) => void;
   setLastBackupDate: (date: string) => void;
   setBudgetAlertsEnabled: (enabled: boolean) => void;
+  setDefaultExpensePayment: (id: string) => void;
+  setDefaultIncomeDestination: (id: string) => void;
 }
 
 const defaultSettings: Settings = {
@@ -59,6 +61,8 @@ const defaultSettings: Settings = {
   activityFeedShowRecurring: true,
   lastBackupDate: null,
   budgetAlertsEnabled: true,
+  defaultExpensePayment: 'cash',
+  defaultIncomeDestination: 'cash',
 };
 
 export const useSettingsStore = create<SettingsStore>()(
@@ -127,6 +131,8 @@ export const useSettingsStore = create<SettingsStore>()(
         })),
       setLastBackupDate: (date) => set({ lastBackupDate: date }),
       setBudgetAlertsEnabled: (enabled) => set({ budgetAlertsEnabled: enabled }),
+      setDefaultExpensePayment: (id) => set({ defaultExpensePayment: id }),
+      setDefaultIncomeDestination: (id) => set({ defaultIncomeDestination: id }),
     }),
     {
       name: 'nw-settings',

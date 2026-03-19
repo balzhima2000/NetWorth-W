@@ -203,6 +203,8 @@ export interface Settings {
   activityFeedShowRecurring: boolean;
   lastBackupDate: string | null;
   budgetAlertsEnabled: boolean;
+  defaultExpensePayment: string;   // 'cash' or card id
+  defaultIncomeDestination: string; // 'cash' or income destination id
 }
 
 // ============================================================
