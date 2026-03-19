@@ -5,7 +5,7 @@ import type { User } from '../lib/supabase';
 export interface AuthState {
   user: User | null;
   isLoading: boolean;
-  sendMagicLink: (email: string, redirectTo?: string) => Promise<{ error: string | null }>;
+  sendMagicLink: (email: string) => Promise<{ error: string | null }>;
   verifyOtp: (email: string, token: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
 }
