@@ -31,11 +31,11 @@ export function useAuth(): AuthState {
     return () => subscription.unsubscribe();
   }, []);
 
-  const sendMagicLink = async (email: string, redirectTo?: string): Promise<{ error: string | null }> => {
+  const sendMagicLink = async (email: string): Promise<{ error: string | null }> => {
     if (!supabaseConfigured) return { error: 'Sync not configured' };
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { shouldCreateUser: true, emailRedirectTo: redirectTo },
+      options: { shouldCreateUser: true },
     });
     return { error: error?.message ?? null };
   };
