@@ -32,22 +32,18 @@ function localDateStr(d: Date): string {
 }
 
 function getNextDueDate(frequency: string, startDate: string, dayOfMonth: number | null): string {
-  const today = new Date();
+  // Always base the first due date on startDate, NOT today.
+  // useAutoAdd will handle adding any past-due transactions when it runs.
   const [sy, sm, sd] = startDate.split('-').map(Number);
-  const start = new Date(sy, sm - 1, sd);
   if (frequency === 'monthly' && dayOfMonth) {
-    const d = new Date(today.getFullYear(), today.getMonth(), dayOfMonth);
-    if (d <= today) d.setMonth(d.getMonth() + 1);
+    // First occurrence: month of startDate, on dayOfMonth
+    const d = new Date(sy, sm - 1, dayOfMonth);
+    // If dayOfMonth falls before the actual startDate in that month, push one month
+    if (d.getTime() < new Date(sy, sm - 1, sd).getTime()) d.setMonth(d.getMonth() + 1);
     return localDateStr(d);
   }
-  if (frequency === 'yearly') {
-    const d = new Date(today.getFullYear(), start.getMonth(), start.getDate());
-    if (d <= today) d.setFullYear(d.getFullYear() + 1);
-    return localDateStr(d);
-  }
-  const d = new Date(today);
-  d.setDate(d.getDate() + 7);
-  return localDateStr(d);
+  // Weekly and yearly: first due date = startDate itself
+  return startDate;
 }
 
 type BudgetStatus = 'exceeded' | 'warning' | 'caution' | 'healthy' | 'none';
@@ -330,9 +326,38 @@ export default function Spending() {
       return d.getMonth() + 1 === month && d.getFullYear() === year;
     }), [transactions, month, year]);
 
-  const monthSpending = useMemo(() =>
-    monthTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + txToDefault(t), 0),
-    [monthTransactions]);
+  const monthSpending = useMemo(() => {
+    // Transaction-based total
+    let total = monthTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + txToDefault(t), 0);
+    // Add recurring payments that fired this month but weren't auto-added (legacy gap)
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const monthStr = `${year}-${pad(month)}`;
+    const todayStr = getTodayISO();
+    recurringPayments.forEach((rp) => {
+      if (!rp.isActive || rp.type !== 'expense') return;
+      if (rp.startDate > `${monthStr}-31`) return;
+      if (rp.endDate && rp.endDate < `${monthStr}-01`) return;
+      const rpCurrency = rp.currency ?? defaultCurrency;
+      const rpRate = exchangeRates.find(r => r.currency === rpCurrency);
+      const converted = rpCurrency === defaultCurrency ? rp.amount : rpRate ? rp.amount * rpRate.rateToDefault : rp.amount;
+      const addGap = (dueDateStr: string) => {
+        if (dueDateStr < rp.startDate || dueDateStr > todayStr) return;
+        if (rp.endDate && dueDateStr > rp.endDate) return;
+        const covered = monthTransactions.some(t => t.isAutoAdded && t.category === rp.category && t.date === dueDateStr && Math.abs(txToDefault(t) - converted) < 0.01);
+        if (!covered) total += converted;
+      };
+      if (rp.frequency === 'monthly' && rp.dayOfMonth) {
+        addGap(`${monthStr}-${pad(Math.min(rp.dayOfMonth, new Date(year, month, 0).getDate()))}`);
+      } else if (rp.frequency === 'weekly' && rp.dayOfWeek !== null) {
+        for (let d = 1; d <= new Date(year, month, 0).getDate(); d++)
+          if (new Date(year, month - 1, d).getDay() === rp.dayOfWeek) addGap(`${monthStr}-${pad(d)}`);
+      } else if (rp.frequency === 'yearly') {
+        const s = new Date(rp.startDate);
+        if (s.getMonth() + 1 === month) addGap(`${monthStr}-${pad(Math.min(s.getDate(), new Date(year, month, 0).getDate()))}`);
+      }
+    });
+    return total;
+  }, [monthTransactions, recurringPayments, year, month, defaultCurrency, exchangeRates]);
 
   const monthIncome = useMemo(() =>
     monthTransactions.filter(t => t.type === 'income').reduce((sum, t) => sum + txToDefault(t), 0),
@@ -382,46 +407,48 @@ export default function Spending() {
       map[t.category] = (map[t.category] ?? 0) + txToDefault(t);
     });
 
-    // 2. Recurring payments that fired this month (up to today)
+    // 2. Recurring payments that fired this month but DON'T yet have an auto-added
+    //    transaction (handles legacy payments whose nextDueDate was set incorrectly).
+    //    Skip any recurring payment that already has an auto-added transaction this
+    //    month to avoid double-counting.
     const todayStr = getTodayISO();
     const pad = (n: number) => String(n).padStart(2, '0');
     const monthStr = `${year}-${pad(month)}`;
 
     recurringPayments.forEach((rp) => {
       if (!rp.isActive || rp.type !== 'expense') return;
-      if (rp.startDate > `${monthStr}-31`) return; // hasn't started yet
-      if (rp.endDate && rp.endDate < `${monthStr}-01`) return; // ended before this month
+      if (rp.startDate > `${monthStr}-31`) return;
+      if (rp.endDate && rp.endDate < `${monthStr}-01`) return;
 
       const rpCurrency = rp.currency ?? defaultCurrency;
       const rpRate = exchangeRates.find(r => r.currency === rpCurrency);
       const converted = rpCurrency === defaultCurrency ? rp.amount : rpRate ? rp.amount * rpRate.rateToDefault : rp.amount;
 
+      // Helper: only add if no auto-added transaction already covers this date
+      const addIfNotPresent = (dueDateStr: string) => {
+        if (dueDateStr < rp.startDate || dueDateStr > todayStr) return;
+        if (rp.endDate && dueDateStr > rp.endDate) return;
+        const alreadyCovered = monthTransactions.some(
+          t => t.isAutoAdded && t.category === rp.category && t.date === dueDateStr && Math.abs(txToDefault(t) - converted) < 0.01
+        );
+        if (!alreadyCovered) map[rp.category] = (map[rp.category] ?? 0) + converted;
+      };
+
       if (rp.frequency === 'monthly' && rp.dayOfMonth) {
-        const daysInM = new Date(year, month, 0).getDate();
-        const day = Math.min(rp.dayOfMonth, daysInM);
-        const dueDate = `${monthStr}-${pad(day)}`;
-        if (dueDate >= rp.startDate && dueDate <= todayStr) {
-          map[rp.category] = (map[rp.category] ?? 0) + converted;
-        }
+        const day = Math.min(rp.dayOfMonth, new Date(year, month, 0).getDate());
+        addIfNotPresent(`${monthStr}-${pad(day)}`);
       } else if (rp.frequency === 'weekly' && rp.dayOfWeek !== null) {
-        // Count every matching weekday in this month up to today
         const daysInM = new Date(year, month, 0).getDate();
         for (let d = 1; d <= daysInM; d++) {
-          const date = new Date(year, month - 1, d);
-          const dateStr = `${monthStr}-${pad(d)}`;
-          if (date.getDay() === rp.dayOfWeek && dateStr >= rp.startDate && dateStr <= todayStr) {
-            map[rp.category] = (map[rp.category] ?? 0) + converted;
+          if (new Date(year, month - 1, d).getDay() === rp.dayOfWeek) {
+            addIfNotPresent(`${monthStr}-${pad(d)}`);
           }
         }
       } else if (rp.frequency === 'yearly') {
         const startD = new Date(rp.startDate);
         if (startD.getMonth() + 1 === month) {
-          const daysInM = new Date(year, month, 0).getDate();
-          const day = Math.min(startD.getDate(), daysInM);
-          const dueDate = `${monthStr}-${pad(day)}`;
-          if (dueDate >= rp.startDate && dueDate <= todayStr) {
-            map[rp.category] = (map[rp.category] ?? 0) + converted;
-          }
+          const day = Math.min(startD.getDate(), new Date(year, month, 0).getDate());
+          addIfNotPresent(`${monthStr}-${pad(day)}`);
         }
       }
     });
