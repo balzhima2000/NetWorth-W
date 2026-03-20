@@ -14,6 +14,7 @@ export interface StockTrade {
   assetCategory: 'stocks' | 'bonds' | 'crypto' | 'other';
   market?: 'global' | 'tase'; // undefined = 'global' (backwards-compatible)
   currency: string;         // native price currency, e.g. 'USD', 'ILS', 'GBP'
+  buyRateToDefault?: number; // rateToDefault captured at time of purchase (historic, immutable)
 }
 
 export interface CurrentHolding {
@@ -26,7 +27,7 @@ export interface CurrentHolding {
   blendedCostBasis: number;      // weighted avg buy price in native currency
   currentPrice: number;          // current price in native currency
   currentValue: number;          // sharesHeld × currentPrice × rateToDefault (defaultCurrency)
-  costBasisTotal: number;        // sharesHeld × blendedCostBasis × rateToDefault (defaultCurrency)
+  costBasisTotal: number;        // sharesHeld × blendedCostBasisDefault (defaultCurrency, using historic buyRateToDefault per lot)
   unrealizedGain: number;        // currentValue - costBasisTotal (defaultCurrency)
   unrealizedGainPercent: number; // (currentPrice - blendedCostBasis) / blendedCostBasis × 100
   portfolioPercent: number;

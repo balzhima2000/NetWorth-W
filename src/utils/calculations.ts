@@ -72,8 +72,17 @@ export function calculateCurrentHoldings(
     const currentPrice = currentPrices[ticker] ?? blendedCostBasis;
 
     // Totals in defaultCurrency (for portfolio summaries)
-    const currentValue = sharesHeld * currentPrice * rateToDefault;
-    const costBasisTotal = sharesHeld * blendedCostBasis * rateToDefault;
+    const currentValue = sharesHeld * currentPrice * rateToDefault; // live rate ✓
+
+    // Cost basis uses the rate locked in at purchase time per buy lot (historic, immutable).
+    // Falls back to current rateToDefault for legacy trades that predate this field.
+    const totalCostBasisDefault = buys.reduce((sum, trade) => {
+      const tradeRate = trade.buyRateToDefault ?? rateToDefault;
+      return sum + trade.quantity * trade.buyPrice * tradeRate;
+    }, 0);
+    const blendedCostBasisDefault = totalBuyQty > 0 ? totalCostBasisDefault / totalBuyQty : 0;
+    const costBasisTotal = sharesHeld * blendedCostBasisDefault; // historic rate ✓
+
     const unrealizedGain = currentValue - costBasisTotal;
     // Gain % is currency-neutral (native/native)
     const unrealizedGainPercent = blendedCostBasis > 0 ? ((currentPrice - blendedCostBasis) / blendedCostBasis) * 100 : 0;

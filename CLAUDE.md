@@ -45,6 +45,7 @@ Two separate price concepts exist:
 | Field | Location | Set by | Currency | Ever overwritten by API? |
 |---|---|---|---|---|
 | `buyPrice` / `sellPrice` | `StockTrade` (persisted) | User entry only (`handleSaveTrade`) | Native (e.g. USD, ILS) | ❌ Never |
+| `buyRateToDefault` | `StockTrade` (persisted) | Captured once in `handleSaveTrade` at trade entry time | — | ❌ Never — this is the historic rate used for cost basis |
 | `currentPrices[ticker]` | `portfolioStore` (persisted) | "Refresh Prices" or Excel import | Native currency | ✅ Yes, intentional |
 
 - `StockTrade.currency` (required) — the native price currency, e.g. `'USD'` for global stocks, `'ILS'` for TASE.
@@ -53,8 +54,10 @@ Two separate price concepts exist:
 - **Refresh Prices** calls `updateCurrentPrice(ticker, price)` → modifies only `currentPrices` + `lastPriceUpdates`. Never touches `StockTrade` fields.
 - `CurrentHolding` is **not stored** — computed on-demand by `calculateCurrentHoldings(trades, currentPrices, lastPriceUpdates, exchangeRates)`.
   - `blendedCostBasis` and `currentPrice` → native currency
-  - `currentValue`, `costBasisTotal`, `unrealizedGain` → `defaultCurrency` (converted via `exchangeRates`)
-  - `unrealizedGainPercent` → % based on native prices (currency-neutral)
+  - `currentValue` → `defaultCurrency` using the **live** `rateToDefault` (what the portfolio is worth now)
+  - `costBasisTotal` → `defaultCurrency` using **`buyRateToDefault` per buy lot** (what you paid, at the rate when you bought) — legacy trades without this field fall back to current rate
+  - `unrealizedGain` = `currentValue − costBasisTotal` → includes both price movement and FX movement
+  - `unrealizedGainPercent` → % based on native prices only (currency-neutral, no FX effect)
   - When `currentPrices[ticker]` is absent, `currentPrice` falls back to `blendedCostBasis` (0% gain).
 
 ### API keys & which holdings they cover

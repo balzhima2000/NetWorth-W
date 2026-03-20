@@ -316,9 +316,7 @@ export default function Spending() {
 
   const txToDefault = (t: Transaction): number => {
     if (t.currency === defaultCurrency) return t.amount;
-    const rate = exchangeRates.find((r) => r.currency === t.currency);
-    if (rate) return t.amount * rate.rateToDefault;
-    return t.convertedAmount;
+    return t.convertedAmount; // always use stored value — never recalculate from live rates
   };
 
   const monthTransactions = useMemo(() =>

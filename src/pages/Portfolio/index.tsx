@@ -241,6 +241,10 @@ export default function Portfolio() {
         assetCategory, notes: tradeNotes, market: tradeMkt,
       });
     } else {
+      const buyRateToDefault =
+        tradeCurrency === defaultCurrency
+          ? 1
+          : (exchangeRates.find((r) => r.currency === tradeCurrency)?.rateToDefault ?? 1);
       addTrade({
         id: crypto.randomUUID(), ticker: upperTicker, name: companyName || upperTicker,
         quantity: qty, buyPrice: tradeType === 'buy' ? px : 0,
@@ -249,6 +253,7 @@ export default function Portfolio() {
         sellDate: tradeType === 'sell' ? tradeDate : null,
         assetCategory, notes: tradeNotes, market: tradeMkt,
         currency: tradeCurrency,
+        buyRateToDefault, // locked at entry time, never updated
       });
     }
     setShowTradeModal(false);
