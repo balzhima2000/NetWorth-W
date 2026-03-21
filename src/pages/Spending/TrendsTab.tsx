@@ -87,14 +87,14 @@ export default function TrendsTab({
   );
 
   const hasDailySpend = dailyTotals.some((d) => d.amount > 0);
-  const hasEnoughHistory = allMonthlyTotals.length >= 2;
+  const hasAnyData = allMonthlyTotals.length >= 1 || hasDailySpend;
 
-  if (!hasEnoughHistory) {
+  if (!hasAnyData) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
         <p className="text-4xl mb-4">📊</p>
         <p className="text-white/60 text-sm">
-          Add at least 2 months of transactions to see spending trends.
+          Add some transactions to see spending trends.
         </p>
       </div>
     );
