@@ -456,11 +456,13 @@ export default function Settings() {
   };
 
   return (
-    <div className="space-y-6 max-w-2xl">
+    <div className="space-y-6">
       <div>
         <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1">Settings</h1>
         <p className="text-white/50">Manage your app configuration and data</p>
       </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
       {/* ── SYNC & ACCOUNT ── */}
       <GlassCard padding="lg">
@@ -775,206 +777,208 @@ export default function Settings() {
         </div>
       </GlassCard>
 
-      {/* ── EXPENSE CATEGORIES ── */}
+      {/* ── CATEGORIES (Expense + Income) ── */}
       <GlassCard padding="lg">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-white">🏷️ Expense Categories</h2>
-          <Button variant="secondary" size="sm" onClick={() => openAddCat('expense')}>+ Add Expense Category</Button>
-        </div>
-        <div className="space-y-2">
-          {categories.map((cat) => (
-            <div key={cat.id} className="flex items-center justify-between p-2.5 bg-white/5 rounded-xl border border-white/8">
-              <div className="flex items-center gap-2">
-                <span className="text-lg">{cat.emoji}</span>
-                <div className="w-2 h-2 rounded-full" style={{ background: cat.color }} />
-                <span className="text-white text-sm font-medium">{cat.name}</span>
+        <h2 className="text-xl font-semibold text-white mb-4">🏷️ Categories</h2>
+
+        {/* Expense Categories */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-base font-semibold text-white/70">Expense Categories</h3>
+            <Button variant="secondary" size="sm" onClick={() => openAddCat('expense')}>+ Add</Button>
+          </div>
+          <div className="space-y-2">
+            {categories.map((cat) => (
+              <div key={cat.id} className="flex items-center justify-between p-2.5 bg-white/5 rounded-xl border border-white/8">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">{cat.emoji}</span>
+                  <div className="w-2 h-2 rounded-full" style={{ background: cat.color }} />
+                  <span className="text-white text-sm font-medium">{cat.name}</span>
+                </div>
+                <div className="flex gap-1">
+                  <button onClick={() => openEditCat(cat, 'expense')} className="p-1.5 rounded-lg text-white/30 hover:text-white/70 hover:bg-white/10 transition-colors">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                  </button>
+                  <button
+                    onClick={() => !catHasTransactions(cat.id) && confirmDeleteCat(cat.id, 'expense')}
+                    disabled={catHasTransactions(cat.id)}
+                    className={`p-1.5 rounded-lg transition-colors ${catHasTransactions(cat.id) ? 'text-white/15 cursor-not-allowed' : 'text-white/30 hover:text-[#EF4444] hover:bg-[#EF4444]/10'}`}
+                    title={catHasTransactions(cat.id) ? 'Category is used in transactions' : 'Delete'}
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                  </button>
+                </div>
               </div>
-              <div className="flex gap-1">
-                <button onClick={() => openEditCat(cat, 'expense')} className="p-1.5 rounded-lg text-white/30 hover:text-white/70 hover:bg-white/10 transition-colors">
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
-                </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Income Categories */}
+        <div className="pt-4 border-t border-white/5">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-base font-semibold text-white/70">Income Categories</h3>
+            <Button variant="secondary" size="sm" onClick={() => openAddCat('income')}>+ Add</Button>
+          </div>
+          <div className="space-y-2">
+            {incomeCategories.map((cat) => (
+              <div key={cat.id} className="flex items-center justify-between p-2.5 bg-white/5 rounded-xl border border-white/8">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">{cat.emoji}</span>
+                  <div className="w-2 h-2 rounded-full" style={{ background: cat.color }} />
+                  <span className="text-white text-sm font-medium">{cat.name}</span>
+                </div>
+                <div className="flex gap-1">
+                  <button onClick={() => openEditCat(cat, 'income')} className="p-1.5 rounded-lg text-white/30 hover:text-white/70 hover:bg-white/10 transition-colors">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                  </button>
+                  <button
+                    onClick={() => !catHasTransactions(cat.id) && confirmDeleteCat(cat.id, 'income')}
+                    disabled={catHasTransactions(cat.id)}
+                    className={`p-1.5 rounded-lg transition-colors ${catHasTransactions(cat.id) ? 'text-white/15 cursor-not-allowed' : 'text-white/30 hover:text-[#EF4444] hover:bg-[#EF4444]/10'}`}
+                    title={catHasTransactions(cat.id) ? 'Category is used in transactions' : 'Delete'}
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </GlassCard>
+
+      {/* ── PAYMENT METHODS (Cards + Income Destinations) ── */}
+      <GlassCard padding="lg">
+        <h2 className="text-xl font-semibold text-white mb-4">💳 Payment Methods</h2>
+
+        {/* Payment Cards */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-base font-semibold text-white/70">Expense Cards</h3>
+            <Button variant="secondary" size="sm" onClick={openAddCard}>+ Add Card</Button>
+          </div>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between p-2.5 bg-white/5 rounded-xl border border-white/8 opacity-60">
+              <div className="flex items-center gap-3">
+                <div className="w-5 h-5 rounded-full bg-[#22C55E]" />
+                <span className="text-white text-sm font-medium">💵 Cash</span>
+                <span className="text-xs text-white/30">built-in</span>
+              </div>
+            </div>
+            {cards.map((card) => (
+              <div key={card.id} className="flex items-center justify-between p-2.5 bg-white/5 rounded-xl border border-white/8">
+                <div className="flex items-center gap-3">
+                  <div className="w-5 h-5 rounded-full" style={{ background: card.color }} />
+                  <span className="text-white text-sm font-medium">{card.name}</span>
+                  {!card.isActive && <span className="text-xs text-white/30 bg-white/10 px-1.5 rounded">inactive</span>}
+                </div>
+                <div className="flex gap-1">
+                  <button onClick={() => updateCard(card.id, { isActive: !card.isActive })} className="p-1.5 rounded-lg text-white/30 hover:text-white/70 hover:bg-white/10 transition-colors text-xs px-2" title={card.isActive ? 'Deactivate' : 'Activate'}>
+                    {card.isActive ? '⏸' : '▶'}
+                  </button>
+                  <button onClick={() => openEditCard(card)} className="p-1.5 rounded-lg text-white/30 hover:text-white/70 hover:bg-white/10 transition-colors">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                  </button>
+                  <button onClick={() => setDeleteCardId(card.id)} className="p-1.5 rounded-lg text-white/30 hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                  </button>
+                </div>
+              </div>
+            ))}
+            {cards.length === 0 && <p className="text-white/30 text-sm">No cards added yet</p>}
+          </div>
+          <div className="mt-3 pt-3 border-t border-white/5 flex items-center justify-between gap-4">
+            <div>
+              <p className="text-white/70 text-sm font-medium">Default for expenses</p>
+              <p className="text-white/35 text-xs mt-0.5">Pre-selected when adding an expense</p>
+            </div>
+            <Select
+              value={defaultExpensePayment}
+              onChange={e => setDefaultExpensePayment(e.target.value)}
+              containerClassName="min-w-[140px]"
+              options={[
+                { value: 'cash', label: '💵 Cash' },
+                ...cards.filter(c => c.isActive).map(c => ({ value: c.id, label: `💳 ${c.name || 'Unnamed Card'}` })),
+              ]}
+            />
+          </div>
+        </div>
+
+        {/* Income Destinations */}
+        <div className="pt-4 border-t border-white/5">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-base font-semibold text-white/70">Income Destinations</h3>
+            {!showNewDestInput && (
+              <Button variant="secondary" size="sm" onClick={() => setShowNewDestInput(true)}>+ Add Account</Button>
+            )}
+          </div>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between p-2.5 bg-white/5 rounded-xl border border-white/8 opacity-60">
+              <div className="flex items-center gap-3">
+                <span className="text-base leading-none">💵</span>
+                <span className="text-white text-sm font-medium">Cash</span>
+                <span className="text-xs text-white/30">built-in</span>
+              </div>
+            </div>
+            {incomeDestinations.filter(d => d.id !== 'cash').map((dest) => (
+              <div key={dest.id} className="flex items-center justify-between p-2.5 bg-white/5 rounded-xl border border-white/8">
+                <div className="flex items-center gap-3">
+                  <span className="text-base leading-none">{dest.icon}</span>
+                  <span className="text-white text-sm font-medium">{dest.name}</span>
+                </div>
                 <button
-                  onClick={() => !catHasTransactions(cat.id) && confirmDeleteCat(cat.id, 'expense')}
-                  disabled={catHasTransactions(cat.id)}
-                  className={`p-1.5 rounded-lg transition-colors ${catHasTransactions(cat.id) ? 'text-white/15 cursor-not-allowed' : 'text-white/30 hover:text-[#EF4444] hover:bg-[#EF4444]/10'}`}
-                  title={catHasTransactions(cat.id) ? 'Category is used in transactions' : 'Delete'}
+                  onClick={() => setDeleteDestId(dest.id)}
+                  className="p-1.5 rounded-lg text-white/30 hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors"
                 >
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                 </button>
               </div>
-            </div>
-          ))}
-        </div>
-      </GlassCard>
-
-      {/* ── INCOME CATEGORIES ── */}
-      <GlassCard padding="lg">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-white">💰 Income Categories</h2>
-          <Button variant="secondary" size="sm" onClick={() => openAddCat('income')}>+ Add Income Category</Button>
-        </div>
-        <div className="space-y-2">
-          {incomeCategories.map((cat) => (
-            <div key={cat.id} className="flex items-center justify-between p-2.5 bg-white/5 rounded-xl border border-white/8">
-              <div className="flex items-center gap-2">
-                <span className="text-lg">{cat.emoji}</span>
-                <div className="w-2 h-2 rounded-full" style={{ background: cat.color }} />
-                <span className="text-white text-sm font-medium">{cat.name}</span>
-              </div>
-              <div className="flex gap-1">
-                <button onClick={() => openEditCat(cat, 'income')} className="p-1.5 rounded-lg text-white/30 hover:text-white/70 hover:bg-white/10 transition-colors">
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
-                </button>
+            ))}
+            {showNewDestInput && (
+              <div className="flex gap-2 items-center pt-1">
+                <input
+                  autoFocus
+                  type="text"
+                  placeholder="e.g. Chase Checking, Savings Account"
+                  value={newDestName}
+                  onChange={e => setNewDestName(e.target.value)}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' && newDestName.trim()) {
+                      addIncomeDestination({ id: crypto.randomUUID(), name: newDestName.trim(), icon: '🏦' });
+                      setNewDestName(''); setShowNewDestInput(false);
+                    } else if (e.key === 'Escape') {
+                      setShowNewDestInput(false); setNewDestName('');
+                    }
+                  }}
+                  className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#10B981]/50"
+                />
                 <button
-                  onClick={() => !catHasTransactions(cat.id) && confirmDeleteCat(cat.id, 'income')}
-                  disabled={catHasTransactions(cat.id)}
-                  className={`p-1.5 rounded-lg transition-colors ${catHasTransactions(cat.id) ? 'text-white/15 cursor-not-allowed' : 'text-white/30 hover:text-[#EF4444] hover:bg-[#EF4444]/10'}`}
-                  title={catHasTransactions(cat.id) ? 'Category is used in transactions' : 'Delete'}
-                >
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </GlassCard>
-
-      {/* ── PAYMENT CARDS ── */}
-      <GlassCard padding="lg">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-white">💳 Payment Cards</h2>
-          <Button variant="secondary" size="sm" onClick={openAddCard}>+ Add Card</Button>
-        </div>
-        <div className="space-y-2">
-          {/* Cash (built-in) */}
-          <div className="flex items-center justify-between p-2.5 bg-white/5 rounded-xl border border-white/8 opacity-60">
-            <div className="flex items-center gap-3">
-              <div className="w-5 h-5 rounded-full bg-[#22C55E]" />
-              <span className="text-white text-sm font-medium">💵 Cash</span>
-              <span className="text-xs text-white/30">built-in</span>
-            </div>
-          </div>
-          {cards.map((card) => (
-            <div key={card.id} className="flex items-center justify-between p-2.5 bg-white/5 rounded-xl border border-white/8">
-              <div className="flex items-center gap-3">
-                <div className="w-5 h-5 rounded-full" style={{ background: card.color }} />
-                <span className="text-white text-sm font-medium">{card.name}</span>
-                {!card.isActive && <span className="text-xs text-white/30 bg-white/10 px-1.5 rounded">inactive</span>}
-              </div>
-              <div className="flex gap-1">
-                <button onClick={() => updateCard(card.id, { isActive: !card.isActive })} className="p-1.5 rounded-lg text-white/30 hover:text-white/70 hover:bg-white/10 transition-colors text-xs px-2" title={card.isActive ? 'Deactivate' : 'Activate'}>
-                  {card.isActive ? '⏸' : '▶'}
-                </button>
-                <button onClick={() => openEditCard(card)} className="p-1.5 rounded-lg text-white/30 hover:text-white/70 hover:bg-white/10 transition-colors">
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
-                </button>
-                <button onClick={() => setDeleteCardId(card.id)} className="p-1.5 rounded-lg text-white/30 hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                </button>
-              </div>
-            </div>
-          ))}
-          {cards.length === 0 && <p className="text-white/30 text-sm">No cards added yet</p>}
-        </div>
-        {/* Default payment method for expenses */}
-        <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between gap-4">
-          <div>
-            <p className="text-white/70 text-sm font-medium">Default for expenses</p>
-            <p className="text-white/35 text-xs mt-0.5">Pre-selected when adding an expense</p>
-          </div>
-          <Select
-            value={defaultExpensePayment}
-            onChange={e => setDefaultExpensePayment(e.target.value)}
-            containerClassName="min-w-[140px]"
-            options={[
-              { value: 'cash', label: '💵 Cash' },
-              ...cards.filter(c => c.isActive).map(c => ({ value: c.id, label: `💳 ${c.name || 'Unnamed Card'}` })),
-            ]}
-          />
-        </div>
-      </GlassCard>
-
-      {/* ── INCOME DESTINATIONS ── */}
-      <GlassCard padding="lg">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h2 className="text-xl font-semibold text-white">🏦 Income Destinations</h2>
-            <p className="text-white/40 text-xs mt-0.5">Where income lands — shown when adding income transactions</p>
-          </div>
-          {!showNewDestInput && (
-            <Button variant="secondary" size="sm" onClick={() => setShowNewDestInput(true)}>+ Add Account</Button>
-          )}
-        </div>
-        <div className="space-y-2">
-          {/* Cash — built-in, non-deletable */}
-          <div className="flex items-center justify-between p-2.5 bg-white/5 rounded-xl border border-white/8 opacity-60">
-            <div className="flex items-center gap-3">
-              <span className="text-base leading-none">💵</span>
-              <span className="text-white text-sm font-medium">Cash</span>
-              <span className="text-xs text-white/30">built-in</span>
-            </div>
-          </div>
-          {incomeDestinations.filter(d => d.id !== 'cash').map((dest) => (
-            <div key={dest.id} className="flex items-center justify-between p-2.5 bg-white/5 rounded-xl border border-white/8">
-              <div className="flex items-center gap-3">
-                <span className="text-base leading-none">{dest.icon}</span>
-                <span className="text-white text-sm font-medium">{dest.name}</span>
-              </div>
-              <button
-                onClick={() => setDeleteDestId(dest.id)}
-                className="p-1.5 rounded-lg text-white/30 hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors"
-              >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-              </button>
-            </div>
-          ))}
-          {/* Inline add input */}
-          {showNewDestInput && (
-            <div className="flex gap-2 items-center pt-1">
-              <input
-                autoFocus
-                type="text"
-                placeholder="e.g. Chase Checking, Savings Account"
-                value={newDestName}
-                onChange={e => setNewDestName(e.target.value)}
-                onKeyDown={e => {
-                  if (e.key === 'Enter' && newDestName.trim()) {
+                  disabled={!newDestName.trim()}
+                  onClick={() => {
+                    if (!newDestName.trim()) return;
                     addIncomeDestination({ id: crypto.randomUUID(), name: newDestName.trim(), icon: '🏦' });
                     setNewDestName(''); setShowNewDestInput(false);
-                  } else if (e.key === 'Escape') {
-                    setShowNewDestInput(false); setNewDestName('');
-                  }
-                }}
-                className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#10B981]/50"
-              />
-              <button
-                disabled={!newDestName.trim()}
-                onClick={() => {
-                  if (!newDestName.trim()) return;
-                  addIncomeDestination({ id: crypto.randomUUID(), name: newDestName.trim(), icon: '🏦' });
-                  setNewDestName(''); setShowNewDestInput(false);
-                }}
-                className="px-3 py-2 rounded-xl text-sm font-semibold bg-[#10B981]/20 text-[#10B981] hover:bg-[#10B981]/30 disabled:opacity-40 transition-all"
-              >Add</button>
-              <button onClick={() => { setShowNewDestInput(false); setNewDestName(''); }} className="px-2 py-2 rounded-xl text-sm text-white/40 hover:text-white/60 transition-all">✕</button>
-            </div>
-          )}
-          {incomeDestinations.filter(d => d.id !== 'cash').length === 0 && !showNewDestInput && (
-            <p className="text-white/30 text-sm">No accounts added yet</p>
-          )}
-        </div>
-        {/* Default income destination */}
-        <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between gap-4">
-          <div>
-            <p className="text-white/70 text-sm font-medium">Default for income</p>
-            <p className="text-white/35 text-xs mt-0.5">Pre-selected when adding income</p>
+                  }}
+                  className="px-3 py-2 rounded-xl text-sm font-semibold bg-[#10B981]/20 text-[#10B981] hover:bg-[#10B981]/30 disabled:opacity-40 transition-all"
+                >Add</button>
+                <button onClick={() => { setShowNewDestInput(false); setNewDestName(''); }} className="px-2 py-2 rounded-xl text-sm text-white/40 hover:text-white/60 transition-all">✕</button>
+              </div>
+            )}
+            {incomeDestinations.filter(d => d.id !== 'cash').length === 0 && !showNewDestInput && (
+              <p className="text-white/30 text-sm">No accounts added yet</p>
+            )}
           </div>
-          <Select
-            value={defaultIncomeDestination}
-            onChange={e => setDefaultIncomeDestination(e.target.value)}
-            containerClassName="min-w-[140px]"
-            options={incomeDestinations.map(d => ({ value: d.id, label: `${d.icon} ${d.name}` }))}
-          />
+          <div className="mt-3 pt-3 border-t border-white/5 flex items-center justify-between gap-4">
+            <div>
+              <p className="text-white/70 text-sm font-medium">Default for income</p>
+              <p className="text-white/35 text-xs mt-0.5">Pre-selected when adding income</p>
+            </div>
+            <Select
+              value={defaultIncomeDestination}
+              onChange={e => setDefaultIncomeDestination(e.target.value)}
+              containerClassName="min-w-[140px]"
+              options={incomeDestinations.map(d => ({ value: d.id, label: `${d.icon} ${d.name}` }))}
+            />
+          </div>
         </div>
       </GlassCard>
 
@@ -1046,10 +1050,10 @@ export default function Settings() {
         </div>
       </GlassCard>
 
-      {/* ── DATA MANAGEMENT ── */}
+      {/* ── DATA & RESET ── */}
       <GlassCard padding="lg">
         <h2 className="text-xl font-semibold text-white mb-4">💾 Data Management</h2>
-        <div className="space-y-3">
+        <div className="space-y-3 mb-6">
           <Button variant="secondary" onClick={handleExportJSON} fullWidth>⬇️ Export Full Backup (JSON)</Button>
           <Button variant="secondary" onClick={handleExportCSV} fullWidth>📊 Export Transactions (CSV)</Button>
           <Button variant="ghost" onClick={() => fileInputRef.current?.click()} fullWidth>⬆️ Import Backup (JSON)</Button>
@@ -1058,24 +1062,25 @@ export default function Settings() {
             <p className="text-xs text-white/30 text-center">Last backup: {formatDate(lastBackupDate)}</p>
           )}
         </div>
-      </GlassCard>
 
-      {/* ── DANGER ZONE ── */}
-      <GlassCard padding="lg" className="border border-[#EF4444]/20">
-        <h2 className="text-xl font-semibold text-[#EF4444] mb-4">⚠️ Danger Zone</h2>
-        <div className="space-y-3">
-          <div className="p-4 bg-white/[0.03] rounded-xl border border-white/8">
-            <p className="text-white font-medium text-sm mb-0.5">Reset This Device</p>
-            <p className="text-white/40 text-xs mb-3">Clears all local data. Your cloud backup is preserved — sign back in to restore.</p>
-            <Button variant="danger" size="sm" onClick={() => setShowSoftResetConfirm(true)}>Reset This Device</Button>
-          </div>
-          <div className="p-4 bg-white/[0.03] rounded-xl border border-white/8">
-            <p className="text-white font-medium text-sm mb-0.5">Delete Everything</p>
-            <p className="text-white/40 text-xs mb-3">Permanently deletes all data from this device and the cloud. Cannot be undone.</p>
-            <Button variant="danger" size="sm" onClick={() => { setClearText(''); setShowHardResetConfirm(true); }}>Delete Everything</Button>
+        <div className="pt-4 border-t border-[#EF4444]/20">
+          <h3 className="text-base font-semibold text-[#EF4444] mb-3">⚠️ Danger Zone</h3>
+          <div className="space-y-3">
+            <div className="p-4 bg-white/[0.03] rounded-xl border border-white/8">
+              <p className="text-white font-medium text-sm mb-0.5">Reset This Device</p>
+              <p className="text-white/40 text-xs mb-3">Clears all local data. Your cloud backup is preserved — sign back in to restore.</p>
+              <Button variant="danger" size="sm" onClick={() => setShowSoftResetConfirm(true)}>Reset This Device</Button>
+            </div>
+            <div className="p-4 bg-white/[0.03] rounded-xl border border-white/8">
+              <p className="text-white font-medium text-sm mb-0.5">Delete Everything</p>
+              <p className="text-white/40 text-xs mb-3">Permanently deletes all data from this device and the cloud. Cannot be undone.</p>
+              <Button variant="danger" size="sm" onClick={() => { setClearText(''); setShowHardResetConfirm(true); }}>Delete Everything</Button>
+            </div>
           </div>
         </div>
       </GlassCard>
+
+      </div>{/* end grid */}
 
       {/* CATEGORY MODAL */}
       <Modal isOpen={showCatModal} onClose={() => setShowCatModal(false)} title={editingCat ? `Edit ${catContext === 'expense' ? 'Expense' : 'Income'} Category` : `Add ${catContext === 'expense' ? 'Expense' : 'Income'} Category`} size="sm"
