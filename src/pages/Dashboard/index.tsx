@@ -347,7 +347,6 @@ export default function Dashboard() {
 
   // ── FIRE ────────────────────────────────────────────────────────
   const fireProgress = fireTarget ? Math.min((netWorth / fireTarget) * 100, 100) : null;
-  const fireRemaining = fireTarget ? Math.max(fireTarget - netWorth, 0) : null;
 
   // ── Upcoming recurring (7 days) ────────────────────────────────
   const dueSoon = useMemo(() => {
@@ -903,48 +902,6 @@ export default function Dashboard() {
           </GlassCard>
         )}
 
-        {/* FIRE progress */}
-        {fireProgress !== null && fireTarget !== null && (
-          <GlassCard padding="md">
-            <div className="flex items-start justify-between mb-3">
-              <div>
-                <p className="text-white/70 text-sm font-semibold">🔥 FIRE Progress</p>
-                <p className="text-white/30 text-xs mt-0.5">
-                  Target: {formatCurrency(fireTarget, defaultCurrency)}
-                </p>
-              </div>
-              <div className="text-right">
-                <p
-                  className="text-lg font-bold font-mono leading-none"
-                  style={{ color: fireProgress >= 100 ? '#22C55E' : '#10B981' }}
-                >
-                  {fireProgress.toFixed(1)}%
-                </p>
-                {fireRemaining !== null && fireRemaining > 0 && (
-                  <p className="text-xs text-white/30 mt-0.5">
-                    {formatCurrency(fireRemaining, defaultCurrency)} left
-                  </p>
-                )}
-              </div>
-            </div>
-            <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.08)' }}>
-              <div
-                className="h-full rounded-full"
-                style={{
-                  width: `${fireProgress}%`,
-                  background: fireProgress >= 100
-                    ? 'linear-gradient(90deg,#10B981,#22C55E)'
-                    : 'linear-gradient(90deg,#10B981,#34D399)',
-                  transition: 'width 800ms cubic-bezier(0.34,1.56,0.64,1)',
-                }}
-              />
-            </div>
-            {fireProgress >= 100 && (
-              <p className="text-xs text-[#22C55E] mt-2">🎉 You've reached your FIRE target!</p>
-            )}
-          </GlassCard>
-        )}
-
         {/* Wealth composition — bottom, donut */}
         {totalAssets > 0 && wealthSegments.filter(s => s.value > 1).length > 0 && (
           <GlassCard padding="md">
@@ -1235,7 +1192,12 @@ export default function Dashboard() {
             </GlassCard>
           )}
 
-          {/* Recent Activity — expanded in main content column */}
+        </div>
+
+        {/* ── RIGHT COLUMN (sticky rail) ── */}
+        <div className="space-y-4 xl:sticky xl:top-6">
+
+          {/* Recent Activity */}
           <GlassCard padding="md">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-sm font-semibold text-white">Recent Activity</h2>
@@ -1287,7 +1249,6 @@ export default function Dashboard() {
               />
             ) : (
               <div className="space-y-0.5">
-                {/* Due soon */}
                 {dueSoonActivity.length > 0 && (
                   <>
                     <p className="text-[10px] text-white/30 uppercase tracking-wider px-1 pb-1.5">
@@ -1318,8 +1279,6 @@ export default function Dashboard() {
                     ))}
                   </>
                 )}
-
-                {/* Recent transactions */}
                 {recentTransactions.length > 0 && (
                   <>
                     {dueSoonActivity.length > 0 && (
@@ -1359,59 +1318,6 @@ export default function Dashboard() {
               </div>
             )}
           </GlassCard>
-
-        </div>
-
-        {/* ── RIGHT COLUMN (sticky rail) ── */}
-        <div className="space-y-4 xl:sticky xl:top-6">
-
-          {/* FIRE progress */}
-          {fireTarget !== null && fireProgress !== null && (
-            <GlassCard padding="md">
-              <div className="flex items-start justify-between mb-1">
-                <div>
-                  <p className="text-white/70 text-sm font-semibold">🔥 FIRE Progress</p>
-                  <p className="text-white/30 text-xs mt-0.5">
-                    Target: {formatCurrency(fireTarget, defaultCurrency)}
-                  </p>
-                </div>
-                <p
-                  className="text-2xl font-bold font-mono leading-none"
-                  style={{ color: fireProgress >= 100 ? '#22C55E' : '#10B981' }}
-                >
-                  {fireProgress.toFixed(1)}%
-                </p>
-              </div>
-
-              <div className="my-3 h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.08)' }}>
-                <div
-                  className="h-full rounded-full"
-                  style={{
-                    width: `${fireProgress}%`,
-                    background: fireProgress >= 100
-                      ? 'linear-gradient(90deg,#10B981,#22C55E)'
-                      : 'linear-gradient(90deg,#10B981,#34D399)',
-                    transition: 'width 800ms cubic-bezier(0.34,1.56,0.64,1)',
-                  }}
-                />
-              </div>
-
-              <div className="flex items-center justify-between">
-                {fireRemaining !== null && fireRemaining > 0 ? (
-                  <p className="text-xs text-white/35">
-                    {formatCurrency(fireRemaining, defaultCurrency)} remaining
-                  </p>
-                ) : (
-                  <p className="text-xs text-[#22C55E]">🎉 Target reached!</p>
-                )}
-                {netWorth > 0 && fireTarget > 0 && (
-                  <p className="text-xs text-white/25">
-                    {formatCurrency(netWorth, defaultCurrency)} / {formatCurrency(fireTarget, defaultCurrency)}
-                  </p>
-                )}
-              </div>
-            </GlassCard>
-          )}
 
           {/* Top holdings */}
           {holdings.length > 0 && (
