@@ -251,7 +251,6 @@ export default function Dashboard() {
   const recurringPayments = useRecurringStore((s) => s.recurringPayments);
   const getBudgetsByMonth = useBudgetStore((s) => s.getBudgetsByMonth);
 
-  const fireTarget = useSettingsStore((s) => s.fireTarget);
   const defaultCurrency = useSettingsStore((s) => s.defaultCurrency);
   const exchangeRates = useSettingsStore((s) => s.exchangeRates);
   const userNickname = useSettingsStore((s) => s.userNickname);
@@ -345,9 +344,6 @@ export default function Dashboard() {
     };
   }, [chartData]);
 
-  // ── FIRE ────────────────────────────────────────────────────────
-  const fireProgress = fireTarget ? Math.min((netWorth / fireTarget) * 100, 100) : null;
-
   // ── Upcoming recurring (rest of this month) ──────────────────────
   const dueSoon = useMemo(() => {
     const today = new Date();
@@ -419,24 +415,12 @@ export default function Dashboard() {
       });
     }
 
-    if (fireProgress !== null) {
-      items.push({
-        id: 'fire',
-        icon: '🔥',
-        label: 'FIRE progress — keep it up',
-        value: `${fireProgress.toFixed(1)}%`,
-        href: '/fire',
-        severity: 'positive',
-      });
-    }
-
     return items;
   }, [
     budgetsOverLimit,
     dueSoon,
     dueSoonTotal,
     spendingVsLastMonth,
-    fireProgress,
     defaultCurrency,
   ]);
 

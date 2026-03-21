@@ -882,16 +882,15 @@ export default function Settings() {
             <p className="text-white/70 text-sm font-medium">Default for expenses</p>
             <p className="text-white/35 text-xs mt-0.5">Pre-selected when adding an expense</p>
           </div>
-          <select
+          <Select
             value={defaultExpensePayment}
             onChange={e => setDefaultExpensePayment(e.target.value)}
-            className="bg-white/7 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-[#10B981]/50 min-w-[140px]"
-          >
-            <option value="cash">💵 Cash</option>
-            {cards.filter(c => c.isActive).map(c => (
-              <option key={c.id} value={c.id}>💳 {c.name || 'Unnamed Card'}</option>
-            ))}
-          </select>
+            containerClassName="min-w-[140px]"
+            options={[
+              { value: 'cash', label: '💵 Cash' },
+              ...cards.filter(c => c.isActive).map(c => ({ value: c.id, label: `💳 ${c.name || 'Unnamed Card'}` })),
+            ]}
+          />
         </div>
       </GlassCard>
 
@@ -970,15 +969,12 @@ export default function Settings() {
             <p className="text-white/70 text-sm font-medium">Default for income</p>
             <p className="text-white/35 text-xs mt-0.5">Pre-selected when adding income</p>
           </div>
-          <select
+          <Select
             value={defaultIncomeDestination}
             onChange={e => setDefaultIncomeDestination(e.target.value)}
-            className="bg-white/7 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-[#10B981]/50 min-w-[140px]"
-          >
-            {incomeDestinations.map(d => (
-              <option key={d.id} value={d.id}>{d.icon} {d.name}</option>
-            ))}
-          </select>
+            containerClassName="min-w-[140px]"
+            options={incomeDestinations.map(d => ({ value: d.id, label: `${d.icon} ${d.name}` }))}
+          />
         </div>
       </GlassCard>
 
