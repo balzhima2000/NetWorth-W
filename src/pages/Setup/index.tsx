@@ -85,7 +85,7 @@ export default function SetupWizard() {
 
       <div className="flex-1 flex items-center justify-center p-6">
         <div className="w-full max-w-5xl">
-          {currentStep === 1 && <Step1Name onNext={handleNext} />}
+          {currentStep === 1 && <Step1Name onNext={handleNext} onRestoreFromCloud={() => setCurrentStep(8 as StepNumber)} />}
           {currentStep === 2 && <Step2Privacy onNext={handleNext} onBack={handleBack} />}
           {currentStep === 3 && (
             <Step3Currency onNext={handleNext} onBack={handleBack} />

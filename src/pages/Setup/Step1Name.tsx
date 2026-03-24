@@ -14,11 +14,12 @@ import { parseBackup } from '../../services/exportImport';
 
 interface Step1NameProps {
   onNext: () => void;
+  onRestoreFromCloud: () => void;
 }
 
 type RestoreStep = 'idle' | 'name' | 'confirming';
 
-export default function Step1Name({ onNext }: Step1NameProps) {
+export default function Step1Name({ onNext, onRestoreFromCloud }: Step1NameProps) {
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -223,6 +224,13 @@ export default function Step1Name({ onNext }: Step1NameProps) {
       >
         Continue
       </Button>
+
+      <button
+        className="text-white/30 text-sm hover:text-white/60 transition-colors"
+        onClick={onRestoreFromCloud}
+      >
+        Already set up on another device? Restore from cloud →
+      </button>
     </div>
   );
 }
