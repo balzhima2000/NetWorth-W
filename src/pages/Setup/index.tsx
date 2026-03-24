@@ -31,17 +31,12 @@ export default function SetupWizard() {
   const portfolioMode = useSettingsStore((s) => s.portfolioMode);
   const [currentStep, setCurrentStep] = useState<StepNumber>(1);
 
-  // If user arrives at setup with an active session (e.g. magic link opened in new tab),
-  // jump to the Done step so they can complete setup and proceed.
+  // If a magic link is clicked in a new tab, Supabase fires SIGNED_IN after processing
+  // the URL hash. Jump to the Done step so the user can finish setup without restarting.
+  // We intentionally do NOT check getSession() on mount — a pre-existing session (e.g.
+  // after a device reset) should not skip steps.
   useEffect(() => {
     if (!supabaseConfigured) return;
-
-    // Check for existing session on mount
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) setCurrentStep(9 as StepNumber);
-    });
-
-    // Also listen for sign-in that completes while on setup (new-tab hash processing)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'SIGNED_IN') setCurrentStep(9 as StepNumber);
     });
