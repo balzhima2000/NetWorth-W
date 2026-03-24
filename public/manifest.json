@@ -1,0 +1,17 @@
+{
+  "name": "NetWorth Tracker",
+  "short_name": "NetWorth",
+  "description": "Track your net worth, portfolio, spending, and FIRE goals — all stored locally on your device.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#0a0a0f",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

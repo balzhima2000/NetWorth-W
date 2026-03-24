@@ -1100,7 +1100,9 @@ export default function Spending() {
                   <div className="space-y-1.5">
                     {group.txs.map(tx => {
                       const cat = getCategoryInfo(tx.category);
-                      const cardName = tx.cardId ? (cards.find(c => c.id === tx.cardId)?.name ?? 'Card') : 'Cash';
+                      const cardName = tx.type === 'income'
+                        ? (incomeDestinations.find(d => d.id === tx.paymentMethod)?.name ?? 'Bank')
+                        : (tx.cardId ? (cards.find(c => c.id === tx.cardId)?.name ?? 'Card') : 'Cash');
                       return (
                         <GlassCard key={tx.id} padding="md">
                           <div className="flex items-center gap-3">
