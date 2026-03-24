@@ -42,6 +42,22 @@ export function updateStoreMeta(storeKey: string, patch: Partial<StoreSyncMeta>)
   setSyncMeta(meta);
 }
 
+export function clearSyncMeta(): void {
+  localStorage.removeItem(SYNC_META_KEY);
+}
+
+// ── Last-synced user tracking ─────────────────────────────────────────────────
+
+const LAST_SYNC_USER_KEY = 'nw-sync-user-id';
+
+export function getLastSyncUserId(): string | null {
+  return localStorage.getItem(LAST_SYNC_USER_KEY);
+}
+
+export function setLastSyncUserId(userId: string): void {
+  localStorage.setItem(LAST_SYNC_USER_KEY, userId);
+}
+
 // ── Merge helpers ─────────────────────────────────────────────────────────────
 
 /** Dedup-union two arrays by a string id field. Remote records win on collision. */

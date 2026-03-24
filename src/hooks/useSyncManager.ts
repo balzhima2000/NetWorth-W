@@ -4,6 +4,9 @@ import {
   computeChecksum,
   getSyncMeta,
   updateStoreMeta,
+  clearSyncMeta,
+  getLastSyncUserId,
+  setLastSyncUserId,
   ALL_STORE_KEYS,
 } from '../utils/syncHelpers';
 import { useTransactionStore } from '../stores/transactionStore';
@@ -179,6 +182,8 @@ export function useSyncManager(): SyncManagerState {
     if (!userRef.current) return;
     setSyncStatus('syncing');
     try {
+      // Clear meta so checksum check is bypassed — every store gets re-pushed
+      clearSyncMeta();
       await pushAll(userRef.current.id);
       setSyncStatus('idle');
     } catch {
@@ -238,6 +243,13 @@ export function useSyncManager(): SyncManagerState {
 
     const startSync = async (user: User) => {
       userRef.current = user;
+
+      // If this is a different user than last time, clear stale sync meta
+      // so all stores are treated as un-synced and get a fresh push/pull.
+      if (getLastSyncUserId() !== user.id) {
+        clearSyncMeta();
+        setLastSyncUserId(user.id);
+      }
 
       // Initial full sync
       await fullSync(user.id);
