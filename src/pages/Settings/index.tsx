@@ -522,7 +522,7 @@ export default function Settings() {
               <div className="flex-1 min-w-[140px]">
                 <Input
                   type="text"
-                  placeholder="6-digit code"
+                  placeholder="Enter code from email"
                   value={syncCode}
                   onChange={(e) => setSyncCode(e.target.value)}
                   onKeyDown={(e) => { if (e.key === 'Enter') void handleVerifyCode(); }}
