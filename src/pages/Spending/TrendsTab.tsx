@@ -211,8 +211,8 @@ export default function TrendsTab({
                 }}
                 formatter={(value?: number, name?: string) => {
                   if (value === undefined) return ['', ''];
-                  if (name === 'saved') return [formatCurrency(value, defaultCurrency), 'Saved'];
-                  return [`${Math.round(value)}%`, 'Savings Rate'];
+                  if (name === 'saved') return [<span style={{ color: '#10B981' }}>{formatCurrency(value, defaultCurrency)}</span>, 'Saved'];
+                  return [<span style={{ color: '#10B981' }}>{Math.round(value)}%</span>, 'Savings Rate'];
                 }}
               />
               <ReferenceLine yAxisId="amount" y={0} stroke="rgba(255,255,255,0.15)" strokeDasharray="4 4" />
