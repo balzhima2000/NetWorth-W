@@ -86,6 +86,16 @@ export default function TrendsTab({
     [monthlyTotals]
   );
 
+  const savingsStats = useMemo(() => {
+    if (savingsRateData.length === 0) return null;
+    const rates = savingsRateData.map(m => m.savingsRate);
+    const avg = rates.reduce((a, b) => a + b, 0) / rates.length;
+    const high = Math.max(...rates);
+    const low = Math.min(...rates);
+    const totalSaved = savingsRateData.reduce((a, m) => a + m.saved, 0);
+    return { avg, high, low, totalSaved };
+  }, [savingsRateData]);
+
   const hasDailySpend = dailyTotals.some((d) => d.amount > 0);
   const hasAnyData = allMonthlyTotals.length >= 1 || hasDailySpend;
 
@@ -152,6 +162,26 @@ export default function TrendsTab({
             title="Savings Rate"
             subtitle="Bars show amount saved · Line shows savings rate %"
           />
+          {savingsStats && (
+            <div className="grid grid-cols-4 gap-3 mb-4">
+              <div className="bg-white/[0.03] rounded-lg p-3">
+                <p className="text-white/40 text-[10px] uppercase tracking-wider mb-1">Avg Rate</p>
+                <p className="text-white font-semibold text-sm">{Math.round(savingsStats.avg)}%</p>
+              </div>
+              <div className="bg-white/[0.03] rounded-lg p-3">
+                <p className="text-white/40 text-[10px] uppercase tracking-wider mb-1">Highest</p>
+                <p className="text-[#10B981] font-semibold text-sm">{Math.round(savingsStats.high)}%</p>
+              </div>
+              <div className="bg-white/[0.03] rounded-lg p-3">
+                <p className="text-white/40 text-[10px] uppercase tracking-wider mb-1">Lowest</p>
+                <p className={`font-semibold text-sm ${savingsStats.low < 0 ? 'text-[#EF4444]' : 'text-white'}`}>{Math.round(savingsStats.low)}%</p>
+              </div>
+              <div className="bg-white/[0.03] rounded-lg p-3">
+                <p className="text-white/40 text-[10px] uppercase tracking-wider mb-1">Total Saved</p>
+                <p className={`font-semibold text-sm ${savingsStats.totalSaved >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>{formatCurrency(savingsStats.totalSaved, defaultCurrency)}</p>
+              </div>
+            </div>
+          )}
           <ResponsiveContainer width="100%" height={240}>
             <ComposedChart data={savingsRateData} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
