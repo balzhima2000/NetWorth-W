@@ -5,7 +5,6 @@ const navItems = [
   { to: '/dashboard', label: 'Home',     icon: '🏠' },
   { to: '/portfolio', label: 'Portfolio', icon: '💼' },
   { to: '/spending',  label: 'Spending',  icon: '💳' },
-  { to: '/heatmap',   label: 'Heatmap',   icon: '🗓️' },
   { to: '/fire',      label: 'FIRE',      icon: '🔥' },
   { to: '/settings',  label: 'Settings',  icon: '⚙️' },
 ];

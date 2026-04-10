@@ -16,6 +16,7 @@ import { CURRENCIES } from '../../utils/constants';
 import { fetchExchangeRate } from '../../services/alphaVantage';
 import type { Transaction, RecurringPayment } from '../../types/index';
 import TrendsTab from './TrendsTab';
+import SpendingHeatmap from '../SpendingHeatmap';
 
 const FREQUENCIES = [
   { value: 'weekly', label: 'Weekly' },
@@ -766,6 +767,7 @@ export default function Spending() {
     { id: 'budgets', label: '🎯 Budgets' },
     { id: 'recurring', label: '🔄 Recurring' },
     { id: 'trends', label: '📈 Trends' },
+    { id: 'heatmap', label: '🗓️ Heatmap' },
   ];
 
   const budgetCatInfo = getCategoryInfo(budgetCategory);
@@ -1366,6 +1368,8 @@ export default function Spending() {
           currentYear={year}
         />
       )}
+
+      {activeTab === 'heatmap' && <SpendingHeatmap />}
 
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* MODALS                                                             */}

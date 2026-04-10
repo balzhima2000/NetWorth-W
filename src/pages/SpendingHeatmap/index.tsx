@@ -456,24 +456,7 @@ export default function SpendingHeatmap() {
 
   // ── Render ──
   return (
-    <div className="max-w-7xl mx-auto space-y-5">
-      {/* Page header */}
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-xl font-bold text-white tracking-tight">Spending Heatmap</h1>
-          <p className="text-white/35 text-sm mt-0.5">Daily activity over the last 12 months · click or drag to select</p>
-        </div>
-        {hasSelection && (
-          <button
-            onClick={clearSelection}
-            className="px-3 py-1.5 rounded-xl text-sm font-medium text-white/55 hover:text-white/85 transition-colors"
-            style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.08)' }}
-          >
-            Clear
-          </button>
-        )}
-      </div>
-
+    <div className="space-y-5">
       {/* ── Heatmap card ── */}
       <GlassCard padding="none">
         <div
@@ -481,21 +464,34 @@ export default function SpendingHeatmap() {
           onMouseLeave={handleMouseLeave}
           onMouseUp={handleMouseUp}
         >
-          <div className="overflow-x-auto">
-            <div className="flex" style={{ minWidth: `${weeks.length * CELL_UNIT + 36}px` }}>
-              {/* Day label column */}
-              <div
-                className="flex flex-col mr-1.5 flex-shrink-0"
-                style={{ width: 26, paddingTop: 24 }}
+          {/* Card header row */}
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-[11px] text-white/35">Daily spending · last 12 months · click or drag to select</p>
+            {hasSelection && (
+              <button
+                onClick={clearSelection}
+                className="px-2.5 py-1 rounded-lg text-[11px] font-medium text-white/50 hover:text-white/80 transition-colors"
+                style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.08)' }}
               >
-                {DAY_LABELS.map((label, i) => (
+                Clear
+              </button>
+            )}
+          </div>
+
+          <div className="overflow-x-auto">
+            <div className="flex" style={{ minWidth: `${weeks.length * CELL_UNIT + 40}px` }}>
+              {/* Day label column — all 7 days */}
+              <div
+                className="flex flex-col mr-2 flex-shrink-0"
+                style={{ width: 30, paddingTop: 24 }}
+              >
+                {DAY_LABELS.map((label) => (
                   <div
                     key={label}
                     style={{ height: CELL_SIZE, marginBottom: CELL_GAP }}
-                    className="flex items-center justify-end text-[9px] text-white/22 font-medium pr-1"
+                    className="flex items-center justify-end text-[9px] text-white/30 font-medium pr-1"
                   >
-                    {/* Show Mon, Wed, Fri */}
-                    {(i === 1 || i === 3 || i === 5) ? label : ''}
+                    {label}
                   </div>
                 ))}
               </div>

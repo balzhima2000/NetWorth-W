@@ -10,7 +10,6 @@ import Setup from './pages/Setup';
 import Dashboard from './pages/Dashboard';
 import Portfolio from './pages/Portfolio';
 import Spending from './pages/Spending';
-import SpendingHeatmap from './pages/SpendingHeatmap';
 import Fire from './pages/Fire';
 import Settings from './pages/Settings';
 
@@ -42,8 +41,7 @@ function AppInner() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/spending" element={<Spending />} />
-        <Route path="/heatmap" element={<SpendingHeatmap />} />
-        <Route path="/fire" element={<Fire />} />
+<Route path="/fire" element={<Fire />} />
         <Route path="/settings" element={<Settings />} />
       </Route>
 
