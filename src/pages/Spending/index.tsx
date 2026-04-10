@@ -767,7 +767,6 @@ export default function Spending() {
     { id: 'budgets', label: '🎯 Budgets' },
     { id: 'recurring', label: '🔄 Recurring' },
     { id: 'trends', label: '📈 Trends' },
-    { id: 'heatmap', label: '🗓️ Heatmap' },
   ];
 
   const budgetCatInfo = getCategoryInfo(budgetCategory);
@@ -931,6 +930,9 @@ export default function Spending() {
           )}
         </div>
       </div>
+
+      {/* ── Spending Heatmap ──────────────────────────────────────────────── */}
+      <SpendingHeatmap />
 
       {/* ── Insights / Alerts Strip ────────────────────────────────────────── */}
       {(budgetAttention.length > 0 || pacingLabel || topCategories.length > 0) && (
@@ -1368,8 +1370,6 @@ export default function Spending() {
           currentYear={year}
         />
       )}
-
-      {activeTab === 'heatmap' && <SpendingHeatmap />}
 
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* MODALS                                                             */}
