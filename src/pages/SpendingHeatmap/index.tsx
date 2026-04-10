@@ -629,16 +629,6 @@ export default function SpendingHeatmap() {
         </div>
       )}
 
-      {/* ── Category breakdown ── */}
-      <CategoryBreakdown
-        catTotals={stats.catTotals}
-        catTopTxn={stats.catTopTxn}
-        priorCatTotals={stats.priorCatTotals}
-        totalSpend={stats.totalSpend}
-        categories={categories}
-        defaultCurrency={defaultCurrency}
-        hasSelection={hasSelection}
-      />
 
       {/* Tooltip */}
       {tooltip && (
