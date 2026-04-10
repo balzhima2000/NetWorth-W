@@ -42,13 +42,13 @@ const CELL_UNIT = CELL_SIZE + CELL_GAP;
 const DAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-// Blue-tinted intensity scale — dark bg theme
+// Emerald intensity scale — matches app accent (#10B981)
 const INTENSITY_COLORS = [
   '#151515',                    // 0 – no spend
-  'rgba(59,130,246,0.22)',      // 1 – low
-  'rgba(59,130,246,0.44)',      // 2
-  'rgba(59,130,246,0.70)',      // 3
-  '#3b82f6',                    // 4 – peak
+  'rgba(16,185,129,0.22)',      // 1 – low
+  'rgba(16,185,129,0.44)',      // 2
+  'rgba(16,185,129,0.70)',      // 3
+  '#10B981',                    // 4 – peak
 ];
 
 // ─────────────────────────── types ────────────────────────────────────────
