@@ -26,6 +26,19 @@ const icons = {
       <path d="M6 15h4" />
     </svg>
   ),
+  heatmap: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" className="w-[18px] h-[18px] flex-shrink-0">
+      <rect x="3" y="3" width="4" height="4" rx="1" />
+      <rect x="10" y="3" width="4" height="4" rx="1" />
+      <rect x="17" y="3" width="4" height="4" rx="1" />
+      <rect x="3" y="10" width="4" height="4" rx="1" />
+      <rect x="10" y="10" width="4" height="4" rx="1" />
+      <rect x="17" y="10" width="4" height="4" rx="1" />
+      <rect x="3" y="17" width="4" height="4" rx="1" />
+      <rect x="10" y="17" width="4" height="4" rx="1" />
+      <rect x="17" y="17" width="4" height="4" rx="1" />
+    </svg>
+  ),
   fire: (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" className="w-[18px] h-[18px] flex-shrink-0">
       <path d="M12 2c0 6-6 8-6 14a6 6 0 0 0 12 0c0-4-2-7-3-9-1 2-1 4-3 5 0-3-2-5-2-8 0-1 1-2 2-2z" />
@@ -44,6 +57,7 @@ const navItems = [
   { to: '/dashboard', label: 'Dashboard', icon: icons.dashboard },
   { to: '/portfolio', label: 'Portfolio', icon: icons.portfolio },
   { to: '/spending',  label: 'Spending',  icon: icons.spending  },
+  { to: '/heatmap',   label: 'Heatmap',   icon: icons.heatmap   },
   { to: '/fire',      label: 'FIRE',      icon: icons.fire      },
   { to: '/settings',  label: 'Settings',  icon: icons.settings  },
 ];
