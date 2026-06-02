@@ -131,3 +131,26 @@ src/
       Step5ExcelImport.tsx  — Inline Excel import step (setup wizard only)
   types/index.ts            — All TypeScript interfaces (Transaction, RecurringPayment, etc.)
 ```
+
+## Portfolio case study (ongoing — keep this in mind)
+
+Balzhima is writing a portfolio case study about this redesign (transitioning from graphic/junior designer → product designer who ships alongside devs). **As we work, accumulate the rationale.** Every UX/UI decision should be capturable as: **problem** (from the audit) → **principle** applied → **before → after**. Nudge Balzhima to capture decisions while fresh — don't reconstruct from memory at the end.
+
+**Running thesis:** *UI prominence ∝ frequency of use × relevance in context.*
+
+**Persona — "The Intentional Investor":** financially literate, FIRE-minded, wants confidence/trust, professional-but-stylish. Two modes — *checking* (fast daily glance) vs *deep dive* (weekly). Design checking-mode first.
+
+**Audit → fix → principle threads (the spine of the write-up):**
+- Floating "+" FAB (mobile pattern, ambiguous, covers content) → contextual labeled actions + 3 dashboard action buttons.
+- FIRE calculator on dashboard → split *configuration* (rare, own page) from *monitoring* (glanceable, actionable progress card).
+- Inconsistent number fonts erode trust → one tabular type treatment, comma thousands.
+- No hierarchy / left-hugging layout → Display hero number, full-width equal-height bento.
+- Missing/inconsistent states → states-as-a-system (Button: 9 variants).
+
+**Design-system story:** tokens-first, then components; semantic tokens give Light/Dark from one source and map 1:1 to CSS vars; layering metaphor = *nesting communicates ownership*.
+
+**Color model (restraint = credibility):** black = primary action · violet = accent (selection/active/focus/data line) · green/red = semantic gain/loss · `chart-1..5` = categorical data. Four jobs, never mixed.
+
+**Process narrative (strong portfolio angle):** ran as a design-critique loop with Balzhima as editor; changed direction on evidence (the action-buttons decision); verified technical feasibility against the real codebase (Recharts) *before* committing to a design.
+
+> Detailed running notes live in the auto-memory `project_redesign.md` / `ui-surface-style.md`. This section is the durable case-study lens to apply going forward.
