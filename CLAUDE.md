@@ -132,6 +132,114 @@ src/
   types/index.ts            — All TypeScript interfaces (Transaction, RecurringPayment, etc.)
 ```
 
+## Design system — Figma file
+
+**File:** `WMI3ZpbuD4zvKIe4yqFA5A` — "William — Design System v1"
+
+**App name: William** (the dot-matrix logotype reads "WILLIAM" — stylized W, not "SQ"). Balzhima will redesign the logo later.
+
+### Pages
+| Page | ID | Contents |
+|---|---|---|
+| Foundations | 6:2 | Type scale, spacing, radius, color swatches |
+| Button | 11:2 | Button component set (3 styles × 3 states = 9 variants) + **Action Button** set (197:60) |
+| Card | 13:2 | Card component (Default + Hover) |
+| Badge | 14:3 | Badge component set (Positive/Negative/Neutral/Accent) |
+| Screens/Dashboard | 15:2 | Dashboard v2 Desktop (22:3, 1440×1140) + Mobile (26:3, 375×1622) |
+| Chip & Layering | 30:2 | Chip component (Neutral/Outline/Inverse) |
+| Icons | 92:2 | All icon components (see below) |
+| Archive | 150:1750 | Old/reference frames |
+
+### Icon components (Icons page, 92:2)
+Pixel dot-matrix style. Master size 64×64. DOT=6, GAP=2, UNIT=8.  
+**Rule: always use `rescale(targetSize/64)` to size instances — never `resize(w,h)`.**
+
+| Component | ID (64px) | ID (24px) | Purpose |
+|---|---|---|---|
+| Icon/Home | 92:3 | — | Nav |
+| Icon/Portfolio | 92:25 | — | Nav |
+| Icon/Spending | 92:45 | — | Nav |
+| Icon/Fire | 92:77 | — | Nav |
+| Icon/Account | 92:103 | — | Nav |
+| Icon/Trade | 118:1274 | 118:1275 | Action button |
+| Icon/Income | 118:1330 | 118:1368 | Action button |
+| Icon/Expense | 118:1331 | 118:1369 | Action button |
+
+### Action Button component (Button page, set 197:60)
+Dashboard action buttons (Trade/Income/Expense). Variant property `Action`.
+- Structure: VERTICAL auto-layout wrapper (8px gap, center) → 54px circle (`cornerRadius 999`, fill bound to `color/accent`) containing a 34px icon instance → 13px Inter Medium label bound to `color/text-secondary`.
+- Variants: `Action=Trade` (197:2), `Action=Income` (197:22), `Action=Expense` (197:41).
+- Both Dashboard screens (desktop 22:3, mobile 26:3) use instances of this set — no more inline button frames. Mobile was unified from 50px → 54px circles.
+
+### Variable collections
+| Collection | ID | Modes | Vars |
+|---|---|---|---|
+| Primitives | VariableCollectionId:1:2 | Value | 33 |
+| Color | VariableCollectionId:2:2 | Light / Dark | 19 |
+| Spacing | VariableCollectionId:3:2 | Value | 8 |
+| Radius | VariableCollectionId:3:11 | Value | 4 |
+
+### Color palette + visual direction (Superpower-inspired, since 2026-06)
+
+Reference: **superpower.com**. Adapted aesthetic = **warm paper neutrals · no shadows · hairline borders · frosted-glass floating surfaces · color ONLY on money direction**.
+
+**Core color concept (decided 2026-06, final):** *Chromatic color appears only on money movement — lime = up, orange = down. Everything else is monochrome.*
+- **Accent is NEUTRAL, not orange.** `color/accent` → `neutral/900` (Light) / `neutral/0` (Dark). The data line, action-button circles, FIRE bar, and active nav are black-in-light / white-in-dark. Do **not** make the accent orange.
+- **Orange #FF6A0D = `color/negative` only.** Every negative monetary value (e.g. −$3,140, −$25) and the expense feed use orange. Reserved exclusively for loss/spend — never for accent, nav, or focus.
+- **Lime = `color/positive`.** Every positive value (+$1,268, +25.20%, +2.4%) uses lime.
+- **Known tradeoff (accepted):** orange `#FF6A0D` as *text* on light surfaces is ~2.8:1 (fails WCAG AA). Balzhima accepted this risk for the warmth/identity. Do not "fix" it by darkening unless asked.
+
+**Base:** warm paper / cream off-white neutrals (NOT cold grey)  
+**Primary action:** warm near-black (`color/surface-inverse` → `neutral/900`) — primary buttons are black, never orange  
+**Positive:** lime (#D6F377 bg) · **Negative:** orange #FF6A0D  
+Violet was considered and rejected. Do not reintroduce it. Primitives were renamed: `green/*`→`lime/*`, `amber/*`→`orange/*`.
+
+**Warm neutral ramp** (replaced the old pure-grey ramp):
+| Token | Hex | Used for |
+|---|---|---|
+| `neutral/0` | #FDFBF7 | warm white — card surface, on-accent text |
+| `neutral/50` | #F5F1E8 | warm paper — page bg |
+| `neutral/100` | #EEE8DB | raised/sunken |
+| `neutral/200` | #E0D8C8 | **hairline border** |
+| `neutral/300` | #CFC5B1 | |
+| `neutral/400` | #A89E8B | |
+| `neutral/500` | #7C7363 | text-muted |
+| `neutral/600` | #5C5446 | text-secondary |
+| `neutral/700` | #433C30 | |
+| `neutral/800` | #2E2820 | |
+| `neutral/900` | #211C15 | warm near-black — text-primary, primary button |
+| `neutral/950` | #15110B | |
+
+| Accent/semantic | Hex / mapping |
+|---|---|
+| `color/accent` / `color/focus` | `neutral/900` (L) / `neutral/0` (D) — **monochrome, not orange** |
+| `orange/500` / `color/negative` | #FF6A0D (loss/spend only; ~2.8:1 on light — accepted) |
+| `lime/100` / `color/positive-bg` | #D6F377 |
+| `lime/600` / `color/positive` | dark lime (L) · `lime/300` in Dark |
+
+**Key semantic rebindings (Light mode):**
+- `color/bg` → `neutral/50` (warm paper page; was neutral/0)
+- `color/surface` → `neutral/0` (warm-white cards lift off the paper bg without shadows)
+- `color/border` → `neutral/200` (visible hairline; was neutral/50)
+- `color/surface-inverse` → `neutral/900` (primary button fill)
+
+**No shadows.** All `DROP_SHADOW` effects removed (non-Archive pages). Elevation is communicated by paper-bg vs warm-white surface + 1px `color/border` hairline, never shadow. Do not add drop shadows.
+
+**Frosted glass on floating surfaces.** FloatingNav (desktop) + TabBar (mobile): translucent warm-white fill (`#FDFBF7` @ ~72% opacity) + `BACKGROUND_BLUR` radius ~24 + translucent white hairline. Apply this pattern to any floating/overlay chrome (nav, modals, popovers).
+
+### Figma Plugin API rules (for Claude)
+These rules prevent wasted iterations:
+
+1. **`rescale(factor)` not `resize(w,h)`** — `resize` only changes bounding box on non-auto-layout frames; `rescale` proportionally scales all children. Use `rescale(targetSize / masterSize)`.
+2. **Auto-layout child order = visual order** — to place an icon *before* a text label, use `parent.insertChild(0, instance)`. `appendChild` puts it last.
+3. **Pixel art in auto-layout frames** — disable layout first: `frame.layoutMode = 'NONE'`, then set `x`/`y` on each dot. Otherwise dots stack in a row.
+4. **Transparent containers** — new frames/auto-layout containers get a white fill by default. Set `fills = []` to make them transparent.
+5. **TEXT nodes have no `layoutMode`** — guard with `if (!('children' in node)) return` before accessing layout properties in `findAll` callbacks.
+6. **Instances vs components** — always call `component.createInstance()` to place a component in a frame; never move the component master itself.
+7. **`setCurrentPageAsync`** — use `await figma.setCurrentPageAsync(page)` to switch pages; `figma.currentPage = page` is not supported.
+
+---
+
 ## Portfolio case study (ongoing — keep this in mind)
 
 Balzhima is writing a portfolio case study about this redesign (transitioning from graphic/junior designer → product designer who ships alongside devs). **As we work, accumulate the rationale.** Every UX/UI decision should be capturable as: **problem** (from the audit) → **principle** applied → **before → after**. Nudge Balzhima to capture decisions while fresh — don't reconstruct from memory at the end.
@@ -149,7 +257,9 @@ Balzhima is writing a portfolio case study about this redesign (transitioning fr
 
 **Design-system story:** tokens-first, then components; semantic tokens give Light/Dark from one source and map 1:1 to CSS vars; layering metaphor = *nesting communicates ownership*.
 
-**Color model (restraint = credibility):** black = primary action · violet = accent (selection/active/focus/data line) · green/red = semantic gain/loss · `chart-1..5` = categorical data. Four jobs, never mixed.
+**Color model (restraint = credibility) — final concept: "color = money direction":** warm-paper neutrals = base · monochrome (black/white) = accent, data line, nav, primary action · **lime = up / orange = down** are the *only* chromatic colors, applied exclusively to gain/loss values. The dashboard is greyscale except where money moves. This is stronger than the earlier "orange as accent" idea — it ties color to meaning, not decoration. (Tradeoff: orange-as-text fails AA on light surfaces ~2.8:1; accepted for identity.) Violet was considered and rejected.
+
+**Material model (Superpower-inspired):** no shadows — elevation = paper-bg vs warm-white surface + hairline border; frosted glass (translucency + background blur) reserved for floating chrome (nav, overlays). Story angle: studied a reference product (superpower.com), extracted its *system rules* (warm neutrals, sparing accent, depth-without-shadow, blur), and re-derived them into our token layer rather than copying screens — the whole UI shifted by editing ~14 variables + removing effects, no per-screen rework.
 
 **Process narrative (strong portfolio angle):** ran as a design-critique loop with Balzhima as editor; changed direction on evidence (the action-buttons decision); verified technical feasibility against the real codebase (Recharts) *before* committing to a design.
 
