@@ -181,34 +181,30 @@ Dashboard action buttons (Trade/Income/Expense). Variant property `Action`.
 
 ### Color palette + visual direction (Superpower-inspired, since 2026-06)
 
-Reference: **superpower.com**. Adapted aesthetic = **warm paper neutrals · no shadows · hairline borders · frosted-glass floating surfaces · color ONLY on money direction**.
+Reference: **superpower.com**. Adapted aesthetic = **cool neutral greys + white · no shadows · hairline borders · frosted-glass floating surfaces · color ONLY on money direction**.
+
+> **History note:** a warm-paper/cream neutral ramp was trialled (2026-06) but **reverted**. The final, intended palette is **cool grey + white** (Tailwind-style neutral scale). Do not reintroduce warm/cream neutrals.
 
 **Core color concept (decided 2026-06, final):** *Chromatic color appears only on money movement — lime = up, orange = down. Everything else is monochrome.*
 - **Accent is NEUTRAL, not orange.** `color/accent` → `neutral/900` (Light) / `neutral/0` (Dark). The data line, action-button circles, FIRE bar, and active nav are black-in-light / white-in-dark. Do **not** make the accent orange.
 - **Orange #FF6A0D = `color/negative` only.** Every negative monetary value (e.g. −$3,140, −$25) and the expense feed use orange. Reserved exclusively for loss/spend — never for accent, nav, or focus.
 - **Lime = `color/positive`.** Every positive value (+$1,268, +25.20%, +2.4%) uses lime.
-- **Known tradeoff (accepted):** orange `#FF6A0D` as *text* on light surfaces is ~2.8:1 (fails WCAG AA). Balzhima accepted this risk for the warmth/identity. Do not "fix" it by darkening unless asked.
+- **Known tradeoff (accepted):** orange `#FF6A0D` as *text* on light surfaces is ~2.8:1 (fails WCAG AA). Balzhima accepted this risk for the identity. Do not "fix" it by darkening unless asked.
 
-**Base:** warm paper / cream off-white neutrals (NOT cold grey)  
-**Primary action:** warm near-black (`color/surface-inverse` → `neutral/900`) — primary buttons are black, never orange  
+**Base:** cool neutral greys + white (Tailwind-style neutral scale)  
+**Primary action:** **mid-grey** — `color/surface-inverse` → `neutral/400` (#a3a3a3). This is **intentional** (Balzhima's call, 2026-06): primary buttons and action-button circles render mid-grey, not near-black. Do not "fix" to neutral/900.  
 **Positive:** lime (#D6F377 bg) · **Negative:** orange #FF6A0D  
 Violet was considered and rejected. Do not reintroduce it. Primitives were renamed: `green/*`→`lime/*`, `amber/*`→`orange/*`.
 
-**Warm neutral ramp** (replaced the old pure-grey ramp):
+**Cool neutral ramp** (current, intended):
 | Token | Hex | Used for |
 |---|---|---|
-| `neutral/0` | #FDFBF7 | warm white — card surface, on-accent text |
-| `neutral/50` | #F5F1E8 | warm paper — page bg |
-| `neutral/100` | #EEE8DB | raised/sunken |
-| `neutral/200` | #E0D8C8 | **hairline border** |
-| `neutral/300` | #CFC5B1 | |
-| `neutral/400` | #A89E8B | |
-| `neutral/500` | #7C7363 | text-muted |
-| `neutral/600` | #5C5446 | text-secondary |
-| `neutral/700` | #433C30 | |
-| `neutral/800` | #2E2820 | |
-| `neutral/900` | #211C15 | warm near-black — text-primary, primary button |
-| `neutral/950` | #15110B | |
+| `neutral/0` | #ffffff | white — page bg + card surface |
+| `neutral/50` | #fafafa | subtle raised |
+| `neutral/200` | #e5e5e5 | **hairline border** |
+| `neutral/400` | #a3a3a3 | `surface-inverse` → primary button + action circles (mid-grey, intentional) |
+| `neutral/900` | #171717 | text-primary, accent (data line / active nav / FIRE bar) |
+| `neutral/0–950` | … | standard Tailwind neutral steps in between |
 
 | Accent/semantic | Hex / mapping |
 |---|---|
@@ -217,15 +213,42 @@ Violet was considered and rejected. Do not reintroduce it. Primitives were renam
 | `lime/100` / `color/positive-bg` | #D6F377 |
 | `lime/600` / `color/positive` | dark lime (L) · `lime/300` in Dark |
 
-**Key semantic rebindings (Light mode):**
-- `color/bg` → `neutral/50` (warm paper page; was neutral/0)
-- `color/surface` → `neutral/0` (warm-white cards lift off the paper bg without shadows)
-- `color/border` → `neutral/200` (visible hairline; was neutral/50)
-- `color/surface-inverse` → `neutral/900` (primary button fill)
+**Key semantic bindings (Light mode):**
+- `color/bg` → `neutral/0` (#ffffff page)
+- `color/surface` → `neutral/0` (white cards)
+- `color/border` → `neutral/200` (#e5e5e5 hairline)
+- `color/surface-inverse` → `neutral/400` (#a3a3a3 — mid-grey primary, intentional)
+- Page/card separation comes from the 1px `color/border` hairline, not a bg/surface tone difference (both white).
 
-**No shadows.** All `DROP_SHADOW` effects removed (non-Archive pages). Elevation is communicated by paper-bg vs warm-white surface + 1px `color/border` hairline, never shadow. Do not add drop shadows.
+**No shadows.** All `DROP_SHADOW` effects removed (non-Archive pages); the stale `Elevation/sm·md·lg` effect styles were also deleted. Elevation = 1px `color/border` hairline only, never shadow. Do not add drop shadows.
 
-**Frosted glass on floating surfaces.** FloatingNav (desktop) + TabBar (mobile): translucent warm-white fill (`#FDFBF7` @ ~72% opacity) + `BACKGROUND_BLUR` radius ~24 + translucent white hairline. Apply this pattern to any floating/overlay chrome (nav, modals, popovers).
+**Frosted glass on floating surfaces.** FloatingNav (desktop) + TabBar (mobile): translucent white fill (`neutral/0` @ ~72% opacity) + `BACKGROUND_BLUR` radius ~24 + translucent white hairline. Apply this pattern to any floating/overlay chrome (nav, modals, popovers).
+
+### Components & states (handoff-ready, 2026-06)
+Pre-dev audit pass added the missing interaction/data states and cleaned duplicates.
+
+**Components (canonical):**
+| Component | Set ID | Variants / states |
+|---|---|---|
+| Button | 11:21 | Style {Primary/Secondary/Ghost} × State {Default/Hover/Pressed/Focus/Disabled/Loading} (18) |
+| Action Button | 197:60 | Action {Trade/Income/Expense} — **single source of truth** (dupes 209:1782, 216:2787 deleted; dark frames re-pointed here) |
+| Segment | 231:54 | State {Default/Selected/Focus} |
+| RangeSelector | 231:55 | composed 1W/1M/1Y/YTD/ALL (1M selected) |
+| Card | 13:11 | State {Default/Hover} |
+| Badge | 14:12 | Tone {Positive/Negative/Neutral} (junk Blue/Violet/Rose/Tone7 removed; dupe 209:3135 deleted) |
+| Chip | 30:9 | Neutral/Outline/Inverse |
+| Skeleton | 237:3 | loading placeholder (animate shimmer in code) |
+| EmptyState | 237:4 | icon + H2 + body + CTA (swap per context) |
+| Alert | 237:37 | Tone {Error/Info} — inline fetch-failure banner + Retry |
+| ChartTooltip | 240:24 | hover date + value |
+
+**States page** holds Skeleton / EmptyState / Alert / ChartTooltip / a `NetWorthCard / Loading` example / an `Edge cases (reference)` frame (negative net worth, long numbers, 0%/100% FIRE).
+
+**Chart** is hand-drawn in Figma (lines/vectors) — **build with Recharts**, not from the vectors. Spec: 2 lines (primary = `color/accent` neutral, comparison = grey `color/text-muted`), dotted projection to an end-dot; hover → `ChartTooltip` + crosshair; empty/insufficient data → `EmptyState` pattern.
+
+**Nav**: active item = neutral pill (`color/surface`) + `color/text-primary` icon/label; inactive = `color/text-muted`. NavPill is a baked component (`NavPill/Desktop/Light` 202:2605, `NavPill/Mobile/Light` 202:2606); dark mode renders via tokens (verified).
+
+**Open question for dev:** negative *total* net worth — currently shown orange in the edge-case frame (following negative=orange), but a balance isn't a delta. Confirm whether totals should be orange or stay neutral.
 
 ### Figma Plugin API rules (for Claude)
 These rules prevent wasted iterations:
