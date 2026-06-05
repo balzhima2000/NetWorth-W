@@ -120,3 +120,18 @@
 
 /* Radius helper */
 .william .rounded-card { border-radius: var(--w-radius-card); }
+
+/* Safeguard: the old global design system paints html/body/#root black.
+   On William routes, force the page background to the canvas colour so the
+   old theme never bleeds around the (centred) dashboard content. Scoped via
+   :has() so the old app is untouched. */
+html:has(.william),
+body:has(.william),
+body:has(.william) #root {
+  background-color: #ffffff;
+}
+html:has(.william[data-theme="dark"]),
+body:has(.william[data-theme="dark"]),
+body:has(.william[data-theme="dark"]) #root {
+  background-color: #171717;
+}
