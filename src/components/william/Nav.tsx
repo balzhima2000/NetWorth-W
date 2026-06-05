@@ -24,8 +24,8 @@ const ITEMS: NavItem[] = [
 ];
 
 const frosted =
-  'border border-white/50 bg-[rgba(255,255,255,0.72)] backdrop-blur-xl ' +
-  'dark:border-white/10 dark:bg-[rgba(38,38,38,0.72)]';
+  'border border-line bg-[rgba(255,255,255,0.72)] backdrop-blur-xl ' +
+  'dark:bg-[rgba(38,38,38,0.72)]';
 
 export function FloatingNav() {
   const navigate = useNavigate();
