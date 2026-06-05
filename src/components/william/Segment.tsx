@@ -18,7 +18,7 @@ export function Segment({ selected = false, children, onClick }: SegmentProps) {
       onClick={onClick}
       aria-pressed={selected}
       className={cn(
-        'rounded-lg px-3.5 py-1.5 text-[13px] font-medium transition-colors',
+        'rounded-lg px-3.5 py-2 text-[13px] font-medium transition-colors',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink',
         selected
           ? 'bg-surface text-ink border border-line'
@@ -35,6 +35,7 @@ interface RangeSelectorProps {
   value: string;
   onChange: (value: string) => void;
   className?: string;
+  fullWidth?: boolean;
 }
 
 export function RangeSelector({
@@ -42,11 +43,16 @@ export function RangeSelector({
   value,
   onChange,
   className,
+  fullWidth = false,
 }: RangeSelectorProps) {
   return (
     <div
       role="tablist"
-      className={cn('inline-flex items-center gap-0.5 rounded-[10px] bg-raised p-1', className)}
+      className={cn(
+        'items-center gap-0.5 rounded-[10px] bg-raised p-1',
+        fullWidth ? 'flex w-full justify-between' : 'inline-flex',
+        className,
+      )}
     >
       {options.map((opt) => (
         <Segment key={opt} selected={value === opt} onClick={() => onChange(opt)}>

@@ -65,14 +65,18 @@ function MobileHeader({ name }: { name?: string }) {
   const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
   return (
-    <div className="mb-1 flex items-center gap-3 md:hidden">
-      <div className="flex flex-1 items-center gap-2 rounded-full bg-accent-bg px-4 py-2.5">
+    <div className="mb-1 flex items-center justify-between gap-3 md:hidden">
+      <div className="inline-flex items-center gap-2 rounded-full bg-accent-bg px-4 py-2.5">
         <Icon name="star" size={16} className="text-ink" />
         <span className="ty-label text-ink">{greeting}{name ? `, ${name}` : ''}</span>
       </div>
-      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent-bg text-ink">
+      <button
+        type="button"
+        aria-label="Account"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent-bg text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+      >
         <Icon name="account" size={20} />
-      </div>
+      </button>
     </div>
   );
 }
@@ -108,12 +112,13 @@ export default function WilliamDashboard() {
       <FloatingNav />
       <TabBar />
 
-      <div className="mx-auto flex max-w-[1100px] flex-col gap-5 px-4 md:px-6">
+      <main className="mx-auto flex max-w-[1100px] flex-col gap-5 px-4 md:px-6">
+        <h1 className="sr-only">Dashboard</h1>
 
         <MobileHeader name={d.userName} />
 
         {/* ── Top row: left column (net worth + breakdown) + chart ── */}
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-[400px_1fr]">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-[340px_1fr] lg:grid-cols-[400px_1fr]">
 
           {/* Left column */}
           <div className="flex flex-col gap-5">
@@ -149,29 +154,52 @@ export default function WilliamDashboard() {
             )}
           </div>
 
-          {/* Chart card */}
-          <Card className="flex flex-col gap-4 p-6">
-            <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-              <div className="flex flex-col gap-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <p className="ty-body font-semibold text-ink">
-                    {d.chartData.length >= 2
-                      ? `${formatDate(d.chartData[0].date, 'short')} — ${formatDate(d.chartData[d.chartData.length - 1].date, 'short')}`
-                      : 'Net Worth'}
-                  </p>
-                  {d.periodDelta && (
-                    <span className={cn('num rounded-full px-2 py-[2px] text-[12px] font-semibold leading-none',
-                      deltaPositive ? 'bg-positive-bg text-positive' : 'bg-negative-bg text-negative')}>
-                      {deltaPositive ? '+' : ''}{d.periodDelta.pct.toFixed(2)}%
-                    </span>
-                  )}
-                </div>
-                <p className="ty-body text-muted">vs last period</p>
-              </div>
-              <RangeSelector options={RANGES} value={range} onChange={(v) => setRange(v as RangeOption)} />
+          {/* Chart column: mobile timeframe selector sits OUTSIDE the card */}
+          <div className="flex flex-col gap-4">
+            <div className="md:hidden">
+              <RangeSelector
+                fullWidth
+                options={RANGES}
+                value={range}
+                onChange={(v) => setRange(v as RangeOption)}
+              />
             </div>
 
-            <div className="min-h-[200px] flex-1">
+            <Card className="flex flex-1 flex-col gap-4 p-6">
+              <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                <div className="flex flex-col gap-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="ty-body font-semibold text-ink">
+                      {d.chartData.length >= 2
+                        ? `${formatDate(d.chartData[0].date, 'short')} — ${formatDate(d.chartData[d.chartData.length - 1].date, 'short')}`
+                        : 'Net Worth'}
+                    </p>
+                    {d.periodDelta && (
+                      <span className={cn('num rounded-full px-2 py-[2px] text-[12px] font-semibold leading-none',
+                        deltaPositive ? 'bg-positive-bg text-positive' : 'bg-negative-bg text-negative')}>
+                        {deltaPositive ? '+' : ''}{d.periodDelta.pct.toFixed(2)}%
+                      </span>
+                    )}
+                  </div>
+                  <p className="ty-body text-muted">vs last period</p>
+                </div>
+                {/* desktop/tablet selector stays in the card header */}
+                <div className="hidden md:block">
+                  <RangeSelector
+                    options={RANGES}
+                    value={range}
+                    onChange={(v) => setRange(v as RangeOption)}
+                  />
+                </div>
+              </div>
+
+              <div
+                className="min-h-[200px] flex-1"
+                role="img"
+                aria-label={d.periodDelta
+                  ? `Net worth chart, ${deltaPositive ? 'up' : 'down'} ${d.periodDelta.pct.toFixed(1)}% this period`
+                  : 'Net worth chart'}
+              >
               <NetWorthChart
                 data={d.chartData}
                 comparison={d.comparisonData}
@@ -190,17 +218,24 @@ export default function WilliamDashboard() {
                 </span>
               </div>
             )}
-          </Card>
+            </Card>
+          </div>
         </div>
 
         {/* ── Stats row: FIRE (wide) + Portfolio + This Month ── */}
-        <div className="grid grid-cols-2 gap-5 md:grid-cols-[2.2fr_1fr_1fr]">
+        <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-[2.2fr_1fr_1fr]">
 
           {/* FIRE — full width on mobile, first column on desktop */}
           <Card className="col-span-2 flex flex-col gap-3 p-6 md:col-span-1">
             <div className="flex items-center justify-between">
               <p className="ty-label text-muted">FIRE PROGRESS</p>
-              <button onClick={() => navigate('/fire')} className="text-muted hover:text-ink transition-colors" aria-label="FIRE">→</button>
+              <button
+                onClick={() => navigate('/fire')}
+                aria-label="Open FIRE page"
+                className="-m-2 flex h-10 w-10 items-center justify-center rounded-lg text-muted transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+              >
+                <span aria-hidden="true">→</span>
+              </button>
             </div>
             {d.fireProgress !== null ? (
               <>
@@ -261,17 +296,17 @@ export default function WilliamDashboard() {
                 </Card>
               );
             })}
-            <Card
-              role="button"
+            <button
+              type="button"
               onClick={() => navigate('/spending')}
-              className="flex cursor-pointer items-center justify-between px-5 py-2 hover:bg-raised transition-colors"
+              className="flex w-full items-center justify-between rounded-card border border-line bg-surface px-5 py-2 transition-colors hover:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
             >
               <span className="ty-body text-ink">See all</span>
-              <span className="text-muted">→</span>
-            </Card>
+              <span className="text-muted" aria-hidden="true">→</span>
+            </button>
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 }

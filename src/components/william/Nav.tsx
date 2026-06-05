@@ -46,6 +46,7 @@ export function FloatingNav() {
             key={item.id}
             onClick={() => navigate(item.path)}
             aria-current={active ? 'page' : undefined}
+            aria-label={item.iconOnly ? item.label : undefined}
             className={cn(
               'flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[14px] font-medium transition-colors',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink',
@@ -67,16 +68,18 @@ export function FloatingNav() {
 export function TabBar() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  // Mobile tab bar carries the 4 primary destinations; account lives in the header.
+  const tabs = ITEMS.filter((i) => !i.iconOnly);
 
   return (
     <nav
       className={cn(
-        'fixed bottom-4 left-1/2 z-50 -translate-x-1/2 flex md:hidden',
-        'items-center gap-1 rounded-full p-1.5',
+        'fixed bottom-4 left-1/2 z-50 flex -translate-x-1/2 md:hidden',
+        'items-center gap-7 rounded-full px-5 py-3',
         frosted,
       )}
     >
-      {ITEMS.map((item) => {
+      {tabs.map((item) => {
         const active = pathname === item.path;
         return (
           <button
@@ -84,11 +87,13 @@ export function TabBar() {
             onClick={() => navigate(item.path)}
             aria-current={active ? 'page' : undefined}
             className={cn(
-              'flex flex-col items-center gap-0.5 rounded-full px-4 py-2 transition-colors',
-              active ? 'bg-surface text-ink' : 'text-muted',
+              'flex min-w-[48px] flex-col items-center gap-1 transition-colors',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink rounded-lg',
+              active ? 'text-ink' : 'text-muted',
             )}
           >
-            <Icon name={item.icon} size={20} />
+            <Icon name={item.icon} size={24} />
+            <span className="text-[11px] font-medium leading-none">{item.label}</span>
           </button>
         );
       })}
