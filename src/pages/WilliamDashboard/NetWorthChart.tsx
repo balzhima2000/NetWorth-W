@@ -65,11 +65,21 @@ export function NetWorthChart({ data, comparison = [], currency, empty = false }
   const merged = mergeData(data, comparison);
   const lastDate = data[data.length - 1].date;
 
-  // Zoom Y-axis to the data range with padding
+  // Zoom Y-axis to the data range, snapped to "nice" round ticks (like Figma)
   const values = merged.flatMap((d) => [d.primary, d.comparison].filter((v): v is number => v != null));
   const min = Math.min(...values), max = Math.max(...values);
-  const pad = (max - min) * 0.25 || max * 0.05;
-  const domain: [number, number] = [Math.floor(min - pad), Math.ceil(max + pad)];
+  const niceStep = (raw: number) => {
+    const mag = Math.pow(10, Math.floor(Math.log10(raw)));
+    const norm = raw / mag;
+    const step = norm <= 1 ? 1 : norm <= 2 ? 2 : norm <= 2.5 ? 2.5 : norm <= 5 ? 5 : 10;
+    return step * mag;
+  };
+  const step = niceStep((max - min || max * 0.1) / 3);
+  const niceMin = Math.floor((min - step * 0.25) / step) * step;
+  const niceMax = Math.ceil((max + step * 0.25) / step) * step;
+  const ticks: number[] = [];
+  for (let t = niceMin; t <= niceMax + 1; t += step) ticks.push(t);
+  const domain: [number, number] = [niceMin, niceMax];
 
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -84,7 +94,7 @@ export function NetWorthChart({ data, comparison = [], currency, empty = false }
         />
         <YAxis
           domain={domain}
-          tickCount={4}
+          ticks={ticks}
           tickFormatter={(v) => formatCurrency(v, currency, true)}
           tick={{ fill: 'var(--w-muted)', fontSize: 11 }}
           axisLine={false} tickLine={false} width={56}
