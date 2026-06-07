@@ -4,7 +4,7 @@
  */
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, ActionButton, RangeSelector, Icon, FloatingNav, TabBar } from '../../components/william';
+import { Card, ActionButton, RangeSelector, Icon, FloatingNav, TabBar, Button } from '../../components/william';
 import { NetWorthChart } from './NetWorthChart';
 import { useDashboardData, type RangeOption } from './useDashboardData';
 import { formatCurrency, formatDate } from '../../utils/formatters';
@@ -100,6 +100,7 @@ export default function WilliamDashboard() {
         <p className="ty-body text-secondary text-center max-w-sm">
           Add your first trade or transaction to start tracking your net worth.
         </p>
+        <Button variant="primary" onClick={() => navigate('/portfolio')}>Add your first trade</Button>
       </div>
     );
   }

@@ -243,13 +243,13 @@ Pre-dev audit pass added the missing interaction/data states and cleaned duplica
 | Card | 13:11 | State {Default/Hover/Pressed/Focus} — Hover=accent border, Pressed=raised fill, Focus=accent ring. **Static cards use Default only** |
 | Card / Interactive | 292:26 | **Clickable/navigational card** — whole surface is the action (trailing → affordance) + Default/Hover/Pressed/Focus. Used by the FIRE card. Static cards omit these states |
 | Badge | 14:12 | Tone {Positive/Negative/Neutral} (junk Blue/Violet/Rose/Tone7 removed; dupe 209:3135 deleted) |
-| Chip | 30:9 | Neutral/Outline/Inverse |
+| Chip | 30:9 | Style {Neutral/Outline/Inverse}; interactive states (Hover/Pressed/Focus) documented |
 | Skeleton | 237:3 | loading placeholder (animate shimmer in code) |
 | EmptyState | 237:4 | icon + H2 + body + CTA (swap per context) |
 | Alert | 237:37 | Tone {Error/Info} — inline fetch-failure banner + Retry |
 | ChartTooltip | 240:24 | hover date + value |
 
-**Interaction states:** every interactive component documents Default/Hover/Pressed/Focus (+Disabled/Loading for Button, Selected for Segment). **Focus ring = `color/accent` (neutral)** — there is no `color/focus` token (it was removed; focus rings were briefly bound to `color/blue` #3b82f6 by mistake and rebound to accent). Static elements (Badge, Skeleton, Icon, ChartTooltip, breakdown bar) are stateless by design. The Documentation page shows all states in light + dark.
+**Interaction states:** every interactive component documents Default/Hover/Pressed/Focus (+Disabled/Loading for Button, Selected for Segment, Active for NavPill items). Action Button, Chip, and NavPill item states are shown in the docs; Alert's Retry is a Button/Ghost instance (inherits all button states). EmptyState = icon + H2 + body + primary CTA. RangeSelector composed control is shown in the Segment entry. **Focus ring = `color/accent` (neutral)** — there is no `color/focus` token (it was removed; focus rings were briefly bound to `color/blue` #3b82f6 by mistake and rebound to accent). Static elements (Badge, Skeleton, Icon, ChartTooltip, breakdown bar) are stateless by design. The Documentation page shows all states in light + dark.
 
 **States page** holds Skeleton / EmptyState / Alert / ChartTooltip / a `NetWorthCard / Loading` example / an `Edge cases (reference)` frame (negative net worth, long numbers, 0%/100% FIRE).
 
