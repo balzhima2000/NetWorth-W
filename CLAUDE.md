@@ -222,6 +222,15 @@ Violet was considered and rejected. Do not reintroduce it. Primitives were renam
 - `color/surface-inverse` → `neutral/400` (#a3a3a3 — mid-grey primary, intentional)
 - Page/card separation comes from the 1px `color/border` hairline, not a bg/surface tone difference (both white).
 
+**Full token set (27 `color/*`, added 2026-06 to fill gaps):**
+- Surfaces: `bg · surface · surface-raised · surface-sunken · surface-inverse · surface-inverse-hover`
+- Text: `text-primary · text-secondary · text-muted · text-on-inverse · on-accent`
+- Lines/accent: `border · accent · accent-hover · accent-bg · focus` (focus tracks accent — neutral)
+- Money: `positive · positive-bg · negative · negative-bg`
+- Categorical **chart palette**: `chart-1` blue · `chart-2` teal · `chart-3` amber · `chart-4` indigo · `chart-5` rose (for allocation/FIRE charts; avoids lime/orange which are reserved for money direction). `blue`/`blue-bg` retained.
+- **Fixed:** inactive nav-pill icons were mis-bound to a non-existent `color/chart-5` → rebound to `color/text-secondary`.
+- Code mirror in `src/styles/william.css` (`--w-sunken`, `--w-on-inverse`, `--w-focus`, `--w-chart-1..5`).
+
 **No shadows.** All `DROP_SHADOW` effects removed (non-Archive pages); the stale `Elevation/sm·md·lg` effect styles were also deleted. Elevation = 1px `color/border` hairline only, never shadow. Do not add drop shadows.
 
 **Frosted glass on floating surfaces.** FloatingNav (desktop) + TabBar (mobile): translucent white fill (`neutral/0` @ ~72% opacity) + `BACKGROUND_BLUR` radius ~24 + translucent white hairline. Apply this pattern to any floating/overlay chrome (nav, modals, popovers).

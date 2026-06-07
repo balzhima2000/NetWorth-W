@@ -37,6 +37,17 @@
 
   --color-info:         var(--w-info);
   --color-info-bg:      var(--w-info-bg);
+
+  --color-sunken:       var(--w-sunken);
+  --color-on-inverse:   var(--w-on-inverse);
+  --color-focus:        var(--w-focus);
+
+  /* categorical chart palette (avoids lime/orange which are semantic) */
+  --color-chart-1:      var(--w-chart-1);
+  --color-chart-2:      var(--w-chart-2);
+  --color-chart-3:      var(--w-chart-3);
+  --color-chart-4:      var(--w-chart-4);
+  --color-chart-5:      var(--w-chart-5);
 }
 
 /* ── Light (default) ─────────────────────────────────────── */
@@ -59,6 +70,10 @@
   --w-negative-bg:  #fed7aa;
   --w-info:         #3b82f6;  /* categorical (chart)           */
   --w-info-bg:      #dbeafe;
+  --w-sunken:       #f5f5f5;  /* recessed track / inset        */
+  --w-on-inverse:   #ffffff;  /* text on primary/inverse       */
+  --w-focus:        #171717;  /* focus ring (tracks accent)    */
+  --w-chart-1: #3b82f6; --w-chart-2: #0d9488; --w-chart-3: #d97706; --w-chart-4: #6366f1; --w-chart-5: #e11d48;
 
   --w-font-sans: 'Inter', system-ui, sans-serif;
   --w-font-mono: 'Geist Mono', 'JetBrains Mono', ui-monospace, monospace;
@@ -95,6 +110,10 @@
   --w-negative-bg:  #431407;
   --w-info:         #60a5fa;
   --w-info-bg:      #172554;
+  --w-sunken:       #0a0a0a;
+  --w-on-inverse:   #171717;
+  --w-focus:        #ffffff;
+  --w-chart-1: #60a5fa; --w-chart-2: #2dd4bf; --w-chart-3: #fbbf24; --w-chart-4: #818cf8; --w-chart-5: #fb7185;
 }
 
 /* ── Type scale (ported from Figma text styles) ──────────── */
