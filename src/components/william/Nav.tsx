@@ -14,13 +14,14 @@ import { Icon, type IconName } from './Icon';
 interface NavItem {
   id: string;
   label: string;
+  mobileLabel?: string; // mobile tab bar uses shorter copy (e.g. "Home")
   icon: IconName;
   path: string;
   iconOnly?: boolean;
 }
 
 const ITEMS: NavItem[] = [
-  { id: 'dashboard', label: 'Dashboard', icon: 'home',      path: '/william/dashboard' },
+  { id: 'dashboard', label: 'Dashboard', mobileLabel: 'Home', icon: 'home', path: '/william/dashboard' },
   { id: 'portfolio', label: 'Portfolio', icon: 'portfolio', path: '/portfolio' },
   { id: 'spending',  label: 'Spending',  icon: 'spending',  path: '/spending' },
   { id: 'fire',      label: 'FIRE',      icon: 'fire',      path: '/fire' },
@@ -47,7 +48,7 @@ export function FloatingNav() {
               onClick={() => navigate(item.path)}
               aria-label={item.label}
               aria-current={active ? 'page' : undefined}
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-bg text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-bg text-ink transition-[filter] hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
             >
               <Icon name={item.icon} size={20} />
             </button>
@@ -81,8 +82,8 @@ export function TabBar() {
   return (
     <nav
       className={cn(
-        'fixed bottom-4 left-1/2 z-50 flex -translate-x-1/2 md:hidden',
-        'items-center gap-[30px] rounded-full border border-line bg-canvas px-5 py-1.5',
+        'fixed bottom-4 left-1/2 z-50 flex h-[70px] -translate-x-1/2 md:hidden',
+        'items-center gap-[30px] rounded-full border border-line bg-canvas px-5',
       )}
     >
       {tabs.map((item) => {
@@ -99,7 +100,7 @@ export function TabBar() {
             )}
           >
             <Icon name={item.icon} size={24} />
-            <span className="text-[11px] font-medium leading-none">{item.label}</span>
+            <span className="text-[11px] font-medium leading-none">{item.mobileLabel ?? item.label}</span>
           </button>
         );
       })}

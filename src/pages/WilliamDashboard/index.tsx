@@ -4,7 +4,7 @@
  */
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, ActionButton, RangeSelector, Icon, FloatingNav, TabBar, Button } from '../../components/william';
+import { Card, ActionButton, RangeSelector, Icon, FloatingNav, TabBar, Button, Badge } from '../../components/william';
 import { NetWorthChart } from './NetWorthChart';
 import { useDashboardData, type RangeOption } from './useDashboardData';
 import { formatCurrency, formatDate } from '../../utils/formatters';
@@ -64,6 +64,7 @@ function FireBar({ progress }: { progress: number }) {
 
 // Mobile-only greeting header (Figma 26:5)
 function MobileHeader({ name }: { name?: string }) {
+  const navigate = useNavigate();
   const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
   return (
@@ -75,7 +76,8 @@ function MobileHeader({ name }: { name?: string }) {
       <button
         type="button"
         aria-label="Account"
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent-bg text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+        onClick={() => navigate('/settings')}
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent-bg text-ink transition-[filter] hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
       >
         <Icon name="account" size={20} />
       </button>
@@ -176,10 +178,9 @@ export default function WilliamDashboard() {
                         : 'Net Worth'}
                     </p>
                     {d.periodDelta && (
-                      <span className={cn('num rounded-full px-2 py-[2px] text-[12px] font-semibold leading-none',
-                        deltaPositive ? 'bg-positive-bg text-positive' : 'bg-negative-bg text-negative')}>
+                      <Badge tone={deltaPositive ? 'positive' : 'negative'}>
                         {deltaPositive ? '+' : ''}{d.periodDelta.pct.toFixed(2)}%
-                      </span>
+                      </Badge>
                     )}
                   </div>
                   <p className="ty-body text-muted">vs last period</p>
