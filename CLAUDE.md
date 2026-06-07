@@ -149,7 +149,7 @@ src/
 | Chip & Layering | 30:2 | Chip component (Neutral/Outline/Inverse) |
 | Icons | 92:2 | All icon components (see below) |
 | States | — | Skeleton / EmptyState / Alert / ChartTooltip / loading + edge-case reference |
-| Documentation | — | **Visual component reference** — every dashboard component with spec + live instances (`Dashboard Components` frame). Each component master also carries a `description` (shows in Dev Mode). |
+| Documentation | — | **Visual component reference** — `Dashboard Components — Light` + `Dashboard Components — Dark` boards (dark = clone with Color collection mode set to Dark). Every component + all states + the screen Patterns (activity row, insight callout, breakdown bar). Each master also carries a Dev-Mode `description`. |
 | Archive | 150:1750 | Old/reference frames |
 
 ### Icon components (Icons page, 92:2)
@@ -240,7 +240,8 @@ Pre-dev audit pass added the missing interaction/data states and cleaned duplica
 | Action Button | 197:60 | Action {Trade/Income/Expense} — **single source of truth** (dupes 209:1782, 216:2787 deleted; dark frames re-pointed here) |
 | Segment | 231:54 | State {Default/Selected/Focus} |
 | RangeSelector | 231:55 | composed 1W/1M/1Y/YTD/ALL (1M selected) |
-| Card | 13:11 | State {Default/Hover/Pressed/Focus} — Hover=accent border, Pressed=raised fill, Focus=accent ring |
+| Card | 13:11 | State {Default/Hover/Pressed/Focus} — Hover=accent border, Pressed=raised fill, Focus=accent ring. **Static cards use Default only** |
+| Card / Interactive | 292:26 | **Clickable/navigational card** — whole surface is the action (trailing → affordance) + Default/Hover/Pressed/Focus. Used by the FIRE card. Static cards omit these states |
 | Badge | 14:12 | Tone {Positive/Negative/Neutral} (junk Blue/Violet/Rose/Tone7 removed; dupe 209:3135 deleted) |
 | Chip | 30:9 | Neutral/Outline/Inverse |
 | Skeleton | 237:3 | loading placeholder (animate shimmer in code) |
