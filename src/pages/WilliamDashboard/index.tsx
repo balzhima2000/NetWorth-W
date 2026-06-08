@@ -117,21 +117,21 @@ export default function WilliamDashboard() {
       <FloatingNav />
       <TabBar />
 
-      <main className="mx-auto flex max-w-[1100px] flex-col gap-5 px-4 md:px-6">
+      <main className="mx-auto flex max-w-[1100px] flex-col gap-[18px] px-4 md:gap-5 md:px-6">
         <h1 className="sr-only">Dashboard</h1>
 
         <MobileHeader name={d.userName} />
 
         {/* ── Top row: left column (net worth + breakdown) + chart ── */}
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-[340px_1fr] lg:grid-cols-[400px_1fr]">
+        <div className="grid grid-cols-1 gap-[18px] md:grid-cols-[340px_1fr] md:gap-5 lg:grid-cols-[400px_1fr]">
 
           {/* Left column */}
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-[18px] md:gap-5">
             {/* Net Worth Card — grey wrapper (r24, pad 12/18, gap 14), white inner (r18, pad 20) */}
             <div className="flex flex-col gap-3.5 rounded-[24px] bg-raised p-2.5 pb-4 md:p-3 md:pb-[18px]">
               <div className="flex flex-col gap-1.5 rounded-[18px] bg-surface p-[18px] md:p-5">
                 <p className="ty-label text-muted">CURRENT NET WORTH</p>
-                <p className={cn('num font-black leading-none tracking-[-0.02em] text-[34px] md:text-[52px]', d.netWorth < 0 ? 'text-negative' : 'text-ink')}>
+                <p className={cn('num font-black leading-none tracking-[-0.02em] text-[36px] md:text-[44px]', d.netWorth < 0 ? 'text-negative' : 'text-ink')}>
                   {formatCurrency(d.netWorth, d.defaultCurrency)}
                 </p>
                 {d.periodDelta && (
@@ -151,14 +151,14 @@ export default function WilliamDashboard() {
             {/* Breakdown */}
             {d.breakdown.length > 0 && (
               <Card className="p-[18px] md:p-5">
-                <p className="ty-label text-muted mb-4">NET WORTH BREAKDOWN</p>
+                <p className="ty-label text-muted mb-3.5 md:mb-4">NET WORTH BREAKDOWN</p>
                 <BreakdownBar items={d.breakdown} currency={d.defaultCurrency} />
               </Card>
             )}
           </div>
 
           {/* Chart column: mobile timeframe selector sits OUTSIDE the card */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-[18px]">
             <div className="md:hidden">
               <RangeSelector
                 fullWidth
@@ -168,7 +168,7 @@ export default function WilliamDashboard() {
               />
             </div>
 
-            <Card className="flex flex-1 flex-col gap-[18px] p-[18px] md:p-6">
+            <Card className="flex flex-1 flex-col gap-3.5 p-[18px] md:gap-[18px] md:p-6">
               <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                 <div className="flex flex-col gap-1">
                   <div className="flex flex-wrap items-center gap-2">
@@ -225,7 +225,7 @@ export default function WilliamDashboard() {
         </div>
 
         {/* ── Stats row: FIRE (wide) + Portfolio + This Month ── */}
-        <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-[2.2fr_1fr_1fr]">
+        <div className="grid grid-cols-2 gap-x-3 gap-y-[18px] md:grid-cols-3 md:gap-5 lg:grid-cols-[2.2fr_1fr_1fr]">
 
           {/* FIRE — full width on mobile, first column on desktop */}
           <Card
@@ -234,7 +234,7 @@ export default function WilliamDashboard() {
             aria-label="FIRE progress — open FIRE page"
             onClick={() => navigate('/fire')}
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate('/fire'); } }}
-            className="group col-span-2 flex cursor-pointer flex-col gap-2.5 p-[18px] transition-colors hover:border-accent active:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink md:col-span-1 md:p-5"
+            className="group col-span-2 flex cursor-pointer flex-col gap-2 p-[18px] transition-colors hover:border-accent active:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink md:col-span-1 md:gap-2.5 md:p-5"
           >
             <div className="flex items-center justify-between">
               <p className="ty-label text-muted">FIRE PROGRESS</p>
@@ -254,9 +254,9 @@ export default function WilliamDashboard() {
           </Card>
 
           {/* Portfolio */}
-          <Card className="flex flex-col gap-2.5 p-4 md:p-5">
+          <Card className="flex flex-col gap-1.5 p-4 md:gap-2.5 md:p-5">
             <p className="ty-label text-muted">PORTFOLIO</p>
-            <p className="ty-h1 num text-ink">{formatCurrency(d.portfolioValue, d.defaultCurrency)}</p>
+            <p className="num font-bold text-ink text-[22px] md:text-[32px]">{formatCurrency(d.portfolioValue, d.defaultCurrency)}</p>
             {d.holdings.length > 0 && (
               <GreenDelta>
                 {portfolioGain >= 0 ? '↑ +' : '↓ −'}{formatCurrency(Math.abs(portfolioGain), d.defaultCurrency)} total
@@ -265,9 +265,9 @@ export default function WilliamDashboard() {
           </Card>
 
           {/* This Month */}
-          <Card className="flex flex-col gap-2.5 p-4 md:p-5">
+          <Card className="flex flex-col gap-1.5 p-4 md:gap-2.5 md:p-5">
             <p className="ty-label text-muted">THIS MONTH</p>
-            <p className={cn('ty-h1 num', d.monthNet < 0 ? 'text-negative' : d.monthNet > 0 ? 'text-positive' : 'text-ink')}>
+            <p className={cn('num font-bold text-[22px] md:text-[32px]', d.monthNet < 0 ? 'text-negative' : d.monthNet > 0 ? 'text-positive' : 'text-ink')}>
               {d.monthNet > 0 ? '+' : d.monthNet < 0 ? '−' : ''}{formatCurrency(Math.abs(d.monthNet), d.defaultCurrency)}
             </p>
             <p className="ty-body text-secondary">
@@ -278,7 +278,7 @@ export default function WilliamDashboard() {
 
         {/* ── Recent activity ── */}
         {d.recentActivity.length > 0 && (
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2.5 md:gap-3">
             <h2 className="ty-h2 text-ink">Recent activity</h2>
             {d.recentActivity.map((tx) => {
               const isExpense = tx.type === 'expense';

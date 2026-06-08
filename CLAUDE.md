@@ -243,6 +243,20 @@ Violet was considered and rejected. Do not reintroduce it. Primitives were renam
 
 **RangeSelector/Segment:** track + segments are **`rounded-full`** (r999); selected segment = `color/surface` fill, **no border**; segment pad 6/14.
 
+**⚠️ Dashboard layout gaps + value font sizes are PER-BREAKPOINT (mobile ≠ desktop)** — extracted from screens 26:3 / 22:3. Mobile is tighter:
+| Container / element | Mobile | Desktop |
+|---|---|---|
+| Main stack | 18 | 20 |
+| Top row (cols) | 18 | 20 |
+| Portfolio + This-Month **row gap** | **12** | 20 |
+| Graph card gap | 14 | 18 |
+| FIRE card gap | 8 | 10 |
+| Portfolio/Month card gap | 6 | 10 |
+| Recent activity gap | 10 | 12 |
+| Net-worth hero font | 36 | 44 |
+| Stat-card value font (Portfolio/Month) | **22** | 32 |
+Code uses responsive classes (`gap-[18px] md:gap-5`, `gap-x-3 gap-y-[18px] md:gap-5`, `text-[22px] md:text-[32px]`, etc). The This-Month wrap bug was caused by using desktop values (gap 20 + 32px font) on mobile.
+
 ### Radius + card padding scale (verified against Figma, 2026-06)
 Radius: `sm 8 · md 12 · lg 20 · full 999`. **Standard card radius = 20 (`lg`).** Exceptions: net-worth grey wrapper 24, white inner balance card 18, activity rows / See-all 16, insight callout / chart tooltip 12.
 Card padding: **20px** standard (`p-5`); graph card **24** (`p-6`); activity rows 16/18; net-worth wrapper 12 (18 bottom). Code: `--w-radius-card: 20px`. (The earlier code used r16/p-6 — corrected.)
