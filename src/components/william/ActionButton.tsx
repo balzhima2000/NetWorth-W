@@ -28,8 +28,8 @@ export function ActionButton({ action, label, onClick, className }: ActionButton
       <span
         className={cn(
           'flex h-[34px] w-[54px] items-center justify-center rounded-full bg-inverse text-canvas',
-          'transition-[transform,filter] duration-150',
-          'group-hover:brightness-90 group-active:scale-95 group-active:brightness-75',
+          'transition-[transform,background-color] duration-150',
+          'group-hover:bg-inverse-hover group-active:scale-95 group-active:brightness-90',
           'group-focus-visible:ring-2 group-focus-visible:ring-ink group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-canvas',
         )}
       >

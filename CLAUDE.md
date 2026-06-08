@@ -241,6 +241,10 @@ Violet was considered and rejected. Do not reintroduce it. Primitives were renam
 
 **Button state fills (masters):** Primary hover = `color/surface-inverse-hover` (#737373 / #a3a3a3 dark), pressed = darker; Secondary/Ghost hover & pressed = `color/surface-raised`; disabled = `color/border` fill + `text-muted`. Code mirrors via `--w-inverse-hover`.
 
+**Action Button hover** = `color/surface-inverse-hover` (was a raw darkening overlay — now uses the real token; no non-variable colors in code). Active = scale 95% + brightness.
+
+**Token audit (2026-06):** every fill/stroke in the component masters + dashboard screens is variable-bound — no raw colors. 27 semantic `color/*` tokens (Color collection) + neutral/blue/lime/orange primitive ramps. The only non-variable colors were the doc-only darkening overlays used to *depict* hover/pressed; the corresponding code states now use real tokens.
+
 **RangeSelector/Segment:** track + segments are **`rounded-full`** (r999); selected segment = `color/surface` fill, **no border**; segment pad 6/14.
 
 **⚠️ Dashboard layout gaps + value font sizes are PER-BREAKPOINT (mobile ≠ desktop)** — extracted from screens 26:3 / 22:3. Mobile is tighter:
@@ -273,8 +277,8 @@ Pre-dev audit pass added the missing interaction/data states and cleaned duplica
 | RangeSelector | 231:55 | composed 1W/1M/1Y/YTD/ALL (1M selected) |
 | Card | 13:11 | State {Default/Hover/Pressed/Focus} — Hover=accent border, Pressed=raised fill, Focus=accent ring. **Static cards use Default only** |
 | Card / Interactive | 292:26 | **Clickable/navigational card** — whole surface is the action (trailing → affordance) + Default/Hover/Pressed/Focus. Used by the FIRE card. Static cards omit these states |
-| Badge | 14:12 | Tone {Positive/Negative/Neutral} (junk Blue/Violet/Rose/Tone7 removed; dupe 209:3135 deleted) |
-| Chip | 30:9 | Style {Neutral/Outline/Inverse}; interactive states (Hover/Pressed/Focus) documented |
+| Badge | 14:12 | Tone {Positive/Negative/Neutral}. Neutral = `accent-bg` fill + `accent` text (updated 2026-06, was raised+secondary) |
+| Chip | 30:9 | Style {Neutral/Outline/Inverse} (updated 2026-06): Neutral = `surface-sunken` + `text-secondary`; Outline = `surface` + `border` + `text-primary`; Inverse = `surface-inverse` (mid-grey) + `text-on-inverse` (was ink/black) |
 | Skeleton | 237:3 | loading placeholder (animate shimmer in code) |
 | EmptyState | 237:4 | icon + H2 + body + CTA (swap per context) |
 | Alert | 237:37 | Tone {Error/Info} — inline fetch-failure banner + Retry |

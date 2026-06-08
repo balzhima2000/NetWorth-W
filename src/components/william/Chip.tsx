@@ -4,10 +4,12 @@ import { cn } from './cn';
 /** Chip — Style {Neutral / Outline / Inverse}. */
 type ChipStyle = 'neutral' | 'outline' | 'inverse';
 
+// Matches the Figma Chip master: Neutral = surface-sunken + text-secondary;
+// Outline = surface + border + text-primary; Inverse = surface-inverse + on-inverse.
 const styles: Record<ChipStyle, string> = {
-  neutral: 'bg-raised text-ink',
-  outline: 'border border-line text-ink',
-  inverse: 'bg-ink text-canvas',
+  neutral: 'bg-sunken text-secondary',
+  outline: 'bg-surface border border-line text-ink',
+  inverse: 'bg-inverse text-on-inverse',
 };
 
 interface ChipProps extends React.HTMLAttributes<HTMLSpanElement> {
