@@ -319,14 +319,14 @@ These rules prevent wasted iterations:
 The Portfolio surface was designed in Figma (desktop 1440 + mobile 375), reusing William tokens/components. Frames live on **page 15:2** in two sections: **"Portfolio — Final"** (370:1455) and the modal/menu sections below.
 
 ### Portfolio screen structure
-- **Header**: title + actions — `Refresh` · `Import` · `+ Add trade` (desktop right-aligned; mobile = compact action row, Add trade primary fills width).
+- **Header**: title + subtitle (`6 holdings · Updated 2h ago`) + actions. Actions are **icon + label pills** (all three, incl. Refresh — not icon-only). Desktop = right-aligned `Refresh · Import · + Add trade`. **Mobile = `+ Add trade · Refresh · Import`** (Add trade primary first, all equal pills, none full-width — Figma 488:6940).
 - **Bento row**: *Portfolio Value* summary card (value, gain merged line `↑ +$… · +%`, invested, # positions) + *Allocation* card.
 - **Allocation card**: documented breakdown bar (**gap 3, segment r4**, palette `accent · positive-bg · blue-bg · accent-bg`) + legend (top-3 holdings + "Other" = real sum). Header has a **"Set targets"** button (entry to rebalancing).
 - **Holdings table**: columns **Asset · Price · Shares · Market Value · Gain ($) · Return (%)**. Gain $ and Return % are **separate columns** (so all three are sortable).
 
 ### Sorting = sortable columns (NOT a segmented control)
 - The old Value/Gain/Return segment implied *view switching*; replaced with **sortable column headers** — active column shows a `↓` arrow + `text-primary` label, others `text-muted`. Desktop variants exist: `— Gain` (sort by $), `— Return` (sort by %).
-- **Mobile** has no columns → a compact **"Value ▾" sort dropdown** in the Holdings header; its open state = the **Menu** component (Value selected + check / Gain / Return).
+- **Mobile** has no columns → a compact **sort dropdown** in the Holdings header. Trigger + menu items are **UPPERCASE Geist Mono** (`VALUE · GAIN · RETURN`) matching the column-header treatment; trigger arrow toggles **↓ closed / ↑ open**; selected item = `accent-bg` + check (Figma 499:2167).
 - **Many-holdings edge case**: `— Many holdings` desktop frame (14 rows) confirms the table scales (page grows / scrolls).
 
 ### Add modals (Trade / Income / Expense) — section "Add Transaction Modals" (497:1973)

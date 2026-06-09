@@ -157,9 +157,9 @@ function SortDropdown({ sortBy, setSortBy }: { sortBy: SortKey; setSortBy: (k: S
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="num inline-flex items-center gap-1.5 rounded-full bg-sunken px-3 py-1.5 text-[13px] font-medium text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+        className="num inline-flex items-center gap-1.5 rounded-full bg-sunken px-3 py-1.5 text-[13px] font-medium uppercase tracking-[0.03em] text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
       >
-        {current.label === 'Market value' ? 'Value' : current.label} <span className="text-[12px]">↓</span>
+        {current.key === 'value' ? 'VALUE' : current.label.toUpperCase()} <span className="text-[12px]">{open ? '↑' : '↓'}</span>
       </button>
       {open && (
         <div className="absolute right-0 z-10 mt-2 w-[180px] rounded-xl border border-line bg-surface p-1.5">
@@ -171,11 +171,11 @@ function SortDropdown({ sortBy, setSortBy }: { sortBy: SortKey; setSortBy: (k: S
                 type="button"
                 onClick={() => { setSortBy(c.key); setOpen(false); }}
                 className={cn(
-                  'flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-[14px] font-medium',
+                  'num flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-[13px] font-medium uppercase tracking-[0.03em]',
                   active ? 'bg-accent-bg text-accent' : 'text-ink hover:bg-raised',
                 )}
               >
-                {c.label === 'Market value' ? 'Value' : c.label}{active && <span className="num">✓</span>}
+                {c.key === 'value' ? 'VALUE' : c.label.toUpperCase()}{active && <span className="num">✓</span>}
               </button>
             );
           })}
@@ -256,11 +256,11 @@ export default function WilliamPortfolio() {
           </div>
         </div>
 
-        {/* Mobile actions */}
+        {/* Mobile actions — [Add trade] [Refresh] [Import], icon+text pills (Figma 488:6940) */}
         <div className="flex items-center gap-2 md:hidden">
-          <Button pill variant="primary" onClick={addTrade} className="flex-1"><Icon name="plus" size={16} /> Add trade</Button>
-          <Button pill variant="secondary" onClick={goPortfolio} className="!px-3" aria-label="Refresh prices"><Icon name="refresh" size={18} /></Button>
-          <Button pill variant="secondary" onClick={goPortfolio}><Icon name="import" size={16} /> Import</Button>
+          <Button pill variant="primary" onClick={addTrade} className="!gap-1.5 !px-3.5 !text-[14px]"><Icon name="plus" size={16} /> Add trade</Button>
+          <Button pill variant="secondary" onClick={goPortfolio} className="!gap-1.5 !px-3.5 !text-[14px]"><Icon name="refresh" size={16} /> Refresh</Button>
+          <Button pill variant="secondary" onClick={goPortfolio} className="!gap-1.5 !px-3.5 !text-[14px]"><Icon name="import" size={16} /> Import</Button>
         </div>
 
         {d.isEmpty ? (
