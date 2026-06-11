@@ -5,7 +5,15 @@ import { CARD_COLORS } from '../../utils/constants';
 import type { SpendingCategory } from '../../types/index';
 import { AccountSubPage } from './AccountSubPage';
 
-const EMOJIS = ['🍕','🍔','🛒','👕','🏠','⚡','🚗','✈️','💊','🏋️','🎮','🎬','📚','💰','💳','📈','🏦','💸','🎁','❤️','🎓','🐶','☕','🍺','🌿','🔧','💼','⭐'];
+/** Monochrome monogram chip — the category's initial on a pale tint of its color.
+ * Replaces emojis (off-brand, OS-inconsistent) and scales to any custom name. */
+function Mono({ name, color }: { name: string; color: string }) {
+  return (
+    <span className="flex h-8 w-8 items-center justify-center rounded-full text-[13px] font-semibold" style={{ background: color + '22', color }}>
+      {(name.trim()[0] ?? '?').toUpperCase()}
+    </span>
+  );
+}
 
 export function CategoriesPage({ kind }: { kind: 'expense' | 'income' }) {
   const store = useCategoriesStore();
@@ -17,15 +25,14 @@ export function CategoriesPage({ kind }: { kind: 'expense' | 'income' }) {
   const [editing, setEditing] = useState<SpendingCategory | null>(null);
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
-  const [emoji, setEmoji] = useState('🍕');
   const [color, setColor] = useState(CARD_COLORS[0]);
 
-  const openAdd = () => { setEditing(null); setName(''); setEmoji('🍕'); setColor(CARD_COLORS[0]); setOpen(true); };
-  const openEdit = (c: SpendingCategory) => { setEditing(c); setName(c.name); setEmoji(c.emoji); setColor(c.color); setOpen(true); };
+  const openAdd = () => { setEditing(null); setName(''); setColor(CARD_COLORS[0]); setOpen(true); };
+  const openEdit = (c: SpendingCategory) => { setEditing(c); setName(c.name); setColor(c.color); setOpen(true); };
   const save = () => {
     if (!name.trim()) return;
-    if (editing) update(editing.id, { name: name.trim(), emoji, color });
-    else add({ id: crypto.randomUUID(), name: name.trim(), emoji, color, isDefault: false });
+    if (editing) update(editing.id, { name: name.trim(), color });
+    else add({ id: crypto.randomUUID(), name: name.trim(), emoji: '', color, isDefault: false });
     setOpen(false);
   };
 
@@ -36,7 +43,7 @@ export function CategoriesPage({ kind }: { kind: 'expense' | 'income' }) {
         {list.map((c, i) => (
           <div key={c.id} className={cn('flex items-center justify-between px-5 py-3.5', i < list.length - 1 && 'border-b border-line')}>
             <div className="flex items-center gap-3">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full text-[16px]" style={{ background: c.color + '22' }}>{c.emoji}</span>
+              <Mono name={c.name} color={c.color} />
               <span className="text-[15px] font-medium text-ink">{c.name}</span>
             </div>
             <div className="flex items-center gap-1">
@@ -55,13 +62,6 @@ export function CategoriesPage({ kind }: { kind: 'expense' | 'income' }) {
         </>
       }>
         <Field label="Name"><TextInput value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Groceries" autoFocus /></Field>
-        <Field label="Emoji">
-          <div className="flex flex-wrap gap-1.5">
-            {EMOJIS.map((e) => (
-              <button key={e} type="button" onClick={() => setEmoji(e)} className={cn('flex h-9 w-9 items-center justify-center rounded-lg text-[18px]', emoji === e ? 'bg-accent-bg ring-2 ring-ink' : 'bg-sunken')}>{e}</button>
-            ))}
-          </div>
-        </Field>
         <Field label="Color">
           <div className="flex flex-wrap gap-2">
             {CARD_COLORS.map((c) => (
