@@ -12,7 +12,7 @@ import { Spinner } from './Spinner';
  * which is the intentional design decision. Focus ring uses the neutral
  * accent (ink) rather than orange, since orange is reserved for negatives.
  */
-type Variant = 'primary' | 'secondary' | 'ghost';
+type Variant = 'primary' | 'secondary' | 'ghost' | 'danger';
 type Size = 'l' | 'm' | 's' | 'xs';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -55,6 +55,10 @@ const variants: Record<Variant, string> = {
     'bg-surface text-ink border border-line hover:bg-raised active:bg-raised disabled:text-muted disabled:bg-surface',
   ghost:
     'bg-transparent text-ink hover:bg-raised active:bg-raised disabled:text-muted',
+  // Danger — orange outline for destructive / cancel-in-destructive actions.
+  // Hover tints with the pale negative-bg (the "slightly orange" hover).
+  danger:
+    'bg-surface text-negative border border-negative hover:bg-negative-bg active:bg-negative-bg disabled:border-line disabled:bg-surface disabled:text-muted',
 };
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function Button(

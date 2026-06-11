@@ -47,13 +47,13 @@ export default function Danger() {
         <div className="flex flex-col gap-1">
           <span className="text-[15px] font-semibold text-ink">Reset this device</span>
           <span className="text-[13px] text-secondary">Clears all data on this device and restarts setup. Cloud backup (if signed in) is kept.</span>
-          <Button size="s" pill variant="secondary" className="mt-2 w-fit" onClick={() => setSoft(true)}>Reset this device</Button>
+          <Button size="s" pill variant="danger" className="mt-2 w-fit" onClick={() => setSoft(true)}>Reset this device</Button>
         </div>
         <div className="h-px w-full bg-line" />
         <div className="flex flex-col gap-1">
           <span className="text-[15px] font-semibold text-negative">Delete everything</span>
           <span className="text-[13px] text-secondary">Permanently deletes all local data and your cloud backup. This cannot be undone.</span>
-          <Button size="s" pill variant="secondary" className="mt-2 w-fit !border-negative !text-negative" onClick={() => { setClearText(''); setHard(true); }}>Delete everything</Button>
+          <Button size="s" pill variant="danger" className="mt-2 w-fit" onClick={() => { setClearText(''); setHard(true); }}>Delete everything</Button>
         </div>
       </Card>
 

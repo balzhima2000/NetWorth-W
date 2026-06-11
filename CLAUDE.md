@@ -375,6 +375,7 @@ Field/menu styles were extracted from the modals into reusable components. Share
 - Heights are the locked scale **44 / 38 / 32 / 28** (picked by Balzhima). The Add-trade primary keeps `font-semibold` + 16px plus glyph at M (see Toolbar-button-dims note).
 - The old `size` values (`default` 42 / `toolbar` 38) were **replaced** by this scale; modal CTAs moved 42→44 (L), Set targets migrated from a bespoke `<button>` to `<Button size="s">`.
 - Figma: the **Button — Sizes** reference (Button page) documents L/M/S/XS; the Button master's standard height is **38 (M)**.
+- **Variants**: `primary` (mid-grey fill) · `secondary` (surface + border) · `ghost` · **`danger`**. The `danger` variant is an **orange outline** (`surface` fill, `border-negative`, `text-negative`) whose **hover tints to `bg-negative-bg`** (pale orange #fed7aa light / #431407 dark) — for destructive actions (delete / reset) and cancel-in-destructive dialogs. Used by the Account → Danger zone triggers. Documented in Figma via the **Button — Danger** reference (Button page, default / hover / cancel).
 - **Date fields** use a **text input in `DD.MM.YYYY`** (helpers `isoToDDMM`/`ddmmToISO`) — not native date input — to honor the format.
 - **Icon**: added `refresh / import / target / plus` dot-matrix glyphs (coords re-extracted from masters incl. Balzhima's Refresh edit).
 
