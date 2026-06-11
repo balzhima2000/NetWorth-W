@@ -5,14 +5,10 @@ import { CARD_COLORS } from '../../utils/constants';
 import type { SpendingCategory } from '../../types/index';
 import { AccountSubPage } from './AccountSubPage';
 
-/** Monochrome monogram chip — the category's initial on a pale tint of its color.
- * Replaces emojis (off-brand, OS-inconsistent) and scales to any custom name. */
-function Mono({ name, color }: { name: string; color: string }) {
-  return (
-    <span className="flex h-8 w-8 items-center justify-center rounded-full text-[13px] font-semibold" style={{ background: color + '22', color }}>
-      {(name.trim()[0] ?? '?').toUpperCase()}
-    </span>
-  );
+/** Plain color dot — the quietest, most on-brand category marker (no emoji,
+ * no glyph). The only color is the category's own swatch; scales to any name. */
+function Mono({ color }: { name?: string; color: string }) {
+  return <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: color }} />;
 }
 
 export function CategoriesPage({ kind }: { kind: 'expense' | 'income' }) {
