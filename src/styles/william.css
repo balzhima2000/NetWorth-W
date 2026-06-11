@@ -100,8 +100,12 @@
 }
 
 /* ── Dark ────────────────────────────────────────────────── */
+/* Activated either per-element (data-theme on the .william root) or globally
+   via [data-theme="dark"] on <html> (set by useWilliamTheme from the
+   Light/Dark/Auto preference). */
 .william[data-theme="dark"],
-.dark .william {
+.dark .william,
+html[data-theme="dark"] .william {
   --w-canvas:       #171717;
   --w-surface:      #171717;
   --w-raised:       #262626;
@@ -168,5 +172,11 @@ body:has(.william) #root {
 html:has(.william[data-theme="dark"]),
 body:has(.william[data-theme="dark"]),
 body:has(.william[data-theme="dark"]) #root {
+  background-color: #171717;
+}
+/* Global dark (preference applied to <html>). */
+html[data-theme="dark"],
+html[data-theme="dark"] body,
+html[data-theme="dark"] #root {
   background-color: #171717;
 }

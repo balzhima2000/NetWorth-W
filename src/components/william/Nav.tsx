@@ -25,7 +25,7 @@ const ITEMS: NavItem[] = [
   { id: 'portfolio', label: 'Portfolio', icon: 'portfolio', path: '/william/portfolio' },
   { id: 'spending',  label: 'Spending',  icon: 'spending',  path: '/spending' },
   { id: 'fire',      label: 'FIRE',      icon: 'fire',      path: '/fire' },
-  { id: 'account',   label: 'Account',   icon: 'account',   path: '/settings', iconOnly: true },
+  { id: 'account',   label: 'Account',   icon: 'account',   path: '/william/account', iconOnly: true },
 ];
 
 export function FloatingNav() {

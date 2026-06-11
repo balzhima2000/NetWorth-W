@@ -180,6 +180,7 @@ export interface Settings {
   userName: string;
   userNickname: string;
   portfolioMode: 'simple' | 'detailed';
+  theme: 'light' | 'dark' | 'auto'; // William appearance — auto follows the device
   defaultCurrency: string; // "USD"
   exchangeRates: ExchangeRate[];
   // ── API Keys (each slot is independent and optional) ──

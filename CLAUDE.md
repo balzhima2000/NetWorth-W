@@ -380,6 +380,23 @@ Field/menu styles were extracted from the modals into reusable components. Share
 
 ---
 
+## Account / Settings + theme (William) — designed & partially shipped 2026-06
+
+Figma frames on the **Screens** page: `Account — Desktop` (572:2167) + `Account — Mobile` (577:2300). The old monolithic `/settings` is being split into isolated William pages reached from an **Account hub**.
+
+### Theme (Light / Dark / Auto) — shipped
+- `Settings.theme: 'light'|'dark'|'auto'` (default `auto`) in `settingsStore` (persisted) + `setTheme`.
+- **`useWilliamTheme()`** (`components/william/useWilliamTheme.ts`), mounted in `App.tsx`, resolves the preference (auto → `matchMedia('(prefers-color-scheme: dark)')`, live-updating) and sets **`data-theme` on `<html>`**.
+- CSS: dark tokens now also key off **`html[data-theme="dark"] .william`** (added alongside the existing `.william[data-theme="dark"]` / `.dark .william`), plus a global `html[data-theme="dark"]` page-bg rule. The toggle flips every William page at once.
+
+### Account hub + routing — shipped
+- `WilliamAccount` (`src/pages/WilliamAccount/index.tsx`), route **`/william/account`**. Theme toggle (3-seg, top) → grouped link rows → desktop footer. The William **nav account button now points here** (was `/settings`).
+- **Grouping** (`sections.ts`, single source of truth): Connections (api, currency) · Money setup (expense-categories, income-categories, cards, income-destinations, assets) · Account & data (sync, data, danger). Danger zone row is `text-negative`.
+- **Footer**: `balzhima.com` + Eitan's GitHub. ⚠️ Eitan's GitHub URL is a **placeholder** (`github.com/eitan`) pending the real handle.
+- Sub-pages: `/william/account/:slug` → `AccountSection` maps slug → page (`AccountSubPage` shell = back-to-Account header + title). **Currency is fully ported**; the other 9 render `ComingSoon` (interim link to classic `/settings`) until each section's functionality is migrated.
+
+---
+
 ## Portfolio case study (ongoing — keep this in mind)
 
 Balzhima is writing a portfolio case study about this redesign (transitioning from graphic/junior designer → product designer who ships alongside devs). **As we work, accumulate the rationale.** Every UX/UI decision should be capturable as: **problem** (from the audit) → **principle** applied → **before → after**. Nudge Balzhima to capture decisions while fresh — don't reconstruct from memory at the end.

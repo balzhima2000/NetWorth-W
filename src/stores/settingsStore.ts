@@ -9,6 +9,7 @@ interface SettingsStore extends Settings {
   setUserName: (name: string) => void;
   setUserNickname: (nickname: string) => void;
   setPortfolioMode: (mode: 'simple' | 'detailed') => void;
+  setTheme: (theme: 'light' | 'dark' | 'auto') => void;
   setDefaultCurrency: (currency: string) => void;
   setExchangeRates: (rates: ExchangeRate[]) => void;
   addExchangeRate: (rate: ExchangeRate) => void;
@@ -38,6 +39,7 @@ const defaultSettings: Settings = {
   userName: '',
   userNickname: '',
   portfolioMode: 'detailed',
+  theme: 'auto',
   defaultCurrency: 'ILS',
   exchangeRates: [],
   stocksApiKey: '',
@@ -73,6 +75,7 @@ export const useSettingsStore = create<SettingsStore>()(
       setUserName: (name) => set({ userName: name }),
       setUserNickname: (nickname) => set({ userNickname: nickname }),
       setPortfolioMode: (mode) => set({ portfolioMode: mode }),
+      setTheme: (theme) => set({ theme }),
       setDefaultCurrency: (currency) => set({ defaultCurrency: currency }),
       setExchangeRates: (rates) => set({ exchangeRates: rates }),
       addExchangeRate: (rate) =>
