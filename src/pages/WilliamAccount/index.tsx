@@ -96,7 +96,7 @@ export default function WilliamAccount() {
           <div className="flex items-center gap-3">
             <a href="https://balzhima.com" target="_blank" rel="noreferrer" className="font-medium text-ink underline underline-offset-2 hover:text-secondary">balzhima.com</a>
             <span className="num text-muted">·</span>
-            <a href="https://github.com/eitan" target="_blank" rel="noreferrer" className="font-medium text-ink underline underline-offset-2 hover:text-secondary">Eitan’s GitHub</a>
+            <a href="https://github.com/eitanrub7980" target="_blank" rel="noreferrer" className="font-medium text-ink underline underline-offset-2 hover:text-secondary">Eitan’s GitHub</a>
           </div>
         </footer>
       </main>

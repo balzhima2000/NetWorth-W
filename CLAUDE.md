@@ -392,8 +392,8 @@ Figma frames on the **Screens** page: `Account — Desktop` (572:2167) + `Accoun
 ### Account hub + routing — shipped
 - `WilliamAccount` (`src/pages/WilliamAccount/index.tsx`), route **`/william/account`**. Theme toggle (3-seg, top) → grouped link rows → desktop footer. The William **nav account button now points here** (was `/settings`).
 - **Grouping** (`sections.ts`, single source of truth): Connections (api, currency) · Money setup (expense-categories, income-categories, cards, income-destinations, assets) · Account & data (sync, data, danger). Danger zone row is `text-negative`.
-- **Footer**: `balzhima.com` + Eitan's GitHub. ⚠️ Eitan's GitHub URL is a **placeholder** (`github.com/eitan`) pending the real handle.
-- Sub-pages: `/william/account/:slug` → `AccountSection` maps slug → page (`AccountSubPage` shell = back-to-Account header + title). **Currency is fully ported**; the other 9 render `ComingSoon` (interim link to classic `/settings`) until each section's functionality is migrated.
+- **Footer**: `balzhima.com` + Eitan's GitHub (`github.com/eitanrub7980`).
+- Sub-pages: `/william/account/:slug` → `AccountSection` maps slug → page (`AccountSubPage` shell = back-to-Account header + title). **All 10 sections are ported to William pages** (Api, Currency, Categories[expense/income], Cards, IncomeDestinations, Assets, Sync, Data, Danger) — each reads/writes the same stores as classic `/settings` (categoriesStore, cardsStore, networthStore, settingsStore, exportImport service, supabase auth/sync). CRUD uses the william `Modal` + `Field`; Danger's hard-delete still requires typing `DELETE` and wipes `sync_stores`.
 
 ---
 
