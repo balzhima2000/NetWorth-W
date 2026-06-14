@@ -325,6 +325,7 @@ The Portfolio surface was designed in Figma (desktop 1440 + mobile 375), reusing
 - **Bento row**: *Portfolio Value* summary card (value, gain merged line `↑ +$… · +%`, invested, # positions) + *Allocation* card.
 - **Allocation card**: documented breakdown bar (**gap 3, segment r4**, palette `accent · positive-bg · blue-bg · accent-bg`) + legend (top-3 holdings + "Other" = real sum). Header has a **"Set targets"** button (entry to rebalancing).
 - **Holdings table**: columns **Asset · Price · Shares · Market Value · Gain ($) · Return (%)**. Gain $ and Return % are **separate columns** (so all three are sortable).
+- **Canonical default list screen:** `Foundations page → Portfolio v2 / Desktop → Content → HoldingsCard` — node **`362:140`**. This is the single source of truth for the holdings table layout, column widths, typography, badge treatment, and sort defaults. Do not redesign the list without updating this reference frame. Key defaults: **default sort = Market Value, descending**; asset market badge = "Global" or "TASE" outline chip next to ticker; TASE prices show ₪ (already divided by 100 from agorot at import); Price / Market Value / Gain columns use **Geist Mono** (tabular numbers); Gain and Return use `color/positive` (lime) for positive values, `color/negative` (orange) for negative. Documented on the Documentation page as "Doc/Holdings Table" (node `669:1902`).
 
 ### Sorting = sortable columns (NOT a segmented control)
 - The old Value/Gain/Return segment implied *view switching*; replaced with **sortable column headers**. To make sortability obvious, **all 3 sortable headers (Market value / Gain / Return) always show a `↓` arrow**: inactive = `text-muted` label + **40%-opacity** arrow (brightens to full on hover, pointer cursor); active = **`font-semibold` `text-ink`** label + the live direction arrow (`↓` desc / `↑` asc). Non-sortable headers (Asset/Price/Shares) stay plain `text-muted`, no arrow. In Figma the active label+arrow use **Geist Mono SemiBold**; inactive arrows are **Geist Mono Medium, `text-muted`, 40% opacity** (applied to all 3 desktop ColHeaders: 411:1505, 488:6619, 417:1887).
@@ -395,6 +396,47 @@ Figma frames on the **Screens** page: `Account — Desktop` (572:2167) + `Accoun
 - **Grouping** (`sections.ts`, single source of truth): Connections (api, currency) · Money setup (expense-categories, income-categories, cards, income-destinations, assets) · Account & data (sync, data, danger). Danger zone row is `text-negative`.
 - **Footer**: `balzhima.com` + Eitan's GitHub (`github.com/eitanrub7980`).
 - Sub-pages: `/william/account/:slug` → `AccountSection` maps slug → page (`AccountSubPage` shell = back-to-Account header + title). **All 10 sections are ported to William pages** (Api, Currency, Categories[expense/income], Cards, IncomeDestinations, Assets, Sync, Data, Danger) — each reads/writes the same stores as classic `/settings` (categoriesStore, cardsStore, networthStore, settingsStore, exportImport service, supabase auth/sync). CRUD uses the william `Modal` + `Field`; Danger's hard-delete still requires typing `DELETE` and wipes `sync_stores`.
+
+---
+
+## Spending + All Transactions screens (designed 2026-06)
+
+Figma frames on **Screens page** (15:2):
+| Frame | Node | Size |
+|---|---|---|
+| Spending — Desktop | `617:2543` | 1440×1014 |
+| Spending — Mobile | `617:2544` | 375×1287 |
+| All Transactions — Desktop | `629:2786` | 1440×1084 |
+| All Transactions — Mobile | `629:2787` | 375×1005 |
+
+### Month-filtered view header — component (630:2923)
+Header pattern for any view that shows content filtered by a selected month. Used by both Spending ("Spending for") and All Transactions ("Transactions for") pages.
+
+Structure: `HORIZONTAL` auto-layout — title text (Inter SemiBold 32px, `color/text-primary`) + **month picker pill**.
+
+**Month picker pill:** `r = 999`, fill `color/surface` + 1px `color/border`, text "June 2026 ▾" where the `▾` is **Geist Mono Medium** (same as all dropdown arrows). On mobile the title and pill sit on **separate lines** (title row + pill row below), not inline.
+
+### Spending bento (desktop 617:2543)
+Three-row bento grid:
+| Row | Left card | Width | Right card | Width | Height |
+|---|---|---|---|---|---|
+| 1 | Hero (THIS MONTH SPENT + value + trend badge) | 472 | By Category (donut + legend + Set targets) | 708 | 255 |
+| 2 | Recent (transaction list + See all ›) | 708 | Budgets (3 budget bars, no "View all") | 472 | 359 |
+| 3 | Recurring nav card | 590 | Trends nav card | 590 | 76 |
+
+Row 2 cards are equal-height via `layoutSizingVertical = 'FILL'` (both FILL the 359px row).
+
+### Recurring + Trends nav cards
+Mini nav cards that link to dedicated sub-pages. Each card: `HORIZONTAL` auto-layout, icon (20px) + VERTICAL text stack (title 15px SemiBold + subtitle 13px `text-secondary`). Present on both Spending desktop (Row 3) and Spending mobile (stacked between By Category and Recent).
+
+- **Icon/Recurring** (657:1398) — ↻ dot-matrix circular arrow (18 dots): arc clockwise upper-left→bottom + arrowhead wings at end
+- **Icon/Trends** (657:1421) — rising line chart with axes (22 dots): Y-axis + X-axis + jagged ascending data line
+
+### Transaction list date headers
+Date group headers (e.g. "TODAY · JUN 14", "JUN 12") are **plain text with no background fill** on both desktop and mobile. Mobile date headers had grey fills that were removed — do not re-add them. Category markers follow the standard `3×32 r2` rectangle rule.
+
+### Budgets card
+Summary card showing 3 budget category rows with progress bars. **No "View all ›" link** — there is no dedicated Budgets page yet; the card is purely informational. Desktop: node `636:4500` (inside spending desktop). Mobile: node `625:2720` (inside spending mobile).
 
 ---
 
