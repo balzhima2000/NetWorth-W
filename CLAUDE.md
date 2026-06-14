@@ -420,7 +420,7 @@ Structure: `HORIZONTAL` auto-layout — title text (Inter SemiBold 32px, `color/
 Three-row bento grid:
 | Row | Left card | Width | Right card | Width | Height |
 |---|---|---|---|---|---|
-| 1 | Hero (THIS MONTH SPENT + value + trend badge) | 472 | By Category (donut + legend + Set targets) | 708 | 255 |
+| 1 | Hero (THIS MONTH SPENT + value + trend badge) | 472 | By Category (donut + legend + Set targets) | 708 | **337** (auto — hugs ByCategory content) |
 | 2 | Recent (transaction list + See all ›) | 708 | Budgets (3 budget bars, no "View all") | 472 | 359 |
 | 3 | Recurring nav card | 590 | Trends nav card | 590 | 76 |
 
