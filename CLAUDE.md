@@ -242,6 +242,20 @@ Violet was considered and rejected. Do not reintroduce it. Primitives were renam
 **⚠️ Allocation / net-worth breakdown bar — per-theme colors (do NOT change):** Stocks = `accent` · Cash = lime · Crypto = blue · Other = `accent-bg`. Cash/Crypto use the **pale `-bg` tint in light** (`positive-bg`/`blue-bg`) but the **BRIGHT token in dark** (`positive` #bef264 / `blue` #60a5fa) — the dark `-bg` tints are nearly invisible on a dark surface. Balzhima set the dark board's segments to the bright tokens by hand. Code mirrors this via mode-aware `--w-alloc-lime` / `--w-alloc-blue`. **The Documentation Light & Dark boards intentionally differ here — do not "re-sync" the dark board by re-cloning the light one, or you'll overwrite this.**
 - Code mirror in `src/styles/william.css` (`--w-sunken`, `--w-on-inverse`, `--w-focus`, `--w-chart-1..5`).
 
+**⚠️ Chart color rule — NEVER invent colors.** Every fill in a chart must bind to an existing design system token via `setBoundVariableForPaint`. No raw hex values, no hardcoded RGB, no opacity hacks.
+
+**The single chart color palette (all chart types):** `color/accent` · `color/positive-bg` · `color/blue-bg` · `color/accent-bg` — in that exact order, confirmed from the ByCategory reference node (708:3259). Use these tokens in order for however many series/categories you have:
+- 1st series/category → `color/accent`
+- 2nd series/category → `color/positive-bg`
+- 3rd series/category → `color/blue-bg`
+- 4th series/category → `color/accent-bg`
+
+This applies to **all chart types**: breakdown bars, donut charts, paired bar charts, split bars. Example: Spend vs Income bars → spending = `color/accent`, income = `color/positive-bg`.
+
+Do **not** use `color/positive` (vivid lime) or `color/negative` (orange) for chart segments — those are reserved for delta values (gains/losses as text), not chart fills. Do **not** use opacity to create muted variants — use flat tokens only.
+
+If a chart needs more than 4 series, use `color/chart-1..5`. If a color is genuinely ambiguous, **ask Balzhima** rather than guessing.
+
 **No shadows.** All `DROP_SHADOW` effects removed (non-Archive pages); the stale `Elevation/sm·md·lg` effect styles were also deleted. Elevation = 1px `color/border` hairline only, never shadow. Do not add drop shadows.
 
 **Nav surfaces are OPAQUE (not frosted).** The NavPill masters use a solid fill + 1px border, NOT translucency/blur (a frosted treatment was trialled in code but caused dark-mode discoloration and didn't match the masters — reverted). Exact specs:
@@ -302,6 +316,17 @@ Pre-dev audit pass added the missing interaction/data states and cleaned duplica
 **Nav**: active item = neutral pill (`color/surface`) + `color/text-primary` icon/label; inactive = `color/text-muted`. NavPill is a baked component (`NavPill/Desktop/Light` 202:2605, `NavPill/Mobile/Light` 202:2606); dark mode renders via tokens (verified).
 
 **Open question for dev:** negative *total* net worth — currently shown orange in the edge-case frame (following negative=orange), but a balance isn't a delta. Confirm whether totals should be orange or stay neutral.
+
+### UI consistency rule (Heuristic #4)
+
+**Toolbar action buttons must be identical in style and size across all screens.** The reference is the Portfolio screen header (370:1455). Any new screen that has an Add/primary action button must match exactly:
+- **Size**: M = 38px height, `px-4` horizontal padding, pill (`cornerRadius 999`)
+- **Fill**: `color/surface-inverse` (mid-grey, primary style)
+- **Label**: 14px Inter Semi Bold
+- **Icon**: 16px plus glyph (dot-matrix `Icon/Plus`)
+- **Gap**: 6px between icon and label
+
+The label text can differ by screen context ("Add trade" on Portfolio, "Add" or "Add transaction" on Spending) but every other property is locked. Before building a new screen's header, screenshot the Portfolio header as the reference — do not estimate sizes from memory.
 
 ### Figma Plugin API rules (for Claude)
 These rules prevent wasted iterations:
