@@ -2,6 +2,7 @@ export { cn } from './cn';
 export { Icon } from './Icon';
 export type { IconName } from './Icon';
 export { Spinner } from './Spinner';
+export { PixelSpinner } from './PixelSpinner';
 export { Button } from './Button';
 export { Badge } from './Badge';
 export { Chip } from './Chip';

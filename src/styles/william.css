@@ -54,13 +54,6 @@
      dark -bg tints are invisible on a dark surface). Do not change. */
   --color-alloc-lime:   var(--w-alloc-lime);
   --color-alloc-blue:   var(--w-alloc-blue);
-
-  /* Pixel step spinner — dot-matrix Refresh icon rotating in 16 discrete steps */
-  --animate-pixel-spin: pixel-spin 800ms steps(16) infinite;
-}
-
-@keyframes pixel-spin {
-  to { transform: rotate(360deg); }
 }
 
 /* ── Light (default) ─────────────────────────────────────── */
