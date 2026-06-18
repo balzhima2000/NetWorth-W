@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from './cn';
-import { Spinner } from './Spinner';
+import { Icon } from './Icon';
 
 /**
  * Button — ports the Figma Button set.
@@ -73,7 +73,14 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
       aria-busy={loading || undefined}
       {...rest}
     >
-      {loading && <Spinner />}
+      {loading && (
+        <Icon
+          name="refresh"
+          size={size === 'l' ? 18 : size === 'm' ? 18 : size === 's' ? 16 : 14}
+          className="animate-pixel-spin"
+          style={{ transformOrigin: 'center' }}
+        />
+      )}
       {children}
     </button>
   );

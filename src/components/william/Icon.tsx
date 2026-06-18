@@ -6,6 +6,7 @@
  *
  * Size with the `size` prop (px). Color via text color (currentColor).
  */
+import React from 'react';
 import { cn } from './cn';
 
 export type IconName =
@@ -34,9 +35,10 @@ interface IconProps {
   name: IconName;
   size?: number;
   className?: string;
+  style?: React.CSSProperties;
 }
 
-export function Icon({ name, size = 24, className }: IconProps) {
+export function Icon({ name, size = 24, className, style }: IconProps) {
   return (
     <svg
       width={size}
@@ -45,6 +47,7 @@ export function Icon({ name, size = 24, className }: IconProps) {
       fill="currentColor"
       aria-hidden="true"
       className={cn('shrink-0', className)}
+      style={style}
     >
       {DOTS[name].map(([x, y], i) => (
         <rect key={i} x={x} y={y} width={6} height={6} rx={1.5} />
