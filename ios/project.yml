@@ -1,0 +1,25 @@
+# XcodeGen project definition — run `xcodegen generate` in this folder to
+# produce William.xcodeproj (brew install xcodegen). Targets iOS 26 for Liquid Glass.
+name: William
+options:
+  bundleIdPrefix: com.balzhima.william
+  deploymentTarget:
+    iOS: "26.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    GENERATE_INFOPLIST_FILE: YES
+    INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+    TARGETED_DEVICE_FAMILY: "1,2"
+    DEVELOPMENT_TEAM: "" # set your team in Xcode
+targets:
+  William:
+    type: application
+    platform: iOS
+    sources:
+      - path: William
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.balzhima.william
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
