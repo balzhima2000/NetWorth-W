@@ -1,4 +1,5 @@
 /** Resolves /william/account/:slug → the matching section page. */
+import type { JSX } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import { ACCOUNT_ITEMS } from './sections';
 import Api from './Api';

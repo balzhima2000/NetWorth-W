@@ -4,7 +4,7 @@
  * setting pages, and a desktop footer. Matches Figma "Account — Desktop/Mobile".
  */
 import { useNavigate } from 'react-router-dom';
-import { Card, Icon, FloatingNav, TabBar, cn } from '../../components/william';
+import { Card, FloatingNav, TabBar, cn } from '../../components/william';
 import { useSettingsStore } from '../../stores/settingsStore';
 import { ACCOUNT_GROUPS } from './sections';
 
