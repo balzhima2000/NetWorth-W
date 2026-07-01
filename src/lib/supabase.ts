@@ -1,10 +1,19 @@
 import { createClient } from '@supabase/supabase-js';
 
-export const supabaseConfigured = true;
+// Credentials come from environment variables (see .env.example).
+// Create a `.env.local` with your own Supabase project's URL + anon key.
+// If they're absent, `supabaseConfigured` is false and all sync/auth calls
+// are gated off — the app runs fully as a local-only (localStorage) tracker.
+const url = import.meta.env.VITE_SUPABASE_URL;
+const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
+export const supabaseConfigured = Boolean(url && anonKey);
+
+// When unconfigured we still create a harmless placeholder client so module
+// imports don't crash; every call site guards real usage behind `supabaseConfigured`.
 export const supabase = createClient(
-  'https://qfcwxpslgledmizlozlp.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFmY3d4cHNsZ2xlZG1pemxvemxwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2Nzg0NDcsImV4cCI6MjA4OTI1NDQ0N30.DoVI2YAcwvv9oxxrSm5Bx3Wl3eemZj3sAVTabpPXlco',
+  url ?? 'https://placeholder.supabase.co',
+  anonKey ?? 'placeholder-anon-key',
 );
 
 export type { User, Session } from '@supabase/supabase-js';
