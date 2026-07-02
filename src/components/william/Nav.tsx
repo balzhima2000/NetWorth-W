@@ -82,8 +82,8 @@ export function TabBar() {
   return (
     <nav
       className={cn(
-        'fixed bottom-4 left-1/2 z-50 flex h-[70px] w-[340px] -translate-x-1/2 md:hidden',
-        'items-center justify-center gap-[30px] rounded-full border border-line bg-canvas px-5',
+        'fixed bottom-4 left-1/2 z-50 flex w-[340px] -translate-x-1/2 md:hidden',
+        'items-center gap-1 rounded-full border border-line bg-canvas p-1.5',
       )}
     >
       {tabs.map((item) => {
@@ -94,13 +94,16 @@ export function TabBar() {
             onClick={() => navigate(item.path)}
             aria-current={active ? 'page' : undefined}
             className={cn(
-              'flex w-[50px] flex-col items-center gap-0.5 rounded-lg py-0.5 transition-colors',
+              'flex flex-1 flex-col items-center gap-0.5 rounded-full py-2 transition-colors',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink',
-              active ? 'text-ink' : 'text-muted',
+              // Active item = grey pill (surface-raised) + ink; inactive = muted.
+              active ? 'bg-raised text-ink' : 'text-muted',
             )}
           >
             <Icon name={item.icon} size={24} />
-            <span className="text-[11px] font-medium leading-none">{item.mobileLabel ?? item.label}</span>
+            <span className={cn('text-[10px] leading-none', active ? 'font-semibold' : 'font-medium')}>
+              {item.mobileLabel ?? item.label}
+            </span>
           </button>
         );
       })}

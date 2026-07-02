@@ -242,27 +242,57 @@ function MilestonesTrack({ milestones, netWorth, max, currency }: { milestones: 
   );
 }
 
-function MilestonesLadder({ milestones, netWorth, currency }: { milestones: Milestone[]; netWorth: number; currency: string }) {
+// Mobile ladder (Figma 1113:4794): a thick rounded rail with an accent cap at
+// the "You" position, value-proportional dots (min-spaced so labels never
+// collide) and right-side name + mono amount labels.
+function MilestonesLadder({
+  milestones, netWorth, progressPct, currency,
+}: { milestones: Milestone[]; netWorth: number; progressPct: number; currency: string }) {
+  const RAIL_H = 340;
+  const MIN_GAP = 62;
+  const DOT_Y = 8; // dot centre offset from an item's top (aligns to first line)
+  const maxV = Math.max(...milestones.map((m) => m.amount), netWorth);
+  const minV = netWorth;
+
+  const items = [
+    { id: 'you', you: true, amount: netWorth, name: 'You are here',
+      sub: `${money0(netWorth, currency)} · ${Math.round(progressPct)}% there` },
+    ...milestones.map((m) => ({
+      id: m.id, you: false, amount: m.amount, name: m.label, reached: m.reached,
+      sub: `${short(m.amount, currency)}${m.year ? ` · ~${m.year}` : m.reached ? ' · reached' : ''}`,
+    })),
+  ];
+
+  let prev = -Infinity;
+  const positioned = items.map((it) => {
+    const frac = maxV > minV ? Math.max(0, (it.amount - minV) / (maxV - minV)) : 0;
+    const floor = prev === -Infinity ? 0 : prev + MIN_GAP;
+    const y = Math.max(frac * RAIL_H, floor);
+    prev = y;
+    return { ...it, y };
+  });
+  const lastY = positioned[positioned.length - 1].y;
+
   return (
-    <div className="relative flex flex-col gap-6 pl-8 md:hidden">
-      {/* rail */}
-      <div className="absolute left-[7px] top-2 bottom-2 w-0.5 rounded-full bg-raised" aria-hidden="true" />
-      {/* you */}
-      <div className="relative">
-        <span className="absolute -left-8 top-1 h-3.5 w-3.5 -translate-x-0 rounded-full border-2 border-surface bg-accent" style={{ left: '-1.9rem' }} />
-        <p className="ty-label text-muted">You are here</p>
-        <p className="num text-[15px] font-semibold text-ink">{short(netWorth, currency)}</p>
-      </div>
-      {milestones.map((m) => (
-        <div key={m.id} className="relative">
+    <div className="relative md:hidden" style={{ height: lastY + 44 }}>
+      {/* rail + accent cap (top → You) */}
+      <div className="absolute left-1 w-2.5 rounded-full bg-raised" style={{ top: DOT_Y - 2, height: lastY + 4 }} />
+      <div className="absolute left-1 w-2.5 rounded-full bg-accent" style={{ top: DOT_Y - 2, height: positioned[0].y + 12 }} />
+      {positioned.map((it) => (
+        <div key={it.id} className="absolute left-0 right-0" style={{ top: it.y }}>
           <span
-            className={cn('absolute top-1.5 h-2.5 w-2.5 rounded-full', m.reached ? 'bg-accent' : 'bg-muted')}
-            style={{ left: '-1.78rem' }}
+            className={cn(
+              'absolute -translate-y-1/2 rounded-full border-2 border-surface',
+              it.you ? 'left-[1px] h-4 w-4 bg-accent' : 'left-[3px] h-3 w-3 bg-muted',
+            )}
+            style={{ top: DOT_Y }}
           />
-          <p className={cn('text-[15px] font-semibold', m.reached ? 'text-ink' : 'text-secondary')}>{m.label}</p>
-          <p className="num-mono font-medium text-[13px] text-secondary">
-            {short(m.amount, currency)}{m.year ? ` · ~${m.year}` : m.reached ? ' · reached' : ''}
-          </p>
+          <div className="pl-9">
+            {it.you
+              ? <p className="ty-label text-muted">You are here</p>
+              : <p className="text-[15px] font-semibold text-ink">{it.name}</p>}
+            <p className={cn('num-mono font-medium text-[13px]', it.you ? 'text-ink' : 'text-secondary')}>{it.sub}</p>
+          </div>
         </div>
       ))}
     </div>
@@ -436,7 +466,7 @@ export default function WilliamFire() {
 
               <MilestonesTrack milestones={d.milestones} netWorth={d.netWorth} max={d.maxMilestone} currency={cur} />
               <div className="mt-6 md:hidden">
-                <MilestonesLadder milestones={d.milestones} netWorth={d.netWorth} currency={cur} />
+                <MilestonesLadder milestones={d.milestones} netWorth={d.netWorth} progressPct={d.progressPct} currency={cur} />
               </div>
             </Card>
 
