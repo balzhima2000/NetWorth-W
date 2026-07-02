@@ -157,11 +157,13 @@ html[data-theme="dark"] .william {
   font-variant-numeric: tabular-nums;
 }
 
-/* FIRE screen renders every number in the mono family (per the Figma).
-   Scoped to the page so other William surfaces are untouched. The page root
-   carries both classes, so this is a compound selector (no descendant space). */
-.william.william-fire .num {
+/* Geist Mono readout numbers (tile values, milestone amounts, delta badges,
+   chart axes/tooltip). The design only ships Geist Mono Medium (500), so pair
+   this with `font-medium` — heavier weights faux-bold and look chunky. */
+.william .num-mono {
   font-family: var(--w-font-mono);
+  font-feature-settings: "tnum" 1;
+  font-variant-numeric: tabular-nums;
 }
 
 /* Radius helper */

@@ -232,7 +232,7 @@ function MilestonesTrack({ milestones, netWorth, max, currency }: { milestones: 
               <div className={cn('h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full', m.reached ? 'bg-accent' : 'bg-muted')} />
               <div className={cn('absolute top-4 whitespace-nowrap', alignFor(pct))}>
                 <p className="text-[15px] font-semibold text-ink">{m.label}</p>
-                <p className="num ty-body text-secondary">{short(m.amount, currency)}</p>
+                <p className="num-mono font-medium text-[13px] text-secondary">{short(m.amount, currency)}</p>
               </div>
             </div>
           );
@@ -260,7 +260,7 @@ function MilestonesLadder({ milestones, netWorth, currency }: { milestones: Mile
             style={{ left: '-1.78rem' }}
           />
           <p className={cn('text-[15px] font-semibold', m.reached ? 'text-ink' : 'text-secondary')}>{m.label}</p>
-          <p className="num ty-body text-secondary">
+          <p className="num-mono font-medium text-[13px] text-secondary">
             {short(m.amount, currency)}{m.year ? ` · ~${m.year}` : m.reached ? ' · reached' : ''}
           </p>
         </div>
@@ -277,7 +277,7 @@ function Tile({ label, value, info }: { label: string; value: string; info?: Rea
         <span className="text-[13px] text-secondary">{label}</span>
         {info}
       </div>
-      <span className="num text-[22px] font-semibold text-ink md:text-[25px]">{value}</span>
+      <span className="num-mono text-[22px] font-medium text-ink md:text-[25px]">{value}</span>
     </div>
   );
 }
@@ -335,7 +335,7 @@ export default function WilliamFire() {
               {/* FIRE Progress */}
               <Card className="flex flex-col p-5">
                 <p className="ty-label text-muted">FINANCIAL INDEPENDENCE</p>
-                <p className="num mt-3 text-[72px] font-black leading-none tracking-[-0.03em] text-ink md:text-[80px]">
+                <p className="num mt-3 text-[72px] font-bold leading-none tracking-[-0.03em] text-ink md:text-[80px]">
                   {Math.round(d.progressPct)}%
                 </p>
                 <p className="mt-2 ty-body text-secondary">of your {short(d.fiNumber, cur)} goal</p>
@@ -387,7 +387,7 @@ export default function WilliamFire() {
                   <div className="flex flex-col gap-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <p className="text-[15px] font-semibold text-ink">Now → {d.horizonYear}</p>
-                      <span className="num rounded-full bg-positive-bg px-2 py-0.5 text-[12px] font-medium text-positive">
+                      <span className="num-mono rounded-full bg-positive-bg px-2 py-0.5 text-[12px] font-medium text-positive">
                         {gainPositive ? '+' : '−'}{short(Math.abs(d.gainOverHorizon), cur)}
                       </span>
                     </div>

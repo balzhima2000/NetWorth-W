@@ -27,7 +27,7 @@ function CustomTooltip({ active, payload, label, currency }: any) {
       <p className="ty-label text-muted">{label}</p>
       <div className="flex items-center gap-1.5">
         <span aria-hidden="true" className="h-3.5 w-0.5 rounded-full bg-accent" />
-        <p className="num text-[14px] font-semibold text-ink">
+        <p className="num-mono text-[14px] font-medium text-ink">
           {formatCurrency(projected.value, currency)}
         </p>
       </div>
@@ -75,7 +75,7 @@ export function FireProjectionChart({ data, fiNumber, currency }: Props) {
         <CartesianGrid horizontal vertical={false} stroke="var(--w-line)" strokeWidth={1} strokeDasharray="4 4" />
         <XAxis
           dataKey="year"
-          tick={{ fill: 'var(--w-muted)', fontSize: 11 }}
+          tick={{ fill: 'var(--w-muted)', fontSize: 11, fontFamily: 'var(--w-font-mono)' }}
           axisLine={false} tickLine={false}
           interval="preserveStartEnd" minTickGap={56}
         />
@@ -83,7 +83,7 @@ export function FireProjectionChart({ data, fiNumber, currency }: Props) {
           domain={[niceMin, niceMax]}
           ticks={ticks}
           tickFormatter={(v) => formatCurrency(v, currency, true)}
-          tick={{ fill: 'var(--w-muted)', fontSize: 11 }}
+          tick={{ fill: 'var(--w-muted)', fontSize: 11, fontFamily: 'var(--w-font-mono)' }}
           axisLine={false} tickLine={false} width={56}
         />
         <Tooltip content={<CustomTooltip currency={currency} />} cursor={{ stroke: 'var(--w-line)', strokeWidth: 1 }} />
