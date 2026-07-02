@@ -157,6 +157,12 @@ html[data-theme="dark"] .william {
   font-variant-numeric: tabular-nums;
 }
 
+/* FIRE screen renders every number in the mono family (per the Figma).
+   Scoped to the page so other William surfaces are untouched. */
+.william .william-fire .num {
+  font-family: var(--w-font-mono);
+}
+
 /* Radius helper */
 .william .rounded-card { border-radius: var(--w-radius-card); }
 

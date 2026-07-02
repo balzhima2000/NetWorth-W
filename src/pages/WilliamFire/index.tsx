@@ -65,10 +65,14 @@ function InfoTip({ title, align = 'left', children }: { title?: string; align?: 
       <span
         role="tooltip"
         className={cn(
-          'pointer-events-none absolute top-full z-30 mt-2 hidden w-[340px] max-w-[80vw] flex-col gap-2 rounded-2xl border border-line bg-surface p-4 text-left',
+          'pointer-events-none z-30 hidden flex-col gap-2 rounded-2xl border border-line bg-surface p-4 text-left',
           'shadow-[0_12px_32px_-8px_rgba(0,0,0,0.22)]',
           'group-hover:flex group-focus-within:flex',
-          align === 'right' ? 'right-0' : 'left-0',
+          // Desktop: anchored under the icon.
+          'md:absolute md:top-full md:mt-2 md:w-[340px]',
+          align === 'right' ? 'md:right-0' : 'md:left-0',
+          // Mobile: pinned above the tab bar, full-width, so wide copy never overflows.
+          'max-md:fixed max-md:inset-x-4 max-md:bottom-24 max-md:w-auto',
         )}
       >
         {title && <span className="text-[15px] font-semibold tracking-[-0.01em] text-ink">{title}</span>}
@@ -223,7 +227,7 @@ function Tile({ label, value, info }: { label: string; value: string; info?: Rea
   return (
     <div className="flex flex-col gap-2 rounded-xl bg-sunken p-3.5 md:p-4">
       <div className="flex items-center gap-1.5">
-        <span className="ty-label text-secondary">{label}</span>
+        <span className="text-[13px] text-secondary">{label}</span>
         {info}
       </div>
       <span className="num text-[22px] font-semibold text-ink md:text-[25px]">{value}</span>
@@ -264,7 +268,7 @@ export default function WilliamFire() {
         : `Financial independence at ${short(d.fiNumber, cur)}`;
 
   return (
-    <div className="william min-h-screen bg-canvas pb-28 pt-6 md:pt-24">
+    <div className="william william-fire min-h-screen bg-canvas pb-28 pt-6 md:pt-24">
       <FloatingNav />
       <TabBar />
 
