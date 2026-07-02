@@ -8,7 +8,7 @@
  *  - Milestones ladder (Coast / Lean / FIRE / Fat on one value axis)
  *  - Assumptions grid + Edit modal (the inputs behind the FI number)
  */
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Card, Button, Icon, FloatingNav, TabBar, RangeSelector, Modal, Field, TextInput } from '../../components/william';
 import { cn } from '../../components/william/cn';
 import { getCurrencySymbol } from '../../utils/formatters';
@@ -51,33 +51,77 @@ function money0(v: number, currency: string) {
   }
 }
 
-// ── Info tooltip — opaque surface + hairline (no shadow), hover/focus reveal ──
-function InfoTip({ title, align = 'left', children }: { title?: string; align?: 'left' | 'right'; children: React.ReactNode }) {
+// ── Info tooltip — matches the Figma Tooltip component (beak + placement) ──
+// Auto-placed above/below the trigger, centered, clamped to the viewport; the
+// beak stays aligned to the trigger. Same behavior on desktop and mobile.
+const TIP_WIDTH = 300;
+const TIP_GAP = 8;      // trigger ↔ tooltip
+const TIP_MARGIN = 12;  // viewport edge
+
+function InfoTip({ title, children }: { title?: string; children: React.ReactNode }) {
+  const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const tipRef = useRef<HTMLDivElement>(null);
+  const [pos, setPos] = useState<{ top: number; left: number; placement: 'top' | 'bottom'; beak: number } | null>(null);
+
+  const compute = () => {
+    const t = triggerRef.current?.getBoundingClientRect();
+    const tip = tipRef.current?.getBoundingClientRect();
+    if (!t || !tip) return;
+    const vw = window.innerWidth, vh = window.innerHeight;
+    const spaceBelow = vh - t.bottom;
+    const placement: 'top' | 'bottom' =
+      spaceBelow < tip.height + TIP_GAP + TIP_MARGIN && t.top > tip.height + TIP_GAP + TIP_MARGIN ? 'top' : 'bottom';
+    const cx = t.left + t.width / 2;
+    const left = Math.max(TIP_MARGIN, Math.min(cx - tip.width / 2, vw - tip.width - TIP_MARGIN));
+    const top = placement === 'bottom' ? t.bottom + TIP_GAP : t.top - tip.height - TIP_GAP;
+    const beak = Math.max(16, Math.min(cx - left, tip.width - 16)); // beak x within tooltip
+    setPos({ top, left, placement, beak });
+  };
+
+  useLayoutEffect(() => { if (open) compute(); }, [open]);
+  useEffect(() => {
+    if (!open) return;
+    const on = () => compute();
+    window.addEventListener('scroll', on, true);
+    window.addEventListener('resize', on);
+    return () => { window.removeEventListener('scroll', on, true); window.removeEventListener('resize', on); };
+  }, [open]);
+
   return (
-    <span className="group relative inline-flex align-middle">
+    <span className="inline-flex align-middle">
       <button
+        ref={triggerRef}
         type="button"
         aria-label={title ?? 'More information'}
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
         className="inline-flex text-muted transition-colors hover:text-ink focus-visible:text-ink focus-visible:outline-none"
       >
         <Icon name="info" size={14} />
       </button>
-      <span
-        role="tooltip"
-        className={cn(
-          'pointer-events-none z-30 hidden flex-col gap-2 rounded-2xl border border-line bg-surface p-4 text-left',
-          'shadow-[0_12px_32px_-8px_rgba(0,0,0,0.22)]',
-          'group-hover:flex group-focus-within:flex',
-          // Desktop: anchored under the icon.
-          'md:absolute md:top-full md:mt-2 md:w-[340px]',
-          align === 'right' ? 'md:right-0' : 'md:left-0',
-          // Mobile: pinned above the tab bar, full-width, so wide copy never overflows.
-          'max-md:fixed max-md:inset-x-4 max-md:bottom-24 max-md:w-auto',
-        )}
-      >
-        {title && <span className="text-[15px] font-semibold tracking-[-0.01em] text-ink">{title}</span>}
-        <span className="text-[14px] leading-relaxed text-secondary">{children}</span>
-      </span>
+      {open && (
+        <div
+          ref={tipRef}
+          role="tooltip"
+          style={{ position: 'fixed', top: pos?.top ?? -9999, left: pos?.left ?? -9999, width: TIP_WIDTH, opacity: pos ? 1 : 0 }}
+          className="pointer-events-none z-[60] flex flex-col gap-2 rounded-2xl border border-line bg-surface p-4 text-left shadow-[0_12px_32px_-8px_rgba(0,0,0,0.22)]"
+        >
+          {/* beak — a rotated square straddling the edge facing the trigger */}
+          <span
+            aria-hidden="true"
+            style={{ left: pos?.beak ?? 0 }}
+            className={cn(
+              'absolute h-3 w-3 -translate-x-1/2 rotate-45 border-line bg-surface',
+              pos?.placement === 'top' ? '-bottom-1.5 border-b border-r' : '-top-1.5 border-l border-t',
+            )}
+          />
+          {title && <span className="text-[15px] font-semibold tracking-[-0.01em] text-ink">{title}</span>}
+          <span className="text-[14px] leading-relaxed text-secondary">{children}</span>
+        </div>
+      )}
     </span>
   );
 }
@@ -163,11 +207,14 @@ function EditAssumptionsModal({ open, onClose }: { open: boolean; onClose: () =>
 // ── Milestones ──────────────────────────────────────────────────────────────
 function MilestonesTrack({ milestones, netWorth, max, currency }: { milestones: Milestone[]; netWorth: number; max: number; currency: string }) {
   const youPct = Math.max(Math.min((netWorth / max) * 100, 100), 0);
+  // Keep endpoint labels inside the card: right-align the last, left-align the first.
+  const alignFor = (pct: number) =>
+    pct >= 88 ? '-translate-x-full text-right' : pct <= 12 ? 'translate-x-0 text-left' : '-translate-x-1/2 text-center';
   return (
     <div className="relative hidden px-2 pb-14 pt-8 md:block">
       {/* You marker (above) */}
-      <div className="absolute top-0 -translate-x-1/2 text-center" style={{ left: `${youPct}%` }}>
-        <span className="num whitespace-nowrap text-[13px] font-medium text-ink">You · {short(netWorth, currency)}</span>
+      <div className={cn('absolute top-0 whitespace-nowrap', alignFor(youPct))} style={{ left: `${youPct}%` }}>
+        <span className="num text-[13px] font-medium text-ink">You · {short(netWorth, currency)}</span>
       </div>
       {/* track */}
       <div className="relative h-3 rounded-full bg-raised">
@@ -183,7 +230,7 @@ function MilestonesTrack({ milestones, netWorth, max, currency }: { milestones: 
           return (
             <div key={m.id} className="absolute top-1/2" style={{ left: `${pct}%` }}>
               <div className={cn('h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full', m.reached ? 'bg-accent' : 'bg-muted')} />
-              <div className="absolute top-4 -translate-x-1/2 whitespace-nowrap text-center">
+              <div className={cn('absolute top-4 whitespace-nowrap', alignFor(pct))}>
                 <p className="ty-body font-semibold text-ink">{m.label}</p>
                 <p className="num ty-body text-secondary">{short(m.amount, currency)}</p>
               </div>
@@ -411,12 +458,12 @@ export default function WilliamFire() {
                 <Tile
                   label="Withdrawal rate"
                   value={`${d.withdrawalRate.toFixed(1)}%`}
-                  info={<InfoTip align="right" title="Withdrawal rate">The share of your portfolio you withdraw each year. The 4% rule comes from the Trinity Study.</InfoTip>}
+                  info={<InfoTip title="Withdrawal rate">The share of your portfolio you withdraw each year. The 4% rule comes from the Trinity Study.</InfoTip>}
                 />
                 <Tile
                   label="Expected return · real"
                   value={`${d.expectedReturn.toFixed(1)}%`}
-                  info={<InfoTip align="right" title="Expected return">Real return after inflation. The historic stock-market average is roughly 7%.</InfoTip>}
+                  info={<InfoTip title="Expected return">Real return after inflation. The historic stock-market average is roughly 7%.</InfoTip>}
                 />
                 <Tile label="Annual savings" value={money0(d.annualSavings, cur)} />
                 <Tile label="Current age" value={d.currentAge != null ? String(d.currentAge) : '—'} />
