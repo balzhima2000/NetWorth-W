@@ -8,7 +8,7 @@
  *  - Milestones ladder (Coast / Lean / FIRE / Fat on one value axis)
  *  - Assumptions grid + Edit modal (the inputs behind the FI number)
  */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, Button, Icon, FloatingNav, TabBar, RangeSelector, Modal, Field, TextInput } from '../../components/william';
 import { cn } from '../../components/william/cn';
 import { getCurrencySymbol } from '../../utils/formatters';
@@ -17,6 +17,21 @@ import { FireProjectionChart } from './FireProjectionChart';
 import { useFireData, type FireRange, type Milestone } from './useFireData';
 
 const RANGES: FireRange[] = ['5Y', '10Y', '20Y', '30Y', 'FI'];
+
+// Desktop shows the range selector; mobile has none and defaults to the full
+// path-to-FI view (matches the Figma mobile projection card).
+function useIsDesktop() {
+  const [desktop, setDesktop] = useState(() =>
+    typeof window !== 'undefined' && window.matchMedia('(min-width: 768px)').matches,
+  );
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px)');
+    const on = () => setDesktop(mq.matches);
+    mq.addEventListener('change', on);
+    return () => mq.removeEventListener('change', on);
+  }, []);
+  return desktop;
+}
 
 // Compact money matched to the Figma labels ($310k · $1.25M).
 function short(v: number, currency: string) {
@@ -50,13 +65,14 @@ function InfoTip({ title, align = 'left', children }: { title?: string; align?: 
       <span
         role="tooltip"
         className={cn(
-          'pointer-events-none absolute top-full z-30 mt-2 hidden w-[320px] max-w-[80vw] flex-col gap-1.5 rounded-xl border border-line bg-surface p-3.5 text-left',
+          'pointer-events-none absolute top-full z-30 mt-2 hidden w-[340px] max-w-[80vw] flex-col gap-2 rounded-2xl border border-line bg-surface p-4 text-left',
+          'shadow-[0_12px_32px_-8px_rgba(0,0,0,0.22)]',
           'group-hover:flex group-focus-within:flex',
           align === 'right' ? 'right-0' : 'left-0',
         )}
       >
-        {title && <span className="ty-body font-semibold text-ink">{title}</span>}
-        <span className="ty-body leading-relaxed text-secondary">{children}</span>
+        {title && <span className="text-[15px] font-semibold tracking-[-0.01em] text-ink">{title}</span>}
+        <span className="text-[14px] leading-relaxed text-secondary">{children}</span>
       </span>
     </span>
   );
@@ -233,7 +249,9 @@ function EmptyState({ onEdit }: { onEdit: () => void }) {
 export default function WilliamFire() {
   const [range, setRange] = useState<FireRange>('10Y');
   const [editOpen, setEditOpen] = useState(false);
-  const d = useFireData(range);
+  const isDesktop = useIsDesktop();
+  // Mobile has no range selector — it always shows the full path to FI.
+  const d = useFireData(isDesktop ? range : 'FI');
   const cur = d.defaultCurrency;
 
   const gainPositive = d.gainOverHorizon >= 0;
@@ -295,7 +313,7 @@ export default function WilliamFire() {
                   </div>
                   <div className="flex items-center justify-between">
                     <dt className="flex items-center gap-1.5 ty-body text-secondary">
-                      FI number · {Math.round(d.expensesMultiple)}× expenses
+                      FI number
                       <InfoTip title="Your FI number">
                         {Math.round(d.expensesMultiple)}× your annual expenses — the portfolio that funds your
                         spending at a {d.withdrawalRate}% withdrawal rate.
@@ -324,7 +342,9 @@ export default function WilliamFire() {
                     </div>
                     <p className="ty-body text-muted">projected · {d.expectedReturn}% real return</p>
                   </div>
-                  <RangeSelector options={RANGES} value={range} onChange={(v) => setRange(v as FireRange)} />
+                  <div className="hidden md:block">
+                    <RangeSelector options={RANGES} value={range} onChange={(v) => setRange(v as FireRange)} />
+                  </div>
                 </div>
 
                 <div className="min-h-[220px] flex-1" role="img" aria-label={`Projected net worth to ${d.horizonYear}`}>

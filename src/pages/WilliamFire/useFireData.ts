@@ -100,8 +100,10 @@ export function useFireData(range: FireRange) {
     const maxMilestone = Math.max(...milestones.map((m) => m.amount), netWorth, 1);
 
     // ── Projection chart series for the selected horizon ──
+    // FI horizon ends exactly at the FI year so the end-dot lands on the FI
+    // line (matches Figma: "Now → <FI year>", dot on the $1.25M target line).
     const horizon = range === 'FI'
-      ? Math.min(Math.max(Math.ceil(yearsToFire) + 2, 5), MAX_HORIZON)
+      ? Math.min(Math.max(Math.ceil(yearsToFire), 5), MAX_HORIZON)
       : parseInt(range);
     const mr = r / 12;
     const projection: ProjectionPoint[] = [{ year: thisYear, projected: netWorth, coast: netWorth }];
