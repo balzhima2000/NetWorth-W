@@ -42,6 +42,7 @@ export function useFireData(range: FireRange) {
   const expectedReturn   = useSettingsStore((s) => s.fireExpectedReturn);
   const monthlyContribution = useSettingsStore((s) => s.fireMonthlyContribution);
   const currentAge       = useSettingsStore((s) => s.fireCurrentAge);
+  const userTargetAge    = useSettingsStore((s) => s.fireTargetAge);
 
   // ── Current net worth (portfolio + manual assets − liabilities) ──
   const holdings = useMemo(
@@ -72,7 +73,10 @@ export function useFireData(range: FireRange) {
     const yearsToFire = reachedFI ? 0 : toFire.years;
     const withinReach = fiNumber > 0 && yearsToFire > 0 && yearsToFire < MAX_HORIZON;
     const fireYear = reachedFI ? thisYear : (withinReach ? toFire.targetYear : null);
-    const targetAge = currentAge != null && fireYear != null ? currentAge + (fireYear - thisYear) : null;
+    // Target FI age is a user goal (falls back to the projected age if unset);
+    // its year derives from current age + the age gap.
+    const targetAge = userTargetAge ?? (currentAge != null && fireYear != null ? currentAge + (fireYear - thisYear) : null);
+    const targetYear = currentAge != null && targetAge != null ? thisYear + (targetAge - currentAge) : fireYear;
 
     const progressPct = fiNumber > 0 ? (netWorth / fiNumber) * 100 : 0;
 
@@ -136,6 +140,7 @@ export function useFireData(range: FireRange) {
       yearsToFire,
       fireYear,
       targetAge,
+      targetYear,
       milestones,
       nextMilestone,
       maxMilestone,
@@ -144,5 +149,5 @@ export function useFireData(range: FireRange) {
       horizonYear,
       gainOverHorizon,
     };
-  }, [hasProfile, defaultCurrency, netWorth, annualExpenses, withdrawalRate, expectedReturn, monthlyContribution, currentAge, range]);
+  }, [hasProfile, defaultCurrency, netWorth, annualExpenses, withdrawalRate, expectedReturn, monthlyContribution, currentAge, userTargetAge, range]);
 }

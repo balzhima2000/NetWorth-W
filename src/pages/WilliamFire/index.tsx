@@ -107,7 +107,7 @@ function InfoTip({ title, children }: { title?: string; children: React.ReactNod
           ref={tipRef}
           role="tooltip"
           style={{ position: 'fixed', top: pos?.top ?? -9999, left: pos?.left ?? -9999, width: TIP_WIDTH, opacity: pos ? 1 : 0 }}
-          className="pointer-events-none z-[60] flex flex-col gap-2 rounded-2xl border border-line bg-surface p-4 text-left shadow-[0_12px_32px_-8px_rgba(0,0,0,0.22)]"
+          className="pointer-events-none z-[60] flex flex-col gap-[5px] rounded-2xl border border-line bg-surface p-4 text-left shadow-[0_12px_32px_-8px_rgba(0,0,0,0.22)]"
         >
           {/* beak — a rotated square straddling the edge facing the trigger */}
           <span
@@ -118,8 +118,8 @@ function InfoTip({ title, children }: { title?: string; children: React.ReactNod
               pos?.placement === 'top' ? '-bottom-1.5 border-b border-r' : '-top-1.5 border-l border-t',
             )}
           />
-          {title && <span className="text-[15px] font-semibold tracking-[-0.01em] text-ink">{title}</span>}
-          <span className="text-[14px] leading-relaxed text-secondary">{children}</span>
+          {title && <span className="text-[15px] font-semibold leading-[1.4] tracking-[-0.01em] text-ink">{title}</span>}
+          <span className="text-[14px] leading-[1.4] text-secondary">{children}</span>
         </div>
       )}
     </span>
@@ -144,6 +144,8 @@ function EditAssumptionsModal({ open, onClose }: { open: boolean; onClose: () =>
   const [ret, setRet] = useState('');
   const [savings, setSavings] = useState('');
   const [age, setAge] = useState('');
+  const [targetAge, setTargetAge] = useState('');
+  const cur = s.defaultCurrency;
 
   // Seed fields each time the modal opens.
   const [seeded, setSeeded] = useState(false);
@@ -153,6 +155,7 @@ function EditAssumptionsModal({ open, onClose }: { open: boolean; onClose: () =>
     setRet(String(s.fireExpectedReturn));
     setSavings(s.fireMonthlyContribution != null ? String(s.fireMonthlyContribution * 12) : '');
     setAge(s.fireCurrentAge != null ? String(s.fireCurrentAge) : '');
+    setTargetAge(s.fireTargetAge != null ? String(s.fireTargetAge) : '');
     setSeeded(true);
   }
   if (!open && seeded) setSeeded(false);
@@ -166,15 +169,27 @@ function EditAssumptionsModal({ open, onClose }: { open: boolean; onClose: () =>
       expectedReturn: ret.trim() === '' ? s.fireExpectedReturn : Number(ret),
       monthlyContribution: savingsNum != null ? savingsNum / 12 : null,
       currentAge: num(age),
+      targetAge: num(targetAge),
     });
     onClose();
   };
+
+  // Money input with a trailing currency label (matches the Figma field accessory).
+  const MoneyField = ({ label, value, onChange, placeholder }: { label: string; value: string; onChange: (v: string) => void; placeholder: string }) => (
+    <Field label={label}>
+      <div className="relative">
+        <TextInput inputMode="numeric" className="pr-14" placeholder={placeholder} value={value} onChange={(e) => onChange(e.target.value)} />
+        <span className="num-mono pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[14px] font-medium text-secondary">{cur}</span>
+      </div>
+    </Field>
+  );
 
   return (
     <Modal
       open={open}
       onClose={onClose}
       title="Edit assumptions"
+      maxWidth={480}
       footer={
         <>
           <Button variant="secondary" size="l" className="flex-1" onClick={onClose}>Cancel</Button>
@@ -183,21 +198,20 @@ function EditAssumptionsModal({ open, onClose }: { open: boolean; onClose: () =>
       }
     >
       <p className="-mt-1 ty-body text-secondary">These inputs drive your FI number and projected date.</p>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <Field label="Annual expenses">
-          <TextInput inputMode="numeric" placeholder="50000" value={expenses} onChange={(e) => setExpenses(e.target.value)} />
-        </Field>
+      <div className="grid grid-cols-1 gap-x-3 gap-y-3.5 sm:grid-cols-2">
+        <MoneyField label="Annual expenses" placeholder="50000" value={expenses} onChange={setExpenses} />
+        <MoneyField label="Annual savings" placeholder="30000" value={savings} onChange={setSavings} />
         <Field label="Withdrawal rate (%)">
           <TextInput inputMode="decimal" placeholder="4" value={withdrawal} onChange={(e) => setWithdrawal(e.target.value)} />
         </Field>
         <Field label="Expected return · real (%)">
           <TextInput inputMode="decimal" placeholder="7" value={ret} onChange={(e) => setRet(e.target.value)} />
         </Field>
-        <Field label="Annual savings">
-          <TextInput inputMode="numeric" placeholder="30000" value={savings} onChange={(e) => setSavings(e.target.value)} />
-        </Field>
         <Field label="Current age">
           <TextInput inputMode="numeric" placeholder="32" value={age} onChange={(e) => setAge(e.target.value)} />
+        </Field>
+        <Field label="Target FI age">
+          <TextInput inputMode="numeric" placeholder="47" value={targetAge} onChange={(e) => setTargetAge(e.target.value)} />
         </Field>
       </div>
     </Modal>
@@ -275,15 +289,14 @@ function MilestonesLadder({
 
   return (
     <div className="relative md:hidden" style={{ height: lastY + 44 }}>
-      {/* rail + accent cap (top → You) */}
-      <div className="absolute left-1 w-2.5 rounded-full bg-raised" style={{ top: DOT_Y - 2, height: lastY + 4 }} />
-      <div className="absolute left-1 w-2.5 rounded-full bg-accent" style={{ top: DOT_Y - 2, height: positioned[0].y + 12 }} />
+      {/* rail (You → Fat) */}
+      <div className="absolute left-1 w-2.5 rounded-full bg-raised" style={{ top: DOT_Y - 5, height: lastY + 10 }} />
       {positioned.map((it) => (
         <div key={it.id} className="absolute left-0 right-0" style={{ top: it.y }}>
           <span
             className={cn(
-              'absolute -translate-y-1/2 rounded-full border-2 border-surface',
-              it.you ? 'left-[1px] h-4 w-4 bg-accent' : 'left-[3px] h-3 w-3 bg-muted',
+              'absolute -translate-y-1/2 rounded-full',
+              it.you ? 'left-[2px] h-3.5 w-3.5 bg-accent' : 'left-1 h-2.5 w-2.5 bg-muted',
             )}
             style={{ top: DOT_Y }}
           />
@@ -449,7 +462,7 @@ export default function WilliamFire() {
                   <div className="flex items-center gap-1.5">
                     <h2 className="ty-h2 text-ink">Milestones</h2>
                     <InfoTip title="The FIRE ladder">
-                      <span className="flex flex-col gap-1.5">
+                      <span className="flex flex-col gap-[5px]">
                         <span><strong className="text-ink">Coast FIRE</strong> — invested enough that growth alone reaches FI by retirement; you can stop saving.</span>
                         <span><strong className="text-ink">Lean FIRE</strong> — covers bare-bones expenses.</span>
                         <span><strong className="text-ink">FIRE</strong> — covers your full expenses ({Math.round(d.expensesMultiple)}× = the {d.withdrawalRate}% rule).</span>
@@ -499,7 +512,7 @@ export default function WilliamFire() {
                 <Tile label="Current age" value={d.currentAge != null ? String(d.currentAge) : '—'} />
                 <Tile
                   label="Target FI age"
-                  value={d.targetAge != null && d.fireYear ? `${d.targetAge} · ${d.fireYear}` : d.fireYear ? String(d.fireYear) : '—'}
+                  value={d.targetAge != null && d.targetYear ? `${d.targetAge} · ${d.targetYear}` : d.targetAge != null ? String(d.targetAge) : d.fireYear ? String(d.fireYear) : '—'}
                 />
               </div>
             </Card>

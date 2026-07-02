@@ -200,7 +200,8 @@ export interface Settings {
   fireMonthlyContribution: number | null;
   fireExpectedReturn: number;   // % e.g. 7 (real, inflation-adjusted)
   fireWithdrawalRate: number;   // % e.g. 4
-  fireCurrentAge: number | null; // used to derive the target FI age
+  fireCurrentAge: number | null; // current age
+  fireTargetAge: number | null;  // the age you're aiming to reach FI by (a goal)
   activityFeedShowTransactions: boolean;
   activityFeedShowTrades: boolean;
   activityFeedShowRecurring: boolean;
