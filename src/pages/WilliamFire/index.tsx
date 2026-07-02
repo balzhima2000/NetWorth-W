@@ -231,7 +231,7 @@ function MilestonesTrack({ milestones, netWorth, max, currency }: { milestones: 
             <div key={m.id} className="absolute top-1/2" style={{ left: `${pct}%` }}>
               <div className={cn('h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full', m.reached ? 'bg-accent' : 'bg-muted')} />
               <div className={cn('absolute top-4 whitespace-nowrap', alignFor(pct))}>
-                <p className="ty-body font-semibold text-ink">{m.label}</p>
+                <p className="text-[15px] font-semibold text-ink">{m.label}</p>
                 <p className="num ty-body text-secondary">{short(m.amount, currency)}</p>
               </div>
             </div>
@@ -251,7 +251,7 @@ function MilestonesLadder({ milestones, netWorth, currency }: { milestones: Mile
       <div className="relative">
         <span className="absolute -left-8 top-1 h-3.5 w-3.5 -translate-x-0 rounded-full border-2 border-surface bg-accent" style={{ left: '-1.9rem' }} />
         <p className="ty-label text-muted">You are here</p>
-        <p className="num ty-body font-semibold text-ink">{short(netWorth, currency)}</p>
+        <p className="num text-[15px] font-semibold text-ink">{short(netWorth, currency)}</p>
       </div>
       {milestones.map((m) => (
         <div key={m.id} className="relative">
@@ -259,7 +259,7 @@ function MilestonesLadder({ milestones, netWorth, currency }: { milestones: Mile
             className={cn('absolute top-1.5 h-2.5 w-2.5 rounded-full', m.reached ? 'bg-accent' : 'bg-muted')}
             style={{ left: '-1.78rem' }}
           />
-          <p className={cn('ty-body font-semibold', m.reached ? 'text-ink' : 'text-secondary')}>{m.label}</p>
+          <p className={cn('text-[15px] font-semibold', m.reached ? 'text-ink' : 'text-secondary')}>{m.label}</p>
           <p className="num ty-body text-secondary">
             {short(m.amount, currency)}{m.year ? ` · ~${m.year}` : m.reached ? ' · reached' : ''}
           </p>
@@ -360,7 +360,7 @@ export default function WilliamFire() {
                 <dl className="mt-5 flex flex-col gap-4">
                   <div className="flex items-center justify-between">
                     <dt className="ty-body text-secondary">Current net worth</dt>
-                    <dd className="num ty-body font-semibold text-ink">{money0(d.netWorth, cur)}</dd>
+                    <dd className="num text-[15px] font-semibold text-ink">{money0(d.netWorth, cur)}</dd>
                   </div>
                   <div className="flex items-center justify-between">
                     <dt className="flex items-center gap-1.5 ty-body text-secondary">
@@ -370,11 +370,11 @@ export default function WilliamFire() {
                         spending at a {d.withdrawalRate}% withdrawal rate.
                       </InfoTip>
                     </dt>
-                    <dd className="num ty-body font-semibold text-ink">{money0(d.fiNumber, cur)}</dd>
+                    <dd className="num text-[15px] font-semibold text-ink">{money0(d.fiNumber, cur)}</dd>
                   </div>
                   <div className="flex items-center justify-between">
                     <dt className="ty-body text-secondary">Projected date</dt>
-                    <dd className="num ty-body font-semibold text-ink">
+                    <dd className="num text-[15px] font-semibold text-ink">
                       {d.reachedFI ? 'Reached' : d.fireYear ? `${d.fireYear} · in ${d.fireYear - new Date().getFullYear()} yrs` : '50+ yrs'}
                     </dd>
                   </div>
@@ -386,7 +386,7 @@ export default function WilliamFire() {
                 <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                   <div className="flex flex-col gap-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <p className="ty-body font-semibold text-ink">Now → {d.horizonYear}</p>
+                      <p className="text-[15px] font-semibold text-ink">Now → {d.horizonYear}</p>
                       <span className="num rounded-full bg-positive-bg px-2 py-0.5 text-[12px] font-medium text-positive">
                         {gainPositive ? '+' : '−'}{short(Math.abs(d.gainOverHorizon), cur)}
                       </span>

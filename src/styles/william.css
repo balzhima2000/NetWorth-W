@@ -158,8 +158,9 @@ html[data-theme="dark"] .william {
 }
 
 /* FIRE screen renders every number in the mono family (per the Figma).
-   Scoped to the page so other William surfaces are untouched. */
-.william .william-fire .num {
+   Scoped to the page so other William surfaces are untouched. The page root
+   carries both classes, so this is a compound selector (no descendant space). */
+.william.william-fire .num {
   font-family: var(--w-font-mono);
 }
 
