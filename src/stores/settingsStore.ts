@@ -26,7 +26,7 @@ interface SettingsStore extends Settings {
   decrementIsraeliRequests: () => void;
   resetRequestsIfNewDay: () => void;
   setFireTarget: (target: number | null) => void;
-  setFireProfile: (profile: { annualExpenses?: number | null; monthlyContribution?: number | null; expectedReturn?: number; withdrawalRate?: number }) => void;
+  setFireProfile: (profile: { annualExpenses?: number | null; monthlyContribution?: number | null; expectedReturn?: number; withdrawalRate?: number; currentAge?: number | null }) => void;
   setActivityFeedSettings: (settings: { showTransactions?: boolean; showTrades?: boolean; showRecurring?: boolean }) => void;
   setLastBackupDate: (date: string) => void;
   setBudgetAlertsEnabled: (enabled: boolean) => void;
@@ -58,6 +58,7 @@ const defaultSettings: Settings = {
   fireMonthlyContribution: null,
   fireExpectedReturn: 7,
   fireWithdrawalRate: 4,
+  fireCurrentAge: null,
   activityFeedShowTransactions: true,
   activityFeedShowTrades: true,
   activityFeedShowRecurring: true,
@@ -119,12 +120,13 @@ export const useSettingsStore = create<SettingsStore>()(
         if (Object.keys(updates).length > 0) set(updates);
       },
       setFireTarget: (target) => set({ fireTarget: target }),
-      setFireProfile: ({ annualExpenses, monthlyContribution, expectedReturn, withdrawalRate }) =>
+      setFireProfile: ({ annualExpenses, monthlyContribution, expectedReturn, withdrawalRate, currentAge }) =>
         set((state) => ({
           fireAnnualExpenses:      annualExpenses      !== undefined ? annualExpenses      : state.fireAnnualExpenses,
           fireMonthlyContribution: monthlyContribution !== undefined ? monthlyContribution : state.fireMonthlyContribution,
           fireExpectedReturn:      expectedReturn      !== undefined ? expectedReturn      : state.fireExpectedReturn,
           fireWithdrawalRate:      withdrawalRate      !== undefined ? withdrawalRate      : state.fireWithdrawalRate,
+          fireCurrentAge:          currentAge          !== undefined ? currentAge          : state.fireCurrentAge,
         })),
       setActivityFeedSettings: ({ showTransactions, showTrades, showRecurring }) =>
         set((state) => ({
@@ -139,7 +141,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'nw-settings',
-      version: 4,
+      version: 5,
       migrate: (persisted: any, version) => {
         if (version < 2) {
           const t = today();
@@ -162,6 +164,9 @@ export const useSettingsStore = create<SettingsStore>()(
           persisted.fireMonthlyContribution = null;
           persisted.fireExpectedReturn      = 7;
           persisted.fireWithdrawalRate      = 4;
+        }
+        if (version < 5) {
+          persisted.fireCurrentAge = null;
         }
         return persisted;
       },

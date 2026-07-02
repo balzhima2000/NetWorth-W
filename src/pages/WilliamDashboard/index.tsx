@@ -234,8 +234,8 @@ export default function WilliamDashboard() {
             role="button"
             tabIndex={0}
             aria-label="FIRE progress — open FIRE page"
-            onClick={() => navigate('/fire')}
-            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate('/fire'); } }}
+            onClick={() => navigate('/william/fire')}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate('/william/fire'); } }}
             className="group col-span-2 flex cursor-pointer flex-col gap-2 p-[18px] transition-colors hover:border-accent active:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink md:col-span-1 md:gap-2.5 md:p-5"
           >
             <div className="flex items-center justify-between">

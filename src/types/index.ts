@@ -198,8 +198,9 @@ export interface Settings {
   fireTarget: number | null;
   fireAnnualExpenses: number | null;
   fireMonthlyContribution: number | null;
-  fireExpectedReturn: number;   // % e.g. 7
+  fireExpectedReturn: number;   // % e.g. 7 (real, inflation-adjusted)
   fireWithdrawalRate: number;   // % e.g. 4
+  fireCurrentAge: number | null; // used to derive the target FI age
   activityFeedShowTransactions: boolean;
   activityFeedShowTrades: boolean;
   activityFeedShowRecurring: boolean;

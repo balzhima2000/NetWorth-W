@@ -11,7 +11,8 @@ import { cn } from './cn';
 export type IconName =
   | 'home' | 'portfolio' | 'spending' | 'fire' | 'account'
   | 'trade' | 'income' | 'expense' | 'star'
-  | 'refresh' | 'import' | 'target' | 'plus';
+  | 'refresh' | 'import' | 'target' | 'plus'
+  | 'info' | 'edit';
 
 // [x, y] top-left of each 6×6 dot, in 64-unit space.
 const DOTS: Record<IconName, [number, number][]> = {
@@ -28,6 +29,10 @@ const DOTS: Record<IconName, [number, number][]> = {
   import: [[29,13],[29,5],[29,21],[29,29],[21,29],[37,29],[29,37],[13,45],[45,45],[13,53],[21,53],[29,53],[37,53],[45,53]],
   target: [[21,5],[29,5],[37,5],[5,21],[53,21],[5,29],[53,29],[5,37],[53,37],[21,53],[29,53],[37,53],[29,29],[13,45],[13,13],[45,13],[45,45]],
   plus: [[29,13],[29,5],[29,53],[5,29],[29,21],[29,29],[29,37],[29,45],[13,29],[21,29],[37,29],[45,29],[53,29]],
+  // lowercase "i" mark — tittle + stem
+  info: [[29,13],[29,29],[29,37],[29,45]],
+  // pencil — diagonal band from top-right nib to bottom-left tip
+  edit: [[45,5],[37,13],[45,13],[29,21],[37,21],[21,29],[29,29],[13,37],[21,37],[13,45],[5,53]],
 };
 
 interface IconProps {
