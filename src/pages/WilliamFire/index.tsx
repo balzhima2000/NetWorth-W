@@ -400,7 +400,7 @@ export default function WilliamFire() {
                   <h2 className="ty-h2 text-ink">Assumptions</h2>
                   <p className="ty-body text-secondary">The inputs behind your FIRE number.</p>
                 </div>
-                <Button variant="secondary" size="s" onClick={() => setEditOpen(true)}>
+                <Button variant="secondary" size="s" pill className="font-semibold" onClick={() => setEditOpen(true)}>
                   <Icon name="edit" size={16} />
                   Edit
                 </Button>
