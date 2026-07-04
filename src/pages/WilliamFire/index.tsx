@@ -192,7 +192,9 @@ function EditAssumptionsModal({ open, onClose }: { open: boolean; onClose: () =>
           >
             {currencies.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
-          <span className="num pointer-events-none text-[12px] text-secondary">▾</span>
+          <svg width="11" height="7" viewBox="0 0 11 7" fill="none" aria-hidden="true" className="pointer-events-none text-secondary">
+            <path d="M1 1.5 5.5 6 10 1.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
         </div>
       </div>
     </Field>
