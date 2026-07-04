@@ -27,15 +27,17 @@ export function Modal({ open, onClose, title, children, footer, maxWidth = 480 }
 
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center p-3 md:items-center md:p-4">
+    <div className="fixed inset-0 z-50 flex flex-col justify-end md:items-center md:justify-center md:p-4">
       <div className="absolute inset-0 bg-black/45" onClick={onClose} aria-hidden="true" />
       <div
         role="dialog"
         aria-modal="true"
         aria-label={title}
         className={cn(
-          // Floating card — all four corners rounded on every breakpoint.
-          'relative flex max-h-[92vh] w-full flex-col overflow-hidden rounded-[24px] border border-line bg-surface',
+          'relative flex max-h-[92vh] w-full flex-col overflow-hidden bg-surface',
+          // Mobile: full-width bottom sheet — top corners rounded, flush to the
+          // bottom edge. Desktop: floating card — all four corners rounded.
+          'rounded-t-[24px] border-t border-line md:rounded-[24px] md:border',
         )}
         style={{ maxWidth: `min(${maxWidth}px, 100%)` }}
       >
