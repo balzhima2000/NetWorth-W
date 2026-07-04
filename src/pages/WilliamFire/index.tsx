@@ -146,6 +146,10 @@ function EditAssumptionsModal({ open, onClose }: { open: boolean; onClose: () =>
   const [age, setAge] = useState('');
   const [targetAge, setTargetAge] = useState('');
   const cur = s.defaultCurrency;
+  // Currencies offered by the money-field selector: common set + the user's own.
+  const currencies = Array.from(
+    new Set(['USD', 'EUR', 'GBP', 'ILS', 'CAD', 'AUD', 'JPY', 'CHF', s.defaultCurrency, ...s.exchangeRates.map((r) => r.currency)]),
+  );
 
   // Seed fields each time the modal opens.
   const [seeded, setSeeded] = useState(false);
@@ -174,12 +178,22 @@ function EditAssumptionsModal({ open, onClose }: { open: boolean; onClose: () =>
     onClose();
   };
 
-  // Money input with a trailing currency label (matches the Figma field accessory).
+  // Money input with a trailing currency selector (matches the Figma field accessory).
   const MoneyField = ({ label, value, onChange, placeholder }: { label: string; value: string; onChange: (v: string) => void; placeholder: string }) => (
     <Field label={label}>
       <div className="relative">
-        <TextInput inputMode="numeric" className="pr-14" placeholder={placeholder} value={value} onChange={(e) => onChange(e.target.value)} />
-        <span className="num-mono pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[14px] font-medium text-secondary">{cur}</span>
+        <TextInput inputMode="numeric" className="pr-[68px]" placeholder={placeholder} value={value} onChange={(e) => onChange(e.target.value)} />
+        <div className="absolute right-2.5 top-1/2 flex -translate-y-1/2 items-center gap-1">
+          <select
+            aria-label="Currency"
+            value={cur}
+            onChange={(e) => s.setDefaultCurrency(e.target.value)}
+            className="num-mono cursor-pointer appearance-none bg-transparent text-[14px] font-medium text-secondary focus:outline-none"
+          >
+            {currencies.map((c) => <option key={c} value={c}>{c}</option>)}
+          </select>
+          <span className="num pointer-events-none text-[12px] text-secondary">▾</span>
+        </div>
       </div>
     </Field>
   );
@@ -233,9 +247,10 @@ function MilestonesTrack({ milestones, netWorth, max, currency }: { milestones: 
       {/* track */}
       <div className="relative h-3 rounded-full bg-raised">
         <div className="absolute inset-y-0 left-0 rounded-full bg-accent" style={{ width: `${youPct}%` }} />
-        {/* You dot */}
+        {/* You dot — sits above the milestone dots so the black marker is never
+            hidden by a near-adjacent grey dot (e.g. Coast when You ≈ Coast). */}
         <div
-          className="absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-surface bg-accent"
+          className="absolute top-1/2 z-10 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-surface bg-accent"
           style={{ left: `${youPct}%` }}
         />
         {/* milestone dots + labels below */}
