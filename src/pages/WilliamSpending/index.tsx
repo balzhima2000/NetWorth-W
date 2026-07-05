@@ -251,7 +251,7 @@ export default function WilliamSpending() {
 
         {/* ── Row 2: nav cards ── */}
         <div className="grid grid-cols-1 gap-2.5 lg:grid-cols-2 lg:gap-5">
-          <NavCard icon="recurring" title="Recurring" subtitle="Subscriptions & installments" onClick={() => navigate('/spending')} />
+          <NavCard icon="recurring" title="Recurring" subtitle="Subscriptions & installments" onClick={() => navigate('/william/spending/recurring')} />
           <NavCard icon="trends" title="Trends" subtitle="Spending over time" onClick={() => navigate('/spending')} />
         </div>
 
