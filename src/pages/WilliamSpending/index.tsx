@@ -22,7 +22,7 @@ const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'Ju
 const money0 = (n: number, cur: string) => `${getCurrencySymbol(cur)}${Math.round(n).toLocaleString('en-US')}`;
 
 // ── Month picker pill ─────────────────────────────────────────────────────────
-function MonthPicker({ month, year, onChange }: { month: number; year: number; onChange: (m: number, y: number) => void }) {
+export function MonthPicker({ month, year, onChange }: { month: number; year: number; onChange: (m: number, y: number) => void }) {
   const [open, setOpen] = useState(false);
   // Current month back through the previous 11.
   const options = useMemo(() => {
@@ -261,7 +261,7 @@ export default function WilliamSpending() {
           <Card className="flex flex-col gap-1 p-5">
             <div className="flex items-center justify-between pb-1">
               <h2 className="text-[18px] font-semibold text-ink">Recent</h2>
-              <button type="button" onClick={() => navigate('/spending')} className="text-[13px] font-medium text-secondary transition-colors hover:text-ink focus-visible:outline-none">
+              <button type="button" onClick={() => navigate('/william/spending/transactions')} className="text-[13px] font-medium text-secondary transition-colors hover:text-ink focus-visible:outline-none">
                 See all
               </button>
             </div>
