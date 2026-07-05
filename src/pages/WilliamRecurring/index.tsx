@@ -10,8 +10,7 @@ import { cn } from '../../components/william/cn';
 import { useRecurringStore } from '../../stores/recurringStore';
 import { formatCurrency, getCurrencySymbol } from '../../utils/formatters';
 import { useRecurringData, type SubRow, type InstallRow } from '../WilliamSpending/useRecurringData';
-import { EditRecurringModal } from './EditRecurringModal';
-import type { RecurringPayment } from '../../types/index';
+import { EditRecurringModal, type RecurringEditing } from './EditRecurringModal';
 
 // Split bar: subscriptions = accent, installments = lime (pale light / bright dark).
 const BAR_SUBS = 'var(--w-accent)';
@@ -117,17 +116,14 @@ export default function WilliamRecurring() {
   const navigate = useNavigate();
   const d = useRecurringData();
   const recurringPayments = useRecurringStore((s) => s.recurringPayments);
+  const installmentPlans = useRecurringStore((s) => s.installmentPlans);
   const { updateRecurringPayment, deleteRecurringPayment, updateInstallmentPlan, deleteInstallmentPlan } = useRecurringStore();
   const cur = d.defaultCurrency;
 
-  // Subscription add/edit use the William modal; installment edit still bridges
-  // to the legacy /spending form (its fields differ from a recurring payment).
-  const [editing, setEditing] = useState<RecurringPayment | 'new' | null>(null);
-  const editSubscription = (id: string) => {
-    const p = recurringPayments.find((x) => x.id === id);
-    if (p) setEditing(p);
-  };
-  const installmentBridge = () => navigate('/spending');
+  // One modal handles subscriptions + installment plans (Add shows a toggle).
+  const [editing, setEditing] = useState<RecurringEditing>(null);
+  const editSubscription = (id: string) => { const p = recurringPayments.find((x) => x.id === id); if (p) setEditing(p); };
+  const editInstallment = (id: string) => { const p = installmentPlans.find((x) => x.id === id); if (p) setEditing(p); };
 
   const subsPct = d.monthlyTotal > 0 ? (d.subsMonthly / d.monthlyTotal) * 100 : 0;
   const instPct = d.monthlyTotal > 0 ? (d.installMonthly / d.monthlyTotal) * 100 : 0;
@@ -216,7 +212,7 @@ export default function WilliamRecurring() {
                 {i > 0 && <Divider />}
                 <InstallmentRow
                   row={row} currency={cur}
-                  onEdit={installmentBridge}
+                  onEdit={() => editInstallment(row.id)}
                   onToggle={() => updateInstallmentPlan(row.id, { isActive: !row.active })}
                   onDelete={() => deleteInstallmentPlan(row.id)}
                 />
@@ -239,7 +235,7 @@ export default function WilliamRecurring() {
           key={editing === 'new' ? 'new' : editing.id}
           open
           onClose={() => setEditing(null)}
-          payment={editing === 'new' ? null : editing}
+          editing={editing}
         />
       )}
     </div>

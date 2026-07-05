@@ -129,6 +129,7 @@ export interface InstallmentPlan {
   totalInstallments: number;
   remainingInstallments: number;
   category: string;
+  currency?: string; // native currency; defaults to defaultCurrency when absent
   dayOfMonth: number;
   startDate: string; // ISO date
   isActive: boolean;

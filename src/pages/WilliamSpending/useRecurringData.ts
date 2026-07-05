@@ -74,7 +74,7 @@ export function useRecurringData() {
       const paid = p.totalInstallments - p.remainingInstallments;
       return {
         id: p.id, name: p.name, category: info.name, color: info.color,
-        perMonth: p.installmentAmount, currency: (p as any).currency || defaultCurrency,
+        perMonth: p.installmentAmount, currency: p.currency || defaultCurrency,
         paid, total: p.totalInstallments,
         leftAmount: p.remainingInstallments * p.installmentAmount,
         pct: p.totalInstallments > 0 ? (paid / p.totalInstallments) * 100 : 0,
@@ -88,7 +88,7 @@ export function useRecurringData() {
       .reduce((s, p) => s + toDefault(p.amount, p.currency || defaultCurrency) * MONTHLY_FACTOR[p.frequency], 0);
     const installMonthly = installments
       .filter((p) => p.isActive)
-      .reduce((s, p) => s + toDefault(p.installmentAmount, (p as any).currency || defaultCurrency), 0);
+      .reduce((s, p) => s + toDefault(p.installmentAmount, p.currency || defaultCurrency), 0);
 
     const monthlyTotal = subsMonthly + installMonthly;
     const activeCount =
