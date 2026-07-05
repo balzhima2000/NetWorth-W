@@ -12,7 +12,7 @@ export type IconName =
   | 'home' | 'portfolio' | 'spending' | 'fire' | 'account'
   | 'trade' | 'income' | 'expense' | 'star'
   | 'refresh' | 'import' | 'target' | 'plus'
-  | 'info' | 'edit';
+  | 'info' | 'edit' | 'recurring' | 'trends';
 
 // Smooth (non-dot-matrix) glyphs — utility icons that are vector paths in Figma,
 // not the pixel style of the nav set. Extracted 1:1 from the Figma masters
@@ -37,6 +37,10 @@ const DOTS: Partial<Record<IconName, [number, number][]>> = {
   import: [[29,13],[29,5],[29,21],[29,29],[21,29],[37,29],[29,37],[13,45],[45,45],[13,53],[21,53],[29,53],[37,53],[45,53]],
   target: [[21,5],[29,5],[37,5],[5,21],[53,21],[5,29],[53,29],[5,37],[53,37],[21,53],[29,53],[37,53],[29,29],[13,45],[13,13],[45,13],[45,45]],
   plus: [[29,13],[29,5],[29,53],[5,29],[29,21],[29,29],[29,37],[29,45],[13,29],[21,29],[37,29],[45,29],[53,29]],
+  // ↻ circular-arrow ring (Spending "Recurring" nav) — decoded from Icon/Recurring/Small.
+  recurring: [[21,5],[29,5],[13,13],[29,13],[45,13],[5,21],[53,21],[5,29],[53,29],[5,37],[53,37],[13,45],[29,45],[45,45],[29,53],[37,53]],
+  // rising line + arrowhead (Spending "Trends" nav) — decoded from Icon/Trends/Small.
+  trends: [[5,53],[13,45],[21,37],[29,29],[37,21],[45,13],[53,5],[29,5],[37,5],[45,5],[53,13],[53,21],[53,29]],
 };
 
 interface IconProps {

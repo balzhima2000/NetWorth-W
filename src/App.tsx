@@ -16,6 +16,7 @@ import WilliamPreview from './pages/WilliamPreview';
 import WilliamDashboard from './pages/WilliamDashboard';
 import WilliamPortfolio from './pages/WilliamPortfolio';
 import WilliamFire from './pages/WilliamFire';
+import WilliamSpending from './pages/WilliamSpending';
 import WilliamAccount from './pages/WilliamAccount';
 import AccountSection from './pages/WilliamAccount/AccountSection';
 import { useWilliamTheme } from './components/william/useWilliamTheme';
@@ -50,6 +51,7 @@ function AppInner() {
       <Route path="/william/dashboard" element={<WilliamDashboard />} />
       <Route path="/william/portfolio" element={<WilliamPortfolio />} />
       <Route path="/william/fire" element={<WilliamFire />} />
+      <Route path="/william/spending" element={<WilliamSpending />} />
       <Route path="/william/account" element={<WilliamAccount />} />
       <Route path="/william/account/:slug" element={<AccountSection />} />
 

@@ -303,7 +303,7 @@ export default function WilliamDashboard() {
             })}
             <button
               type="button"
-              onClick={() => navigate('/spending')}
+              onClick={() => navigate('/william/spending')}
               className="flex w-full items-center justify-between rounded-2xl border border-line bg-surface px-4 py-2 transition-colors hover:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink md:px-[18px]"
             >
               <span className="ty-body text-ink">See all</span>

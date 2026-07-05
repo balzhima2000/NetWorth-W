@@ -23,7 +23,7 @@ interface NavItem {
 const ITEMS: NavItem[] = [
   { id: 'dashboard', label: 'Dashboard', mobileLabel: 'Home', icon: 'home', path: '/william/dashboard' },
   { id: 'portfolio', label: 'Portfolio', icon: 'portfolio', path: '/william/portfolio' },
-  { id: 'spending',  label: 'Spending',  icon: 'spending',  path: '/spending' },
+  { id: 'spending',  label: 'Spending',  icon: 'spending',  path: '/william/spending' },
   { id: 'fire',      label: 'FIRE',      icon: 'fire',      path: '/william/fire' },
   { id: 'account',   label: 'Account',   icon: 'account',   path: '/william/account', iconOnly: true },
 ];
