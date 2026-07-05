@@ -10,6 +10,8 @@ import { cn } from '../../components/william/cn';
 import { useRecurringStore } from '../../stores/recurringStore';
 import { formatCurrency, getCurrencySymbol } from '../../utils/formatters';
 import { useRecurringData, type SubRow, type InstallRow } from '../WilliamSpending/useRecurringData';
+import { EditRecurringModal } from './EditRecurringModal';
+import type { RecurringPayment } from '../../types/index';
 
 // Split bar: subscriptions = accent, installments = lime (pale light / bright dark).
 const BAR_SUBS = 'var(--w-accent)';
@@ -114,11 +116,18 @@ function InstallmentRow({ row, currency, onEdit, onToggle, onDelete }: { row: In
 export default function WilliamRecurring() {
   const navigate = useNavigate();
   const d = useRecurringData();
+  const recurringPayments = useRecurringStore((s) => s.recurringPayments);
   const { updateRecurringPayment, deleteRecurringPayment, updateInstallmentPlan, deleteInstallmentPlan } = useRecurringStore();
   const cur = d.defaultCurrency;
 
-  // Edit + Add bridge to the existing spending page's recurring forms for now.
-  const editBridge = () => navigate('/spending');
+  // Subscription add/edit use the William modal; installment edit still bridges
+  // to the legacy /spending form (its fields differ from a recurring payment).
+  const [editing, setEditing] = useState<RecurringPayment | 'new' | null>(null);
+  const editSubscription = (id: string) => {
+    const p = recurringPayments.find((x) => x.id === id);
+    if (p) setEditing(p);
+  };
+  const installmentBridge = () => navigate('/spending');
 
   const subsPct = d.monthlyTotal > 0 ? (d.subsMonthly / d.monthlyTotal) * 100 : 0;
   const instPct = d.monthlyTotal > 0 ? (d.installMonthly / d.monthlyTotal) * 100 : 0;
@@ -146,7 +155,7 @@ export default function WilliamRecurring() {
                 {d.activeCount} active&nbsp;&nbsp;·&nbsp;&nbsp;{money0(d.monthlyTotal, cur)} / month
               </p>
             </div>
-            <Button pill variant="primary" size="m" className="shrink-0 font-semibold" onClick={editBridge}>
+            <Button pill variant="primary" size="m" className="shrink-0 font-semibold" onClick={() => setEditing('new')}>
               <Icon name="plus" size={16} />
               Add
             </Button>
@@ -189,7 +198,7 @@ export default function WilliamRecurring() {
                 {i > 0 && <Divider />}
                 <SubscriptionRow
                   row={row} currency={cur}
-                  onEdit={editBridge}
+                  onEdit={() => editSubscription(row.id)}
                   onToggle={() => updateRecurringPayment(row.id, { isActive: !row.active })}
                   onDelete={() => deleteRecurringPayment(row.id)}
                 />
@@ -207,7 +216,7 @@ export default function WilliamRecurring() {
                 {i > 0 && <Divider />}
                 <InstallmentRow
                   row={row} currency={cur}
-                  onEdit={editBridge}
+                  onEdit={installmentBridge}
                   onToggle={() => updateInstallmentPlan(row.id, { isActive: !row.active })}
                   onDelete={() => deleteInstallmentPlan(row.id)}
                 />
@@ -220,10 +229,19 @@ export default function WilliamRecurring() {
           <Card className="flex flex-col items-center gap-3 p-10 text-center">
             <Icon name="recurring" size={40} className="text-muted" />
             <p className="text-[15px] text-secondary">No recurring payments or installment plans yet.</p>
-            <Button variant="primary" size="l" onClick={editBridge}>Add your first</Button>
+            <Button variant="primary" size="l" onClick={() => setEditing('new')}>Add your first</Button>
           </Card>
         )}
       </main>
+
+      {editing !== null && (
+        <EditRecurringModal
+          key={editing === 'new' ? 'new' : editing.id}
+          open
+          onClose={() => setEditing(null)}
+          payment={editing === 'new' ? null : editing}
+        />
+      )}
     </div>
   );
 }
