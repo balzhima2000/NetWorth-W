@@ -9,6 +9,7 @@ import { PieChart, Pie, Cell } from 'recharts';
 import { Card, Button, Icon, FloatingNav, TabBar } from '../../components/william';
 import { cn } from '../../components/william/cn';
 import { AddTransactionModal } from '../WilliamPortfolio/modals';
+import { SetBudgetsModal } from './SetBudgetsModal';
 import { formatCurrency, getCurrencySymbol } from '../../utils/formatters';
 import { useSpendingData, type CategorySlice, type RecentRow, type BudgetRow } from './useSpendingData';
 
@@ -186,6 +187,7 @@ export default function WilliamSpending() {
   const [month, setMonth] = useState(now.getMonth() + 1);
   const [year, setYear] = useState(now.getFullYear());
   const [addOpen, setAddOpen] = useState(false);
+  const [budgetsOpen, setBudgetsOpen] = useState(false);
   const d = useSpendingData(month, year);
 
   const cur = d.defaultCurrency;
@@ -237,7 +239,7 @@ export default function WilliamSpending() {
           <Card className="flex flex-col gap-4 p-5">
             <div className="flex items-center justify-between">
               <h2 className="text-[18px] font-semibold text-ink">By category</h2>
-              <Button pill variant="secondary" size="s" onClick={() => navigate('/spending')}>
+              <Button pill variant="secondary" size="s" onClick={() => setBudgetsOpen(true)}>
                 <Icon name="target" size={16} />
                 Set targets
               </Button>
@@ -285,6 +287,7 @@ export default function WilliamSpending() {
       </main>
 
       <AddTransactionModal open={addOpen} onClose={() => setAddOpen(false)} initialType="expense" />
+      {budgetsOpen && <SetBudgetsModal open onClose={() => setBudgetsOpen(false)} month={month} year={year} />}
     </div>
   );
 }
