@@ -179,10 +179,14 @@ function EditAssumptionsModal({ open, onClose }: { open: boolean; onClose: () =>
   };
 
   // Money input with a trailing currency selector (matches the Figma field accessory).
-  const MoneyField = ({ label, value, onChange, placeholder }: { label: string; value: string; onChange: (v: string) => void; placeholder: string }) => (
+  // State stores raw digits; the field displays them with comma thousands.
+  const MoneyField = ({ label, value, onChange, placeholder }: { label: string; value: string; onChange: (v: string) => void; placeholder: string }) => {
+    const digits = value.replace(/[^\d]/g, '');
+    const display = digits ? Number(digits).toLocaleString('en-US') : '';
+    return (
     <Field label={label}>
       <div className="relative">
-        <TextInput inputMode="numeric" className="pr-[68px]" placeholder={placeholder} value={value} onChange={(e) => onChange(e.target.value)} />
+        <TextInput inputMode="numeric" className="pr-[68px]" placeholder={placeholder} value={display} onChange={(e) => onChange(e.target.value.replace(/[^\d]/g, ''))} />
         <div className="absolute right-2.5 top-1/2 flex -translate-y-1/2 items-center gap-1">
           <select
             aria-label="Currency"
@@ -198,7 +202,8 @@ function EditAssumptionsModal({ open, onClose }: { open: boolean; onClose: () =>
         </div>
       </div>
     </Field>
-  );
+    );
+  };
 
   return (
     <Modal
@@ -215,8 +220,8 @@ function EditAssumptionsModal({ open, onClose }: { open: boolean; onClose: () =>
     >
       <p className="-mt-1 ty-body text-secondary">These inputs drive your FI number and projected date.</p>
       <div className="grid grid-cols-1 gap-x-3 gap-y-3.5 sm:grid-cols-2">
-        <MoneyField label="Annual expenses" placeholder="50000" value={expenses} onChange={setExpenses} />
-        <MoneyField label="Annual savings" placeholder="30000" value={savings} onChange={setSavings} />
+        <MoneyField label="Annual expenses" placeholder="50,000" value={expenses} onChange={setExpenses} />
+        <MoneyField label="Annual savings" placeholder="30,000" value={savings} onChange={setSavings} />
         <Field label="Withdrawal rate (%)">
           <TextInput inputMode="decimal" placeholder="4" value={withdrawal} onChange={(e) => setWithdrawal(e.target.value)} />
         </Field>
@@ -332,12 +337,12 @@ function MilestonesLadder({
 // ── Assumption tile ───────────────────────────────────────────────────────────
 function Tile({ label, value, info }: { label: string; value: string; info?: React.ReactNode }) {
   return (
-    <div className="flex flex-col gap-2 rounded-xl bg-sunken p-3.5 md:p-4">
+    <div className="flex flex-col gap-2 rounded-xl bg-sunken p-3 md:p-4">
       <div className="flex items-center gap-1.5">
         <span className="text-[13px] text-secondary">{label}</span>
         {info}
       </div>
-      <span className="num-mono text-[22px] font-medium text-ink md:text-[25px]">{value}</span>
+      <span className="num-mono whitespace-nowrap text-[19px] font-medium text-ink md:text-[22px]">{value}</span>
     </div>
   );
 }
@@ -513,7 +518,7 @@ export default function WilliamFire() {
                 </Button>
               </div>
 
-              <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-3">
                 <Tile label="Annual expenses" value={money0(d.annualExpenses, cur)} />
                 <Tile
                   label="Withdrawal rate"
