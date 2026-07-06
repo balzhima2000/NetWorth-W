@@ -41,7 +41,7 @@ export function MonthPicker({ month, year, onChange }: { month: number; year: nu
         className="inline-flex h-9 items-center gap-2 rounded-full border border-line bg-surface px-3.5 text-[15px] font-medium text-ink transition-colors hover:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
       >
         {MONTH_NAMES[month - 1]} {year}
-        <span className="num-mono text-[13px] text-secondary" aria-hidden="true">⌄</span>
+        <span className="num-mono text-[11px] leading-none text-secondary" aria-hidden="true">▾</span>
       </button>
       {open && (
         <>
