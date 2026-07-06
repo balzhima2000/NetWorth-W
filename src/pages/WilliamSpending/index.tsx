@@ -77,14 +77,14 @@ function Donut({ slices, total, currency }: { slices: CategorySlice[]; total: nu
   const data: CategorySlice[] = hasData ? slices : [{ id: '__empty__', name: 'empty', amount: 1, pct: 0 }];
   return (
     <div className="relative size-[150px] shrink-0">
-      <PieChart width={150} height={150}>
+      <PieChart width={150} height={150} margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
         <Pie
           data={data}
           dataKey="amount"
-          cx={75}
-          cy={75}
+          cx="50%"
+          cy="50%"
           innerRadius={46}
-          outerRadius={75}
+          outerRadius={72}
           startAngle={90}
           endAngle={-270}
           paddingAngle={hasData && slices.length > 1 ? 2 : 0}
