@@ -51,7 +51,9 @@ function LinkRow({ label, danger, onClick, last }: { label: string; danger?: boo
       )}
     >
       <span className={cn('text-[15px] font-medium', danger ? 'text-negative' : 'text-ink')}>{label}</span>
-      <span className={cn('num text-[16px]', danger ? 'text-negative' : 'text-muted')}>›</span>
+      <svg width="7" height="12" viewBox="0 0 7 12" fill="none" aria-hidden="true" className={cn('shrink-0', danger ? 'text-negative' : 'text-muted')}>
+        <path d="M1 1 6 6 1 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
     </button>
   );
 }

@@ -177,7 +177,9 @@ function NavCard({ icon, title, subtitle, onClick }: { icon: 'recurring' | 'tren
         <span className="truncate text-[15px] font-semibold text-ink">{title}</span>
         <span className="truncate text-[13px] text-secondary">{subtitle}</span>
       </span>
-      <span className="shrink-0 text-secondary" aria-hidden="true">›</span>
+      <svg width="7" height="12" viewBox="0 0 7 12" fill="none" aria-hidden="true" className="shrink-0 text-secondary">
+        <path d="M1 1 6 6 1 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
     </button>
   );
 }
