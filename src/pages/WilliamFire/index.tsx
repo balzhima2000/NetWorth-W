@@ -128,7 +128,7 @@ function InfoTip({ title, children }: { title?: string; children: React.ReactNod
 
 function ProgressBar({ pct }: { pct: number }) {
   return (
-    <div className="h-3.5 w-full overflow-hidden rounded-full bg-raised">
+    <div className="h-3.5 w-full overflow-hidden rounded-full bg-line">
       <div className="h-full rounded-full bg-accent" style={{ width: `${Math.max(Math.min(pct, 100), 0)}%` }} />
     </div>
   );
@@ -346,7 +346,7 @@ function MilestonesLadder({
 // ── Assumption tile ───────────────────────────────────────────────────────────
 function Tile({ label, value, info }: { label: string; value: string; info?: React.ReactNode }) {
   return (
-    <div className="flex flex-col gap-2 rounded-xl bg-sunken p-3 md:p-4">
+    <div className="flex flex-col gap-2 rounded-xl bg-raised p-3 md:p-4">
       <div className="flex items-center gap-1.5">
         <span className="text-[13px] text-secondary">{label}</span>
         {info}
@@ -419,7 +419,7 @@ export default function WilliamFire() {
                 </div>
 
                 {d.nextMilestone && (
-                  <div className="mt-4 flex items-center justify-between rounded-xl bg-sunken px-4 py-3">
+                  <div className="mt-4 flex items-center justify-between rounded-xl bg-accent-bg px-4 py-3">
                     <span className="ty-body text-secondary">
                       Next · <span className="font-semibold text-ink">{d.nextMilestone.label}</span>
                     </span>
