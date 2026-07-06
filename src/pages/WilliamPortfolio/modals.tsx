@@ -208,10 +208,18 @@ export function SetTargetsModal({ open, onClose, holdings, totalValue }: { open:
   return (
     <Modal open={open} onClose={onClose} title="Set allocation targets" footer={
       <>
-        <button type="button" onClick={turnOff} className="text-[14px] font-medium text-secondary hover:text-ink">Turn off targets</button>
-        <div className="ml-auto flex gap-2.5">
-          <Button pill size="l" variant="secondary" onClick={onClose}>Cancel</Button>
-          <Button pill size="l" variant="primary" onClick={save}>Save targets</Button>
+        {/* Desktop: Turn off (left) · Cancel · Save (right) */}
+        <div className="hidden w-full items-center gap-2.5 md:flex">
+          <button type="button" onClick={turnOff} className="text-[14px] font-medium text-secondary hover:text-ink">Turn off targets</button>
+          <div className="ml-auto flex gap-2.5">
+            <Button pill size="l" variant="secondary" onClick={onClose}>Cancel</Button>
+            <Button pill size="l" variant="primary" onClick={save}>Save targets</Button>
+          </div>
+        </div>
+        {/* Mobile: full-width Save, neutral ghost Turn off below (✕ dismisses) */}
+        <div className="flex w-full flex-col gap-1 md:hidden">
+          <Button pill size="l" variant="primary" className="w-full" onClick={save}>Save targets</Button>
+          <Button pill size="l" variant="ghost" className="w-full !text-secondary" onClick={turnOff}>Turn off targets</Button>
         </div>
       </>
     }>

@@ -97,10 +97,18 @@ export function EditRecurringModal({ open, onClose, editing }: { open: boolean; 
       title={isEdit ? (plan ? 'Edit installment plan' : 'Edit recurring') : 'Add recurring'}
       footer={
         <>
-          {isEdit && <Button pill size="l" variant="danger" onClick={remove}>Delete</Button>}
-          <div className="ml-auto flex gap-2.5">
-            <Button pill size="l" variant="secondary" onClick={onClose}>Cancel</Button>
-            <Button pill size="l" variant="primary" disabled={!valid} onClick={submit}>Save</Button>
+          {/* Desktop: Delete (left) · Cancel · Save (right) */}
+          <div className="hidden w-full items-center gap-2.5 md:flex">
+            {isEdit && <Button pill size="l" variant="danger" onClick={remove}>Delete</Button>}
+            <div className="ml-auto flex gap-2.5">
+              <Button pill size="l" variant="secondary" onClick={onClose}>Cancel</Button>
+              <Button pill size="l" variant="primary" disabled={!valid} onClick={submit}>Save</Button>
+            </div>
+          </div>
+          {/* Mobile: full-width Save, ghost Delete stacked below (✕ dismisses) */}
+          <div className="flex w-full flex-col gap-1 md:hidden">
+            <Button pill size="l" variant="primary" className="w-full" disabled={!valid} onClick={submit}>Save</Button>
+            {isEdit && <Button pill size="l" variant="ghost" className="w-full !text-negative" onClick={remove}>Delete</Button>}
           </div>
         </>
       }

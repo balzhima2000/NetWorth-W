@@ -47,10 +47,18 @@ export function SetBudgetsModal({ open, onClose, month, year }: { open: boolean;
       title="Set budgets"
       footer={
         <>
-          <button type="button" onClick={clearAll} className="text-[14px] font-medium text-secondary transition-colors hover:text-ink">Clear all</button>
-          <div className="ml-auto flex gap-2.5">
-            <Button pill size="l" variant="secondary" onClick={onClose}>Cancel</Button>
-            <Button pill size="l" variant="primary" onClick={save}>Save</Button>
+          {/* Desktop: Clear all (left) · Cancel · Save (right) */}
+          <div className="hidden w-full items-center gap-2.5 md:flex">
+            <button type="button" onClick={clearAll} className="text-[14px] font-medium text-secondary transition-colors hover:text-ink">Clear all</button>
+            <div className="ml-auto flex gap-2.5">
+              <Button pill size="l" variant="secondary" onClick={onClose}>Cancel</Button>
+              <Button pill size="l" variant="primary" onClick={save}>Save</Button>
+            </div>
+          </div>
+          {/* Mobile: full-width Save, neutral ghost Clear all stacked below (✕ dismisses) */}
+          <div className="flex w-full flex-col gap-1 md:hidden">
+            <Button pill size="l" variant="primary" className="w-full" onClick={save}>Save</Button>
+            <Button pill size="l" variant="ghost" className="w-full !text-secondary" onClick={clearAll}>Clear all</Button>
           </div>
         </>
       }
