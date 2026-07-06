@@ -4,7 +4,7 @@
  * setting pages, and a desktop footer. Matches Figma "Account — Desktop/Mobile".
  */
 import { useNavigate } from 'react-router-dom';
-import { Card, FloatingNav, TabBar, cn } from '../../components/william';
+import { Card, FloatingNav, TabBar, Segmented, cn } from '../../components/william';
 import { useSettingsStore } from '../../stores/settingsStore';
 import { ACCOUNT_GROUPS } from './sections';
 
@@ -18,25 +18,14 @@ function ThemeToggle() {
   const theme = useSettingsStore((s) => s.theme ?? 'auto');
   const setTheme = useSettingsStore((s) => s.setTheme);
   return (
-    <div className="flex w-full gap-0.5 rounded-full bg-sunken p-1">
-      {THEMES.map((t) => {
-        const active = theme === t.key;
-        return (
-          <button
-            key={t.key}
-            type="button"
-            onClick={() => setTheme(t.key)}
-            aria-pressed={active}
-            className={cn(
-              'flex-1 rounded-full py-2 text-[13px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink',
-              active ? 'bg-surface text-ink shadow-none' : 'text-secondary hover:text-ink',
-            )}
-          >
-            {t.label}
-          </button>
-        );
-      })}
-    </div>
+    <Segmented
+      options={THEMES.map((t) => ({ value: t.key, label: t.label }))}
+      value={theme}
+      onChange={(v) => setTheme(v as 'light' | 'dark' | 'auto')}
+      track="sunken"
+      size="md"
+      fullWidth
+    />
   );
 }
 

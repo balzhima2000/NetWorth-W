@@ -1,5 +1,6 @@
 import React from 'react';
 import { cn } from './cn';
+import { Segmented } from './Segment';
 
 /** Form field primitives matched to the Figma Forms components. */
 
@@ -39,24 +40,5 @@ export function SelectInput({ className, children, ...rest }: React.SelectHTMLAt
 
 interface Opt { value: string; label: string }
 export function SegmentToggle({ options, value, onChange }: { options: Opt[]; value: string; onChange: (v: string) => void }) {
-  return (
-    <div className="flex gap-0.5 rounded-full bg-sunken p-1">
-      {options.map((o) => {
-        const active = o.value === value;
-        return (
-          <button
-            key={o.value}
-            type="button"
-            onClick={() => onChange(o.value)}
-            className={cn(
-              'flex-1 rounded-full py-2 text-[14px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink',
-              active ? 'bg-surface text-ink' : 'text-secondary hover:text-ink',
-            )}
-          >
-            {o.label}
-          </button>
-        );
-      })}
-    </div>
-  );
+  return <Segmented options={options} value={value} onChange={onChange} track="sunken" size="md" fullWidth />;
 }

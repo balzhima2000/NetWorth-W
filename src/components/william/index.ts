@@ -6,7 +6,7 @@ export { PixelSpinner } from './PixelSpinner';
 export { Button } from './Button';
 export { Badge } from './Badge';
 export { Chip } from './Chip';
-export { Segment, RangeSelector } from './Segment';
+export { Segment, RangeSelector, Segmented } from './Segment';
 export { Skeleton } from './Skeleton';
 export { ActionButton } from './ActionButton';
 export { Card } from './Card';
