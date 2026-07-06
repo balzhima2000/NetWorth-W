@@ -80,7 +80,7 @@ export default function Assets() {
         <Field label="Value"><TextInput value={value} onChange={(e) => setValue(e.target.value)} inputMode="decimal" placeholder="0" /></Field>
         <Field label="Category">
           <SelectInput value={category} onChange={(e) => setCategory(e.target.value)}>
-            {cats.map((c) => <option key={c.id} value={c.id}>{c.emoji} {c.label}</option>)}
+            {cats.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
           </SelectInput>
         </Field>
       </Modal>

@@ -3,8 +3,6 @@ import { Card, Button, Modal, Field, TextInput, cn } from '../../components/will
 import { useCardsStore } from '../../stores/cardsStore';
 import { AccountSubPage } from './AccountSubPage';
 
-const ICONS = ['💵','🏦','💳','📈','🪙','💼','🏧','💰'];
-
 export default function IncomeDestinations() {
   const dests = useCardsStore((s) => s.incomeDestinations);
   const add = useCardsStore((s) => s.addIncomeDestination);
@@ -12,12 +10,11 @@ export default function IncomeDestinations() {
 
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
-  const [icon, setIcon] = useState('🏦');
 
   const save = () => {
     if (!name.trim()) return;
-    add({ id: crypto.randomUUID(), name: name.trim(), icon });
-    setName(''); setIcon('🏦'); setOpen(false);
+    add({ id: crypto.randomUUID(), name: name.trim(), icon: '' });
+    setName(''); setOpen(false);
   };
 
   return (
@@ -25,10 +22,7 @@ export default function IncomeDestinations() {
       <Card className="flex flex-col p-0 overflow-hidden">
         {dests.map((d, i) => (
           <div key={d.id} className={cn('flex items-center justify-between px-5 py-3.5', i < dests.length - 1 && 'border-b border-line')}>
-            <div className="flex items-center gap-3">
-              <span className="text-[18px]">{d.icon}</span>
-              <span className="text-[15px] font-medium text-ink">{d.name}</span>
-            </div>
+            <span className="text-[15px] font-medium text-ink">{d.name}</span>
             {d.id !== 'cash' && <Button size="xs" variant="ghost" onClick={() => del(d.id)}>Delete</Button>}
           </div>
         ))}
@@ -42,13 +36,6 @@ export default function IncomeDestinations() {
         </>
       }>
         <Field label="Name"><TextInput value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Bank Hapoalim" autoFocus /></Field>
-        <Field label="Icon">
-          <div className="flex flex-wrap gap-1.5">
-            {ICONS.map((e) => (
-              <button key={e} type="button" onClick={() => setIcon(e)} className={cn('flex h-9 w-9 items-center justify-center rounded-lg text-[18px]', icon === e ? 'bg-accent-bg ring-2 ring-ink' : 'bg-sunken')}>{e}</button>
-            ))}
-          </div>
-        </Field>
       </Modal>
     </AccountSubPage>
   );
