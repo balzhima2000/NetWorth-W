@@ -41,7 +41,9 @@ export function MonthPicker({ month, year, onChange }: { month: number; year: nu
         className="inline-flex h-9 items-center gap-2 rounded-full border border-line bg-surface px-3.5 text-[15px] font-medium text-ink transition-colors hover:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
       >
         {MONTH_NAMES[month - 1]} {year}
-        <span className="num-mono text-[11px] leading-none text-secondary" aria-hidden="true">▾</span>
+        <svg width="11" height="7" viewBox="0 0 11 7" fill="none" aria-hidden="true" className="shrink-0 text-secondary">
+          <path d="M1 1.5 5.5 6 10 1.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
       </button>
       {open && (
         <>
@@ -201,7 +203,7 @@ export default function WilliamSpending() {
       <main className="mx-auto flex max-w-[1100px] flex-col gap-[18px] px-4 md:gap-5 md:px-6">
         {/* ── Header ── */}
         <div className="flex items-start justify-between gap-3">
-          <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-3.5">
+          <div className="flex flex-col gap-1.5 md:flex-row md:items-center md:gap-3.5">
             <h1 className="text-[28px] font-semibold tracking-[-0.01em] text-ink md:text-[32px]">Spending for</h1>
             <MonthPicker month={month} year={year} onChange={(m, y) => { setMonth(m); setYear(y); }} />
           </div>

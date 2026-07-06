@@ -107,7 +107,7 @@ export default function WilliamTransactions() {
             Spending
           </button>
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-            <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-3.5">
+            <div className="flex flex-col gap-1.5 md:flex-row md:items-center md:gap-3.5">
               <h1 className="text-[28px] font-semibold tracking-[-0.01em] text-ink md:text-[32px]">Transactions for</h1>
               <MonthPicker month={month} year={year} onChange={(m, y) => { setMonth(m); setYear(y); }} />
             </div>
