@@ -241,12 +241,21 @@ function EditAssumptionsModal({ open, onClose }: { open: boolean; onClose: () =>
 
 // ── Milestones ──────────────────────────────────────────────────────────────
 function MilestonesTrack({ milestones, netWorth, max, currency }: { milestones: Milestone[]; netWorth: number; max: number; currency: string }) {
-  const youPct = Math.max(Math.min((netWorth / max) * 100, 100), 0);
+  const clamp = (v: number) => Math.max(Math.min(v, 100), 0);
+  const youPct = clamp((netWorth / max) * 100);
   // Keep endpoint labels inside the card: right-align the last, left-align the first.
   const alignFor = (pct: number) =>
     pct >= 88 ? '-translate-x-full text-right' : pct <= 12 ? 'translate-x-0 text-left' : '-translate-x-1/2 text-center';
+  // Stagger labels that sit too close horizontally into stacked rows so they
+  // never overlap (e.g. Coast landing on FIRE when no age is set).
+  const MIN_GAP = 15; // percent of the axis
+  const sorted = [...milestones].map((m) => ({ id: m.id, pct: clamp((m.amount / max) * 100) })).sort((a, b) => a.pct - b.pct);
+  const rowOf: Record<string, number> = {};
+  let lastPct = -Infinity, row = 0;
+  sorted.forEach(({ id, pct }) => { row = pct - lastPct < MIN_GAP ? row + 1 : 0; rowOf[id] = row; lastPct = pct; });
+  const maxRow = Object.values(rowOf).reduce((a, b) => Math.max(a, b), 0);
   return (
-    <div className="relative hidden px-2 pb-14 pt-8 md:block">
+    <div className="relative hidden px-2 pt-8 md:block" style={{ paddingBottom: 40 + maxRow * 40 }}>
       {/* You marker (above) */}
       <div className={cn('absolute top-0 whitespace-nowrap', alignFor(youPct))} style={{ left: `${youPct}%` }}>
         <span className="num text-[13px] font-medium text-ink">You · {short(netWorth, currency)}</span>
@@ -260,13 +269,13 @@ function MilestonesTrack({ milestones, netWorth, max, currency }: { milestones: 
           className="absolute top-1/2 z-10 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-surface bg-accent"
           style={{ left: `${youPct}%` }}
         />
-        {/* milestone dots + labels below */}
+        {/* milestone dots + labels below (stacked into rows to avoid collisions) */}
         {milestones.map((m) => {
-          const pct = Math.max(Math.min((m.amount / max) * 100, 100), 0);
+          const pct = clamp((m.amount / max) * 100);
           return (
             <div key={m.id} className="absolute top-1/2" style={{ left: `${pct}%` }}>
               <div className={cn('h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full', m.reached ? 'bg-accent' : 'bg-muted')} />
-              <div className={cn('absolute top-4 whitespace-nowrap', alignFor(pct))}>
+              <div className={cn('absolute whitespace-nowrap', alignFor(pct))} style={{ top: 16 + rowOf[m.id] * 40 }}>
                 <p className="text-[15px] font-semibold text-ink">{m.label}</p>
                 <p className="num-mono font-medium text-[13px] text-secondary">{short(m.amount, currency)}</p>
               </div>
