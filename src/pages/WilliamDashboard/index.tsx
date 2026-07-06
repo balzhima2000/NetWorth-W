@@ -47,18 +47,16 @@ function BreakdownBar({ items, currency }: { items: { label: string; value: numb
   );
 }
 
-// Segmented FIRE progress bar — fixed 4×8px accent segments, 1px gaps (Figma 216:2846)
+// Segmented FIRE progress bar — 4px steps, 1px gaps. The full track shows faint
+// unfilled steps so the segmented structure reads even at low progress; the
+// filled portion overlays accent steps.
 function FireBar({ progress }: { progress: number }) {
+  const pct = Math.max(Math.min(progress, 100), 0);
+  const steps = (color: string) => `repeating-linear-gradient(to right, ${color} 0, ${color} 4px, transparent 4px, transparent 5px)`;
   return (
     <div className="relative h-3 w-full overflow-hidden rounded-full bg-raised">
-      <div
-        className="absolute inset-y-[2px] left-[2px]"
-        style={{
-          width: `calc(${Math.max(Math.min(progress, 100), 0)}% - 4px)`,
-          backgroundImage:
-            'repeating-linear-gradient(to right, var(--w-accent) 0, var(--w-accent) 4px, transparent 4px, transparent 5px)',
-        }}
-      />
+      <div className="absolute inset-y-[2px] left-[2px] right-[2px] opacity-40" style={{ backgroundImage: steps('var(--w-muted)') }} />
+      <div className="absolute inset-y-[2px] left-[2px]" style={{ width: `calc(${pct}% - 4px)`, backgroundImage: steps('var(--w-accent)') }} />
     </div>
   );
 }
