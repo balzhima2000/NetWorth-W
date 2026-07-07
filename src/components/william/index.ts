@@ -4,6 +4,7 @@ export type { IconName } from './Icon';
 export { Spinner } from './Spinner';
 export { PixelSpinner } from './PixelSpinner';
 export { Button } from './Button';
+export { DangerButton } from './DangerButton';
 export { Badge } from './Badge';
 export { Chip } from './Chip';
 export { Segment, RangeSelector, Segmented } from './Segment';

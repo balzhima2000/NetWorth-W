@@ -8,7 +8,7 @@
  * Field/Modal patterns; revisit if a design lands.
  */
 import { useState } from 'react';
-import { Modal, Button, Field, TextInput, SelectInput, SegmentToggle } from '../../components/william';
+import { Modal, Button, DangerButton, Field, TextInput, SelectInput, SegmentToggle } from '../../components/william';
 import { useRecurringStore } from '../../stores/recurringStore';
 import { useCategoriesStore } from '../../stores/categoriesStore';
 import { useSettingsStore } from '../../stores/settingsStore';
@@ -99,7 +99,7 @@ export function EditRecurringModal({ open, onClose, editing }: { open: boolean; 
         <>
           {/* Desktop: Delete (left) · Cancel · Save (right) */}
           <div className="hidden w-full items-center gap-2.5 md:flex">
-            {isEdit && <Button pill size="l" variant="danger" onClick={remove}>Delete</Button>}
+            {isEdit && <DangerButton pill size="l" onClick={remove}>Delete</DangerButton>}
             <div className="ml-auto flex gap-2.5">
               <Button pill size="l" variant="secondary" onClick={onClose}>Cancel</Button>
               <Button pill size="l" variant="primary" disabled={!valid} onClick={submit}>Save</Button>
@@ -108,7 +108,7 @@ export function EditRecurringModal({ open, onClose, editing }: { open: boolean; 
           {/* Mobile: full-width Save, ghost Delete stacked below (✕ dismisses) */}
           <div className="flex w-full flex-col gap-1 md:hidden">
             <Button pill size="l" variant="primary" className="w-full" disabled={!valid} onClick={submit}>Save</Button>
-            {isEdit && <Button pill size="l" variant="ghost" className="w-full !text-negative" onClick={remove}>Delete</Button>}
+            {isEdit && <DangerButton pill size="l" variant="subtle" className="w-full" onClick={remove}>Delete</DangerButton>}
           </div>
         </>
       }

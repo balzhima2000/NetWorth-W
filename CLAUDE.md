@@ -106,7 +106,6 @@ Parses a broker `.xlsx` snapshot (one row = one open position) into `ImportRow[]
 
 ## Workflow rules
 - **Auto-push**: Unless told otherwise, always push after executing the user's orders.
-- **Preview viewport**: Always use the desktop/PC version (1920×1080) for previews by default, unless told otherwise.
 
 ## File map (key files)
 ```
@@ -134,9 +133,7 @@ src/
 
 ## Design system — Figma file
 
-**File:** `WMI3ZpbuD4zvKIe4yqFA5A` — "William — Design System v1"
-
-**App name: William** (the dot-matrix logotype reads "WILLIAM" — stylized W, not "SQ"). Balzhima will redesign the logo later.
+**File:** `WMI3ZpbuD4zvKIe4yqFA5A` 
 
 ### Pages
 | Page | ID | Contents |
@@ -172,8 +169,6 @@ Pixel dot-matrix style. Master size 64×64. DOT=6, GAP=2, UNIT=8.
 | Icon/Target | 429:1084 | — | "Set/Edit targets" (ring + bullseye) |
 | Icon/Plus | 429:1098 | — | "Add trade" / add actions |
 
-**Icon button rule (Portfolio toolbar):** every toolbar/action button leads with a dot-matrix icon + label (Refresh / Import / Add trade / Set targets). The Refresh glyph alone (circular-arrow/spinner ring) tested as not legible enough, so it keeps the "Refresh" **text label** — do not make it icon-only.
-
 **⚠️ Toolbar button exact dims (sourced from Figma 358:146 desktop / 372:143 mobile — do NOT eyeball):** pill, **38px tall** (height unified to 38 per Balzhima's call — Figma itself drew desktop 38 / mobile 40), **16px** horizontal pad, **6px** gap, **14px** label. **Refresh/Import** = secondary (`surface` + `border`), **Inter Medium**, **18px** icon. **Add trade** = primary (`surface-inverse` mid-grey), **Inter Semi Bold**, **16px** icon (the plus glyph is 16, not 18). Row gap = **10px desktop** (`gap-2.5`) / **8px mobile** (`gap-2`). In code these use `<Button pill size="toolbar">` — the `toolbar` size carries `h-[38px] px-4 gap-1.5 text-[14px] font-medium`; Add trade adds `className="font-semibold"`. Buttons hug content (Figma manually undersized its Add-trade frame to 110px; we don't, to avoid clipping the label).
 
 ### Action Button component (Button page, set 197:60)
@@ -192,7 +187,7 @@ Dashboard action buttons (Trade/Income/Expense). Variant property `Action`.
 
 ### Color palette + visual direction (Superpower-inspired, since 2026-06)
 
-Reference: **superpower.com**. Adapted aesthetic = **cool neutral greys + white · no shadows · hairline borders · frosted-glass floating surfaces · color ONLY on money direction**.
+Adapted aesthetic = **cool neutral greys + white · hairline borders · frosted-glass floating surfaces · color ONLY on money direction**.
 
 > **History note:** a warm-paper/cream neutral ramp was trialled (2026-06) but **reverted**. The final, intended palette is **cool grey + white** (Tailwind-style neutral scale). Do not reintroduce warm/cream neutrals.
 
@@ -251,12 +246,6 @@ Violet was considered and rejected. Do not reintroduce it. Primitives were renam
 - 4th series/category → `color/accent-bg`
 
 This applies to **all chart types**: breakdown bars, donut charts, paired bar charts, split bars. Example: Spend vs Income bars → spending = `color/accent`, income = `color/positive-bg`.
-
-Do **not** use `color/positive` (vivid lime) or `color/negative` (orange) for chart segments — those are reserved for delta values (gains/losses as text), not chart fills. Do **not** use opacity to create muted variants — use flat tokens only.
-
-If a chart needs more than 4 series, use `color/chart-1..5`. If a color is genuinely ambiguous, **ask Balzhima** rather than guessing.
-
-**No shadows.** All `DROP_SHADOW` effects removed (non-Archive pages); the stale `Elevation/sm·md·lg` effect styles were also deleted. Elevation = 1px `color/border` hairline only, never shadow. Do not add drop shadows.
 
 **Nav surfaces are OPAQUE (not frosted).** The NavPill masters use a solid fill + 1px border, NOT translucency/blur (a frosted treatment was trialled in code but caused dark-mode discoloration and didn't match the masters — reverted). Exact specs:
 - **FloatingNav (desktop, 202:2605):** fill `color/surface`, border `color/border`, r999, pad 8 (10 left), gap 6. Items r999, icon 20 + label 14. Active = `accent-bg` pill + `accent` text (pad 10/14); inactive = `text-secondary` (pad 10); **account = 36×36 `accent-bg` circle**.
@@ -401,7 +390,7 @@ Field/menu styles were extracted from the modals into reusable components. Share
 - Heights are the locked scale **44 / 38 / 32 / 28** (picked by Balzhima). The Add-trade primary keeps `font-semibold` + 16px plus glyph at M (see Toolbar-button-dims note).
 - The old `size` values (`default` 42 / `toolbar` 38) were **replaced** by this scale; modal CTAs moved 42→44 (L), Set targets migrated from a bespoke `<button>` to `<Button size="s">`.
 - Figma: the **Button — Sizes** reference (Button page) documents L/M/S/XS; the Button master's standard height is **38 (M)**.
-- **Variants**: `primary` (mid-grey fill) · `secondary` (surface + border) · `ghost` · **`danger`**. The `danger` variant is an **orange outline** (`surface` fill, `border-negative`, `text-negative`) whose **hover tints to `bg-negative-bg`** (pale orange #fed7aa light / #431407 dark) — for destructive actions (delete / reset) and cancel-in-destructive dialogs. Used by the Account → Danger zone triggers. Documented in Figma via the **Button — Danger** reference (Button page, default / hover / cancel).
+- **Variants**: `primary` (mid-grey fill) · `secondary` (surface + border) · `ghost`. Destructive styling is **not** a Button variant — it lives in the standalone **`DangerButton`** (`src/components/william/DangerButton.tsx`, deliberately detached so destructive styles aren't reachable via the generic `variant` switch). Its variants: **`outline`** (default — `surface` fill, `border-negative`, `text-negative`, hover tints `bg-negative-bg` pale orange #fed7aa light / #431407 dark; Account → Danger zone triggers, desktop modal Delete) and **`subtle`** (borderless, transparent fill, `text-negative`, hover `bg-negative-bg`; low-emphasis destructive actions, e.g. the stacked mobile Delete in Edit Recurring — replaced the old `ghost + !text-negative` hack). Same size/pill API as Button. In Figma: detached **Button / Danger** component set (Style {Outline/Subtle} × State), separate from the main Button set.
 - **Date fields** use a **text input in `DD.MM.YYYY`** (helpers `isoToDDMM`/`ddmmToISO`) — not native date input — to honor the format.
 - **Icon**: added `refresh / import / target / plus` dot-matrix glyphs (coords re-extracted from masters incl. Balzhima's Refresh edit).
 
