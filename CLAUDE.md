@@ -255,7 +255,7 @@ This applies to **all chart types**: breakdown bars, donut charts, paired bar ch
 
 **Button state fills (masters):** Primary hover = `color/surface-inverse-hover` (#737373 / #a3a3a3 dark), pressed = darker; Secondary/Ghost hover & pressed = `color/surface-raised`; disabled = `color/border` fill + `text-muted`. Code mirrors via `--w-inverse-hover`.
 
-**Action Button hover** = `color/surface-inverse-hover` (was a raw darkening overlay — now uses the real token; no non-variable colors in code). Active = scale 95% + brightness.
+**Action Button tokens (2026-07):** circles run on the `btn-primary` family — Default/Active = `btn-primary`, Hover = `btn-primary-hover`, Pressed = `btn-primary-pressed` (pressed is now a distinct step; hover previously = pressed = `surface-inverse-hover`). Icon dots = `btn-on-primary` (`btn-on-primary-pressed` in Pressed variants), labels = `text-secondary`. The three duplicate `Action=Trade, State=Active` variant names (which made both sets report "component set has existing errors") were fixed to Income/Expense. In code, Active = scale 95% + brightness.
 
 **Token audit (2026-06):** every fill/stroke in the component masters + dashboard screens is variable-bound — no raw colors. 27 semantic `color/*` tokens (Color collection) + neutral/blue/lime/orange primitive ramps. The only non-variable colors were the doc-only darkening overlays used to *depict* hover/pressed; the corresponding code states now use real tokens.
 
