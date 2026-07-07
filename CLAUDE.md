@@ -177,13 +177,15 @@ Dashboard action buttons (Trade/Income/Expense). Variant property `Action`.
 - Variants: `Action=Trade` (197:2), `Action=Income` (197:22), `Action=Expense` (197:41).
 - Both Dashboard screens (desktop 22:3, mobile 26:3) use instances of this set — no more inline button frames. Mobile was unified from 50px → 54px circles.
 
-### Variable collections
+### Variable collections (re-audited 2026-07)
 | Collection | ID | Modes | Vars |
 |---|---|---|---|
-| Primitives | VariableCollectionId:1:2 | Value | 33 |
-| Color | VariableCollectionId:2:2 | Light / Dark | 19 |
+| Primitives | VariableCollectionId:202:2306 | Value | 47 (blue/neutral/orange/lime ramps) |
+| Color | VariableCollectionId:2:2 | Light / Dark | 32 |
 | Spacing | VariableCollectionId:3:2 | Value | 8 |
 | Radius | VariableCollectionId:3:11 | Value | 4 |
+
+Color collection includes 8 **`color/btn-*` tokens** (recreated 2026-07 after the originals were deleted but stayed bound — "ghost variables"): `btn-on-primary` (n0/n0) · `btn-neutral` (n0/n800) · `btn-neutral-hover` (n100/n700) · `btn-neutral-pressed` (n200/n600) · `btn-subtle-hover` (n100/n800) · `btn-subtle-pressed` (n200/n700) · `btn-disabled` (n200/n800) · `btn-disabled-text` (n400/n600) — all alias the neutral ramp (Light/Dark). `docs/annotation` (#8a38f5, ex-"DS Purple") is the doc-chrome purple: annotation components + component-set frame strokes; never product UI. The Danger button hover/pressed overlays bind `orange/500` at 10%/20% paint opacity. Navigation/Lists pages intentionally bind a few **remote Apple-library** variables (`Fills/Tertiary`, `Labels/Secondary`) on iOS reference frames — do not "fix" those.
 
 ### Color palette + visual direction (Superpower-inspired, since 2026-06)
 
