@@ -1,7 +1,7 @@
 /* ============================================================
    William — redesign token layer  (SCOPED to .william)
    ------------------------------------------------------------
-   Direction: cool grey + white · Inter + Geist Mono ·
+   Direction: cool grey + white · Instrument Sans + Geist Mono ·
    no shadows (hairline borders) · color ONLY on money
    direction (lime = up / orange = down, everything else mono).
    Values ported 1:1 from Figma "William — Design System v1".
@@ -86,7 +86,9 @@
   --w-alloc-lime: #ecfccb;  /* allocation bar — pale lime tint (light) */
   --w-alloc-blue: #dbeafe;  /* allocation bar — pale blue tint (light) */
 
-  --w-font-sans: 'Inter', system-ui, sans-serif;
+  /* Instrument Sans caps at 700 — no 900 anywhere; font-synthesis is
+     disabled on .william so faux-bold can't be synthesized. */
+  --w-font-sans: 'Instrument Sans', system-ui, sans-serif;
   --w-font-mono: 'Geist Mono', 'JetBrains Mono', ui-monospace, monospace;
   /* Radius scale (Figma Radius collection) */
   --w-radius-sm: 8px;
@@ -97,6 +99,7 @@
   background-color: var(--w-canvas);
   color: var(--w-ink);
   font-family: var(--w-font-sans);
+  font-synthesis: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -137,7 +140,7 @@ html[data-theme="dark"] .william {
 
 /* ── Type scale (ported from Figma text styles) ──────────── */
 .william .ty-display {
-  font-weight: 900; font-size: 56px; line-height: 1; letter-spacing: -0.02em;
+  font-weight: 700; font-size: 56px; line-height: 1; letter-spacing: -0.02em;
 }
 .william .ty-h1 {
   font-weight: 700; font-size: 32px; line-height: 1.1; letter-spacing: -0.01em;

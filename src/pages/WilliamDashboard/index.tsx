@@ -131,7 +131,7 @@ export default function WilliamDashboard() {
             <div className="flex flex-col gap-3.5 rounded-[24px] bg-raised p-2.5 pb-4 md:p-3 md:pb-[18px]">
               <div className="flex flex-col gap-1.5 rounded-[18px] bg-surface p-[18px] md:p-5">
                 <p className="ty-label text-muted">CURRENT NET WORTH</p>
-                <p className={cn('num font-black leading-none tracking-[-0.02em] text-[36px] md:text-[44px]', d.netWorth < 0 ? 'text-negative' : 'text-ink')}>
+                <p className={cn('num font-bold leading-none tracking-[-0.02em] text-[36px] md:text-[44px]', d.netWorth < 0 ? 'text-negative' : 'text-ink')}>
                   {formatCurrency(d.netWorth, d.defaultCurrency)}
                 </p>
                 {d.periodDelta && (

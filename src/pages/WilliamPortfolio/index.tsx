@@ -36,7 +36,7 @@ function SummaryCard({ d }: { d: ReturnType<typeof usePortfolioData> }) {
   return (
     <Card className="flex flex-col gap-2.5 p-5">
       <Eyebrow>Portfolio value</Eyebrow>
-      <p className="text-[36px] font-black leading-none tracking-[-0.02em] text-ink md:text-[44px]">
+      <p className="text-[36px] font-bold leading-none tracking-[-0.02em] text-ink md:text-[44px]">
         {formatCurrency(d.totalValue, d.defaultCurrency)}
       </p>
       <p className={cn('num text-[15px] font-medium', dir(d.totalGain))}>
