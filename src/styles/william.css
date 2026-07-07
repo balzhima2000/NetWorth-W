@@ -59,7 +59,8 @@
 
 /* ── Light (default) ─────────────────────────────────────── */
 .william {
-  --w-canvas:       #ffffff;  /* page bg                       */
+  --w-canvas:       #f5f5f5;  /* page bg (n100) — cards are borderless,
+                                 separation is tonal: white surface on grey */
   --w-surface:      #ffffff;  /* card surface                  */
   --w-raised:       #f5f5f5;  /* subtle raised / track         */
   --w-inverse:      #a3a3a3;  /* PRIMARY button / action circle
@@ -111,7 +112,7 @@
 .william[data-theme="dark"],
 .dark .william,
 html[data-theme="dark"] .william {
-  --w-canvas:       #171717;
+  --w-canvas:       #0a0a0a;  /* n950 — tonal separation in dark too */
   --w-surface:      #171717;
   --w-raised:       #262626;
   --w-inverse:      #e5e5e5;

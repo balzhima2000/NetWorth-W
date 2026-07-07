@@ -225,11 +225,11 @@ Violet was considered and rejected. Do not reintroduce it. Primitives were renam
 | `lime/600` / `color/positive` | dark lime (L) · `lime/300` in Dark |
 
 **Key semantic bindings (Light mode):**
-- `color/bg` → `neutral/0` (#ffffff page)
-- `color/surface` → `neutral/0` (white cards)
-- `color/border` → `neutral/200` (#e5e5e5 hairline)
+- `color/bg` → `neutral/100` (#f5f5f5 page; Dark → `neutral/950` #0a0a0a). Code: `--w-canvas`.
+- `color/surface` → `neutral/0` (white cards; Dark → n900 #171717)
+- `color/border` → `neutral/200` (#e5e5e5 — controls/dividers only, see below)
 - `color/surface-inverse` → `neutral/400` (#a3a3a3 — mid-grey primary, intentional)
-- Page/card separation comes from the 1px `color/border` hairline, not a bg/surface tone difference (both white).
+- **⚠️ Cards are BORDERLESS (Balzhima's call, 2026-07): page/card separation is TONAL** — white surface on the n100 grey canvas (n900 on n950 in dark). No hairline on any Card master or card-like surface. `color/border` remains on **controls, dividers, and floating chrome only**: inputs, Secondary button, outline chips/pills, menus, month picker, nav, modals, chart tooltips, row dividers. Interactive-card **hover** affordance: accent border in Figma (`Card / Interactive` Hover/Focus keep strokes; Default/Pressed have none) / `hover:bg-raised` in code. Code net-worth card = white wrapper + grey (`raised`) inner balance panel — matches the rebuilt `Card / NetWorth`.
 
 **Full token set (27 `color/*`, added 2026-06 to fill gaps):**
 - Surfaces: `bg · surface · surface-raised · surface-sunken · surface-inverse · surface-inverse-hover`

@@ -127,9 +127,10 @@ export default function WilliamDashboard() {
 
           {/* Left column */}
           <div className="flex flex-col gap-[18px] md:gap-5">
-            {/* Net Worth Card — grey wrapper (r24, pad 12/18, gap 14), white inner (r18, pad 20) */}
-            <div className="flex flex-col gap-3.5 rounded-[24px] bg-raised p-2.5 pb-4 md:p-3 md:pb-[18px]">
-              <div className="flex flex-col gap-1.5 rounded-[18px] bg-surface p-[18px] md:p-5">
+            {/* Net Worth Card — white card (r24), grey inner balance panel (r18):
+                matches the rebuilt Figma Card/NetWorth on the tonal (borderless) canvas */}
+            <div className="flex flex-col gap-3.5 rounded-[24px] bg-surface p-2.5 pb-4 md:p-3 md:pb-[18px]">
+              <div className="flex flex-col gap-1.5 rounded-[18px] bg-raised p-[18px] md:p-5">
                 <p className="ty-label text-muted">CURRENT NET WORTH</p>
                 <p className={cn('num font-bold leading-none tracking-[-0.02em] text-[36px] md:text-[44px]', d.netWorth < 0 ? 'text-negative' : 'text-ink')}>
                   {formatCurrency(d.netWorth, d.defaultCurrency)}
@@ -283,7 +284,7 @@ export default function WilliamDashboard() {
             {d.recentActivity.map((tx) => {
               const isExpense = tx.type === 'expense';
               return (
-                <div key={tx.id} className="flex items-center justify-between rounded-2xl border border-line bg-surface px-4 py-3.5 md:px-[18px] md:py-4">
+                <div key={tx.id} className="flex items-center justify-between rounded-2xl bg-surface px-4 py-3.5 md:px-[18px] md:py-4">
                   <div className="flex flex-col gap-1">
                     <p className={cn('ty-label', isExpense ? 'text-negative' : 'text-positive')}>
                       {isExpense ? 'EXPENSE LOGGED' : 'INCOME ADDED'}
@@ -302,7 +303,7 @@ export default function WilliamDashboard() {
             <button
               type="button"
               onClick={() => navigate('/william/spending')}
-              className="flex w-full items-center justify-between rounded-2xl border border-line bg-surface px-4 py-2 transition-colors hover:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink md:px-[18px]"
+              className="flex w-full items-center justify-between rounded-2xl bg-surface px-4 py-2 transition-colors hover:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink md:px-[18px]"
             >
               <span className="ty-body text-ink">See all</span>
               <span className="text-muted" aria-hidden="true">→</span>
