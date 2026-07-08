@@ -68,17 +68,24 @@ export function ListRow({ title, subtitle, marker, trailing, chevron, danger, on
       </span>
       <span className="flex shrink-0 items-center gap-2">
         {trailing}
-        {chevron && <Chevron className={danger ? 'text-negative' : 'text-muted'} />}
+        {chevron && (
+          <Chevron
+            className={cn('transition-transform group-hover:translate-x-0.5', danger ? 'text-negative' : 'text-muted')}
+          />
+        )}
       </span>
     </>
   );
   const layout = cn('flex w-full items-center justify-between gap-3 text-left', subtitle ? 'py-[13px]' : 'py-5');
   if (onClick) {
     return (
+      // Contained, rounded hover highlight (iOS/macOS list style) — inset from
+      // the card edges by the List's px-5, with its own radius so it never
+      // clashes with the card's rounded corners on the first/last row.
       <button
         type="button"
         onClick={onClick}
-        className={cn(layout, 'transition-colors hover:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ink')}
+        className={cn(layout, 'group rounded-xl transition-colors hover:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ink')}
       >
         {inner}
       </button>

@@ -69,7 +69,7 @@ function AllocationCard({ d, onSetTargets }: { d: ReturnType<typeof usePortfolio
       <div className="flex items-center justify-between">
         <Eyebrow>Allocation</Eyebrow>
         <Button pill size="s" variant="tonal" onClick={onSetTargets}>
-          <Icon name="target" size={16} /> {hasTargets ? 'Edit targets' : 'Set targets'}
+          {hasTargets ? 'Edit targets' : 'Set targets'}
         </Button>
       </div>
       {hasTargets ? (
