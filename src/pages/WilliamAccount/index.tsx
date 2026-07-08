@@ -55,7 +55,7 @@ export default function WilliamAccount() {
         </div>
 
         {/* Appearance — in-card 18px header + theme toggle (Figma 971:1559) */}
-        <Card className="flex flex-col px-5 pb-5">
+        <Card className="flex flex-col px-5 pb-2.5">
           <ListHeader title="Appearance" />
           <ThemeToggle />
         </Card>
