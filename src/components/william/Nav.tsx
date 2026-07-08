@@ -36,7 +36,7 @@ export function FloatingNav() {
     <nav
       className={cn(
         'fixed left-1/2 top-5 z-50 hidden -translate-x-1/2 md:flex',
-        'items-center gap-1.5 rounded-full border border-line bg-surface p-2 pl-2.5',
+        'nav-glass items-center gap-1.5 rounded-full border border-line p-2 pl-2.5',
       )}
     >
       {ITEMS.map((item) => {
@@ -83,7 +83,7 @@ export function TabBar() {
     <nav
       className={cn(
         'fixed bottom-4 left-1/2 z-50 flex w-[340px] -translate-x-1/2 md:hidden',
-        'items-center gap-1 rounded-full border border-line bg-canvas p-1.5',
+        'nav-glass items-center gap-1 rounded-full border border-line p-1.5',
       )}
     >
       {tabs.map((item) => {

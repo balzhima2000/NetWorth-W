@@ -199,6 +199,33 @@ html[data-theme="dark"] .william {
 /* Radius helper */
 .william .rounded-card { border-radius: var(--w-radius-card); }
 
+/* Liquid-glass nav (Tier 1 — frosted, no Apple API). backdrop-filter blurs the
+   page content scrolling behind the fixed nav; a translucent fill + a bright
+   top rim + a lift shadow read as glass. Alpha/saturation are mode-aware so
+   dark mode doesn't muddy (the earlier frosted trial was reverted for exactly
+   that). Falls back to the opaque surface where backdrop-filter is absent. */
+.william .nav-glass {
+  background-color: color-mix(in srgb, var(--w-surface) 62%, transparent);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+          backdrop-filter: blur(20px) saturate(150%);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.55),   /* top specular edge */
+    0 8px 24px -10px rgba(0, 0, 0, 0.25);         /* soft lift */
+}
+.william[data-theme="dark"] .nav-glass,
+.dark .william .nav-glass,
+html[data-theme="dark"] .william .nav-glass {
+  background-color: color-mix(in srgb, var(--w-surface) 58%, transparent);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+          backdrop-filter: blur(20px) saturate(120%);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.10),
+    0 8px 24px -10px rgba(0, 0, 0, 0.6);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .william .nav-glass { background-color: var(--w-surface); }
+}
+
 /* Safeguard: the old global design system paints html/body/#root black.
    On William routes, force the page background to the canvas colour so the
    old theme never bleeds around the (centred) dashboard content. Scoped via
