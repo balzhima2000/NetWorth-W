@@ -31,45 +31,44 @@ const ITEMS: NavItem[] = [
 export function FloatingNav() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const account = ITEMS.find((i) => i.iconOnly)!;
+  const mainItems = ITEMS.filter((i) => !i.iconOnly);
 
   return (
+    // Two detached glass surfaces (Figma NavPill 202:2605): the 4-item pill +
+    // a separate account island, ~10px apart. The wrapper is transparent.
     <nav
-      className={cn(
-        'fixed left-1/2 top-5 z-50 hidden -translate-x-1/2 md:flex',
-        'nav-glass items-center gap-1.5 rounded-full p-2 pl-2.5',
-      )}
+      aria-label="Primary"
+      className="fixed left-1/2 top-5 z-50 hidden -translate-x-1/2 items-center gap-2.5 md:flex"
     >
-      {ITEMS.map((item) => {
-        const active = pathname === item.path;
-        if (item.iconOnly) {
+      <div className="nav-glass flex items-center gap-1.5 rounded-full p-2 pl-2.5">
+        {mainItems.map((item) => {
+          const active = pathname === item.path;
           return (
             <button
               key={item.id}
               onClick={() => navigate(item.path)}
-              aria-label={item.label}
               aria-current={active ? 'page' : undefined}
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-bg text-ink transition-[filter] hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+              className={cn(
+                'flex items-center gap-1.5 rounded-full py-1.5 text-[14px] font-medium transition-colors',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink',
+                active ? 'bg-accent-bg pl-2.5 pr-3.5 text-ink' : 'px-2.5 text-secondary hover:text-ink',
+              )}
             >
               <Icon name={item.icon} size={20} />
+              <span>{item.label}</span>
             </button>
           );
-        }
-        return (
-          <button
-            key={item.id}
-            onClick={() => navigate(item.path)}
-            aria-current={active ? 'page' : undefined}
-            className={cn(
-              'flex items-center gap-1.5 rounded-full py-1.5 text-[14px] font-medium transition-colors',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink',
-              active ? 'bg-accent-bg pl-2.5 pr-3.5 text-ink' : 'px-2.5 text-secondary hover:text-ink',
-            )}
-          >
-            <Icon name={item.icon} size={20} />
-            <span>{item.label}</span>
-          </button>
-        );
-      })}
+        })}
+      </div>
+      <button
+        onClick={() => navigate(account.path)}
+        aria-label={account.label}
+        aria-current={pathname === account.path ? 'page' : undefined}
+        className="nav-glass flex h-11 w-11 items-center justify-center rounded-full text-ink transition-[filter] hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+      >
+        <Icon name={account.icon} size={20} />
+      </button>
     </nav>
   );
 }
