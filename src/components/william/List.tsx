@@ -57,7 +57,7 @@ interface ListRowProps {
 export function ListRow({ title, subtitle, marker, trailing, chevron, danger, onClick }: ListRowProps) {
   const inner = (
     <>
-      <span className="flex min-w-0 items-center gap-3">
+      <span className="flex min-w-0 items-center gap-3 transition-transform duration-150 group-hover:translate-x-0.5">
         {marker && <span aria-hidden="true" className="h-8 w-[3px] shrink-0 rounded-full" style={{ background: marker }} />}
         <span className="flex min-w-0 flex-col gap-0.5">
           <span className={cn('truncate font-medium', subtitle ? 'text-[15px]' : 'text-[14px]', danger ? 'text-negative' : 'text-ink')}>
@@ -70,7 +70,10 @@ export function ListRow({ title, subtitle, marker, trailing, chevron, danger, on
         {trailing}
         {chevron && (
           <Chevron
-            className={cn('transition-transform group-hover:translate-x-0.5', danger ? 'text-negative' : 'text-muted')}
+            className={cn(
+              'transition-[transform,color] duration-150 group-hover:translate-x-0.5',
+              danger ? 'text-negative' : 'text-muted group-hover:text-ink',
+            )}
           />
         )}
       </span>
@@ -79,13 +82,12 @@ export function ListRow({ title, subtitle, marker, trailing, chevron, danger, on
   const layout = cn('flex w-full items-center justify-between gap-3 text-left', subtitle ? 'py-[13px]' : 'py-5');
   if (onClick) {
     return (
-      // Contained, rounded hover highlight (iOS/macOS list style) — inset from
-      // the card edges by the List's px-5, with its own radius so it never
-      // clashes with the card's rounded corners on the first/last row.
+      // Motion-only hover (no fill): the content nudges right and the chevron
+      // brightens, so there's no band to clash with the card's rounded corners.
       <button
         type="button"
         onClick={onClick}
-        className={cn(layout, 'group rounded-xl transition-colors hover:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ink')}
+        className={cn(layout, 'group rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ink')}
       >
         {inner}
       </button>
