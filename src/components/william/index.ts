@@ -11,6 +11,7 @@ export { Segment, RangeSelector, Segmented } from './Segment';
 export { Skeleton } from './Skeleton';
 export { ActionButton } from './ActionButton';
 export { Card } from './Card';
+export { List, ListRow, ListHeader } from './List';
 export { FloatingNav, TabBar } from './Nav';
 export { Modal } from './Modal';
 export { Field, TextInput, Textarea, SelectInput, SegmentToggle } from './Field';

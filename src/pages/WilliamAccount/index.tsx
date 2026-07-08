@@ -4,7 +4,7 @@
  * setting pages, and a desktop footer. Matches Figma "Account — Desktop/Mobile".
  */
 import { useNavigate } from 'react-router-dom';
-import { Card, FloatingNav, TabBar, Segmented, cn } from '../../components/william';
+import { Card, List, ListRow, FloatingNav, TabBar, Segmented } from '../../components/william';
 import { useSettingsStore } from '../../stores/settingsStore';
 import { ACCOUNT_GROUPS } from './sections';
 
@@ -29,23 +29,6 @@ function ThemeToggle() {
   );
 }
 
-function LinkRow({ label, danger, onClick, last }: { label: string; danger?: boolean; onClick: () => void; last: boolean }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={cn(
-        'flex w-full items-center justify-between px-5 py-4 text-left transition-colors hover:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ink',
-        !last && 'border-b border-line',
-      )}
-    >
-      <span className={cn('text-[15px] font-medium', danger ? 'text-negative' : 'text-ink')}>{label}</span>
-      <svg width="7" height="12" viewBox="0 0 7 12" fill="none" aria-hidden="true" className={cn('shrink-0', danger ? 'text-negative' : 'text-muted')}>
-        <path d="M1 1 6 6 1 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    </button>
-  );
-}
 
 export default function WilliamAccount() {
   const navigate = useNavigate();
@@ -69,25 +52,25 @@ export default function WilliamAccount() {
           <span className="text-[13px] font-medium text-muted">Auto follows your device appearance.</span>
         </Card>
 
-        {/* Grouped sections */}
+        {/* Grouped sections — Figma Lists Row (Height=Short) + Trailing (Chevron) */}
         {ACCOUNT_GROUPS.map((grp) => (
           <div key={grp.group} className="flex flex-col gap-2.5">
             <span className="num text-[12px] font-medium uppercase tracking-[0.05em] text-secondary">{grp.group}</span>
-            <Card className="flex flex-col p-0 overflow-hidden">
-              {grp.items.map((it, i) => (
-                <LinkRow key={it.slug} label={it.label} danger={it.danger} onClick={() => go(it.slug)} last={i === grp.items.length - 1} />
+            <List>
+              {grp.items.map((it) => (
+                <ListRow key={it.slug} title={it.label} danger={it.danger} chevron onClick={() => go(it.slug)} />
               ))}
-            </Card>
+            </List>
           </div>
         ))}
 
         {/* Footer */}
         <footer className="mt-2 flex flex-col items-center gap-3 border-t border-line pt-5 text-[13px] md:flex-row md:justify-between">
-          <span className="font-medium text-muted">William — net-worth tracker</span>
+          <span className="font-medium text-muted">NW</span>
           <div className="flex items-center gap-3">
-            <a href="https://balzhima.com" target="_blank" rel="noreferrer" className="font-medium text-ink underline underline-offset-2 hover:text-secondary">balzhima.com</a>
+            <a href="https://balzhima.com" target="_blank" rel="noreferrer" className="font-medium text-ink underline underline-offset-2 hover:text-secondary">Balzhima</a>
             <span className="num text-muted">·</span>
-            <a href="https://github.com/eitanrub7980" target="_blank" rel="noreferrer" className="font-medium text-ink underline underline-offset-2 hover:text-secondary">Eitan’s GitHub</a>
+            <a href="https://github.com/eitanrub7980" target="_blank" rel="noreferrer" className="font-medium text-ink underline underline-offset-2 hover:text-secondary">Eitan</a>
           </div>
         </footer>
       </main>

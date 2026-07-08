@@ -4,7 +4,7 @@
  */
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, ActionButton, RangeSelector, Icon, FloatingNav, TabBar, Button, Badge } from '../../components/william';
+import { Card, ActionButton, RangeSelector, Icon, FloatingNav, TabBar, Button, Badge, List, ListRow, ListHeader } from '../../components/william';
 import { NetWorthChart } from './NetWorthChart';
 import { useDashboardData, type RangeOption } from './useDashboardData';
 import { AddTradeModal, AddTransactionModal } from '../WilliamPortfolio/modals';
@@ -15,6 +15,15 @@ const RANGES: RangeOption[] = ['1W', '1M', '1Y', 'YTD', 'ALL'];
 // Allocation bar: Stocks=accent, Cash=lime, Crypto=blue, Other=grey.
 // Lime/blue are pale tints in light, BRIGHT in dark (matches Figma — do not change).
 const BREAKDOWN_COLORS = ['var(--w-accent)', 'var(--w-alloc-lime)', 'var(--w-alloc-blue)', 'var(--w-accent-bg)'];
+
+// Activity-row category markers: expenses hash into the categorical chart
+// palette (income uses positive lime) — matches the Card/Activity master.
+const MARKER_COLORS = ['var(--w-chart-1)', 'var(--w-accent)', 'var(--w-chart-2)', 'var(--w-chart-4)', 'var(--w-chart-3)'];
+function categoryColor(category: string) {
+  let h = 0;
+  for (let i = 0; i < category.length; i++) h = (h * 31 + category.charCodeAt(i)) >>> 0;
+  return MARKER_COLORS[h % MARKER_COLORS.length];
+}
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
@@ -277,38 +286,27 @@ export default function WilliamDashboard() {
           </Card>
         </div>
 
-        {/* ── Recent activity ── */}
+        {/* ── Recent activity — Figma Card/Activity: List header + Tall rows ── */}
         {d.recentActivity.length > 0 && (
-          <div className="flex flex-col gap-2.5 md:gap-3">
-            <h2 className="ty-h2 text-ink">Recent activity</h2>
+          <List className="py-2.5">
+            <ListHeader title="Recent activity" action="See all" onAction={() => navigate('/william/spending')} />
             {d.recentActivity.map((tx) => {
               const isExpense = tx.type === 'expense';
               return (
-                <div key={tx.id} className="flex items-center justify-between rounded-2xl bg-surface px-4 py-3.5 md:px-[18px] md:py-4">
-                  <div className="flex flex-col gap-1">
-                    <p className={cn('ty-label', isExpense ? 'text-negative' : 'text-positive')}>
-                      {isExpense ? 'EXPENSE LOGGED' : 'INCOME ADDED'}
-                    </p>
-                    <p className="ty-body font-semibold text-ink">{tx.notes || tx.category}</p>
-                  </div>
-                  <div className="flex flex-col items-end gap-1">
-                    <p className="ty-label text-muted">{formatDate(tx.date, 'short').toUpperCase()}</p>
-                    <p className={cn('num ty-body font-semibold', isExpense ? 'text-negative' : 'text-positive')}>
+                <ListRow
+                  key={tx.id}
+                  marker={isExpense ? categoryColor(tx.category) : 'var(--w-positive)'}
+                  title={tx.notes || tx.category}
+                  subtitle={formatDate(tx.date, 'short')}
+                  trailing={
+                    <span className={cn('num text-[15px]', isExpense ? 'text-negative' : 'text-positive')}>
                       {isExpense ? '−' : '+'}{formatCurrency(tx.convertedAmount, d.defaultCurrency)}
-                    </p>
-                  </div>
-                </div>
+                    </span>
+                  }
+                />
               );
             })}
-            <button
-              type="button"
-              onClick={() => navigate('/william/spending')}
-              className="flex w-full items-center justify-between rounded-2xl bg-surface px-4 py-2 transition-colors hover:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink md:px-[18px]"
-            >
-              <span className="ty-body text-ink">See all</span>
-              <span className="text-muted" aria-hidden="true">→</span>
-            </button>
-          </div>
+          </List>
         )}
       </main>
 
