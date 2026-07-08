@@ -4,13 +4,14 @@
  * setting pages, and a desktop footer. Matches Figma "Account — Desktop/Mobile".
  */
 import { useNavigate } from 'react-router-dom';
-import { Card, List, ListRow, FloatingNav, TabBar, Segmented } from '../../components/william';
+import { Card, List, ListRow, ListHeader, FloatingNav, TabBar, Segmented, Icon } from '../../components/william';
+import type { IconName } from '../../components/william';
 import { useSettingsStore } from '../../stores/settingsStore';
 import { ACCOUNT_GROUPS } from './sections';
 
-const THEMES: { key: 'light' | 'dark' | 'auto'; label: string }[] = [
-  { key: 'light', label: 'Light' },
-  { key: 'dark', label: 'Dark' },
+const THEMES: { key: 'light' | 'dark' | 'auto'; label: string; icon?: IconName }[] = [
+  { key: 'light', label: 'Light', icon: 'sun' },
+  { key: 'dark', label: 'Dark', icon: 'moon' },
   { key: 'auto', label: 'Auto' },
 ];
 
@@ -19,7 +20,15 @@ function ThemeToggle() {
   const setTheme = useSettingsStore((s) => s.setTheme);
   return (
     <Segmented
-      options={THEMES.map((t) => ({ value: t.key, label: t.label }))}
+      options={THEMES.map((t) => ({
+        value: t.key,
+        label: (
+          <span className="num inline-flex items-center justify-center gap-1.5 text-[13px] uppercase tracking-[0.65px]">
+            {t.icon && <Icon name={t.icon} size={16} />}
+            {t.label}
+          </span>
+        ),
+      }))}
       value={theme}
       onChange={(v) => setTheme(v as 'light' | 'dark' | 'auto')}
       track="sunken"
@@ -45,23 +54,21 @@ export default function WilliamAccount() {
           <p className="text-[13px] font-medium text-secondary md:text-[15px]">Manage your preferences, connections and data.</p>
         </div>
 
-        {/* Appearance */}
-        <Card className="flex flex-col gap-3 p-5">
-          <span className="num text-[12px] font-medium uppercase tracking-[0.05em] text-secondary">Appearance</span>
+        {/* Appearance — in-card 18px header + theme toggle (Figma 971:1559) */}
+        <Card className="flex flex-col px-5 pb-5">
+          <ListHeader title="Appearance" />
           <ThemeToggle />
-          <span className="text-[13px] font-medium text-muted">Auto follows your device appearance.</span>
         </Card>
 
-        {/* Grouped sections — Figma Lists Row (Height=Short) + Trailing (Chevron) */}
+        {/* Grouped sections — each a borderless List card with an in-card
+            18px header + divided rows (Figma Account / Desktop 971:1553). */}
         {ACCOUNT_GROUPS.map((grp) => (
-          <div key={grp.group} className="flex flex-col gap-2.5">
-            <span className="num text-[12px] font-medium uppercase tracking-[0.05em] text-secondary">{grp.group}</span>
-            <List>
-              {grp.items.map((it) => (
-                <ListRow key={it.slug} title={it.label} danger={it.danger} chevron onClick={() => go(it.slug)} />
-              ))}
-            </List>
-          </div>
+          <List key={grp.group}>
+            <ListHeader title={grp.group} />
+            {grp.items.map((it) => (
+              <ListRow key={it.slug} title={it.label} danger={it.danger} chevron onClick={() => go(it.slug)} />
+            ))}
+          </List>
         ))}
 
         {/* Footer */}
