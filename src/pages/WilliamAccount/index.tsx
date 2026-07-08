@@ -23,7 +23,7 @@ function ThemeToggle() {
       options={THEMES.map((t) => ({
         value: t.key,
         label: (
-          <span className="num inline-flex items-center justify-center gap-1.5 text-[13px] uppercase tracking-[0.65px]">
+          <span className="num-mono inline-flex items-center justify-center gap-1.5 text-[13px] font-medium uppercase tracking-[0.65px]">
             {t.icon && <Icon name={t.icon} size={16} />}
             {t.label}
           </span>
