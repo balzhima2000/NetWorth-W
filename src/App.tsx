@@ -23,6 +23,7 @@ import WilliamTransactions from './pages/WilliamTransactions';
 import WilliamAccount from './pages/WilliamAccount';
 import AccountSection from './pages/WilliamAccount/AccountSection';
 import { useWilliamTheme } from './components/william/useWilliamTheme';
+import { GlassFilters } from './components/william/GlassFilters';
 
 const NotFound = () => (
   <div className="flex items-center justify-center h-screen">
@@ -45,6 +46,8 @@ function AppInner() {
   useWilliamTheme();
 
   return (
+    <>
+      <GlassFilters />
     <Routes>
       {/* Setup route */}
       <Route path="/setup" element={<Setup />} />
@@ -76,6 +79,7 @@ function AppInner() {
       {/* 404 */}
       <Route path="*" element={<NotFound />} />
     </Routes>
+    </>
   );
 }
 

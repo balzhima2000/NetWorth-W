@@ -229,6 +229,13 @@ html[data-theme="dark"] .william .nav-glass {
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .william .nav-glass { background-color: var(--w-surface); }
 }
+/* Tier 2 — real refraction/lensing via the SVG displacement filter, gated to
+   Chromium by <GlassFilters/> (data-glass on <html>). Less blur here because
+   the displacement carries the glass character. Falls back to the frost above. */
+html[data-glass="refraction"] .william .nav-glass {
+  -webkit-backdrop-filter: blur(2px) saturate(120%);
+          backdrop-filter: blur(2px) url(#nav-glass-lens) saturate(120%);
+}
 
 /* Safeguard: the old global design system paints html/body/#root black.
    On William routes, force the page background to the canvas colour so the
