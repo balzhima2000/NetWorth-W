@@ -68,7 +68,7 @@ function AllocationCard({ d, onSetTargets }: { d: ReturnType<typeof usePortfolio
     <Card className="flex flex-col gap-3.5 p-5">
       <div className="flex items-center justify-between">
         <Eyebrow>Allocation</Eyebrow>
-        <Button pill size="s" variant="secondary" onClick={onSetTargets}>
+        <Button pill size="s" variant="tonal" onClick={onSetTargets}>
           <Icon name="target" size={16} /> {hasTargets ? 'Edit targets' : 'Set targets'}
         </Button>
       </div>
@@ -196,7 +196,7 @@ function SortDropdown({ sortBy, sortDir, onSelectField, onToggleDir }: { sortBy:
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-label={`Sort by ${colLabel(current)}, ${sortDir === 'desc' ? 'descending' : 'ascending'}`}
-        className="num inline-flex h-7 items-center gap-1.5 rounded-full border border-line bg-surface px-3 text-[12px] font-medium uppercase tracking-[0.6px] text-ink transition-colors hover:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+        className="num inline-flex h-7 items-center gap-1.5 rounded-full bg-btn-tonal px-3 text-[12px] font-medium uppercase tracking-[0.6px] text-ink transition-colors hover:bg-btn-neutral-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
       >
         {colLabel(current)} <span>{sortArrow(sortDir)}</span>
       </button>

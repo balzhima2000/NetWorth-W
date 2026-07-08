@@ -27,11 +27,11 @@ export default function IncomeDestinations() {
           </div>
         ))}
       </Card>
-      <Button size="s" pill variant="secondary" className="w-fit" onClick={() => setOpen(true)}>+ Add destination</Button>
+      <Button size="s" pill variant="tonal" className="w-fit" onClick={() => setOpen(true)}>+ Add destination</Button>
 
       <Modal open={open} onClose={() => setOpen(false)} title="Add destination" footer={
         <>
-          <Button pill size="l" variant="secondary" className="flex-1 md:flex-none md:ml-auto" onClick={() => setOpen(false)}>Cancel</Button>
+          <Button pill size="l" variant="tonal" className="flex-1 md:flex-none md:ml-auto" onClick={() => setOpen(false)}>Cancel</Button>
           <Button pill size="l" variant="primary" className="flex-1 md:flex-none" disabled={!name.trim()} onClick={save}>Add</Button>
         </>
       }>

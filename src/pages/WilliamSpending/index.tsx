@@ -243,7 +243,7 @@ export default function WilliamSpending() {
           <Card className="flex flex-col gap-4 p-5">
             <div className="flex items-center justify-between">
               <h2 className="text-[18px] font-semibold text-ink">By category</h2>
-              <Button pill variant="secondary" size="s" onClick={() => setBudgetsOpen(true)}>
+              <Button pill variant="tonal" size="s" onClick={() => setBudgetsOpen(true)}>
                 <Icon name="target" size={16} />
                 Set targets
               </Button>

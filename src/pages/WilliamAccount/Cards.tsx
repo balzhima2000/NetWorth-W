@@ -46,11 +46,11 @@ export default function Cards() {
           ))}
         </Card>
       )}
-      <Button size="s" pill variant="secondary" className="w-fit" onClick={openAdd}>+ Add card</Button>
+      <Button size="s" pill variant="tonal" className="w-fit" onClick={openAdd}>+ Add card</Button>
 
       <Modal open={open} onClose={() => setOpen(false)} title={editing ? 'Edit card' : 'Add card'} footer={
         <>
-          <Button pill size="l" variant="secondary" className="flex-1 md:flex-none md:ml-auto" onClick={() => setOpen(false)}>Cancel</Button>
+          <Button pill size="l" variant="tonal" className="flex-1 md:flex-none md:ml-auto" onClick={() => setOpen(false)}>Cancel</Button>
           <Button pill size="l" variant="primary" className="flex-1 md:flex-none" disabled={!name.trim()} onClick={save}>{editing ? 'Save' : 'Add'}</Button>
         </>
       }>

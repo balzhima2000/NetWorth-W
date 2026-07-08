@@ -39,7 +39,7 @@ function KeyField({ label, hint, current, onSave, onRemove, onTest }: {
       {status === 'valid' && <span className="text-[13px] font-medium text-positive">✓ Valid</span>}
       {status === 'invalid' && <span className="text-[13px] font-medium text-negative">✕ Invalid key</span>}
       <div className="flex gap-2">
-        {onTest && <Button size="s" pill variant="secondary" disabled={!val || status === 'testing'} onClick={test}>{status === 'testing' ? 'Testing…' : 'Test'}</Button>}
+        {onTest && <Button size="s" pill variant="tonal" disabled={!val || status === 'testing'} onClick={test}>{status === 'testing' ? 'Testing…' : 'Test'}</Button>}
         <Button size="s" pill variant="primary" disabled={!val} onClick={() => { onSave(val); toast.success(`${label} key saved.`); setVal(''); setStatus('idle'); }}>Save</Button>
         {current && <Button size="s" pill variant="ghost" onClick={() => { onRemove(); toast.success(`${label} key removed.`); }}>Remove</Button>}
       </div>

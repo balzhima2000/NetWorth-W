@@ -56,8 +56,8 @@ export default function Sync() {
             </span>
           </div>
           <div className="flex flex-wrap gap-2">
-            <Button size="s" pill variant="secondary" onClick={() => void forcePull()}>Pull from cloud</Button>
-            <Button size="s" pill variant="secondary" onClick={() => void forcePush()}>Push to cloud</Button>
+            <Button size="s" pill variant="tonal" onClick={() => void forcePull()}>Pull from cloud</Button>
+            <Button size="s" pill variant="tonal" onClick={() => void forcePush()}>Push to cloud</Button>
             <Button size="s" pill variant="ghost" onClick={() => void signOut()}>Sign out</Button>
           </div>
         </Card>

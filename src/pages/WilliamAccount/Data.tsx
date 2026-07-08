@@ -76,8 +76,8 @@ export default function Data() {
   return (
     <AccountSubPage title="Data management" subtitle="Export a backup or restore from one.">
       <Card className="flex flex-col gap-3 p-5">
-        <Button size="m" pill variant="secondary" onClick={exportJSON}>⬇ Export full backup (JSON)</Button>
-        <Button size="m" pill variant="secondary" onClick={exportCSV}>📊 Export transactions (CSV)</Button>
+        <Button size="m" pill variant="tonal" onClick={exportJSON}>⬇ Export full backup (JSON)</Button>
+        <Button size="m" pill variant="tonal" onClick={exportCSV}>📊 Export transactions (CSV)</Button>
         <Button size="m" pill variant="ghost" onClick={() => fileRef.current?.click()}>⬆ Import backup (JSON)</Button>
         <input ref={fileRef} type="file" accept="application/json" className="hidden" onChange={onFile} />
         <span className="text-[13px] text-muted">{lastBackupDate ? `Last backup: ${formatDate(lastBackupDate)}` : 'No backup yet.'}</span>
@@ -85,7 +85,7 @@ export default function Data() {
 
       <Modal open={!!importData} onClose={() => setImportData(null)} title="Import & replace?" footer={
         <>
-          <Button pill size="l" variant="secondary" className="flex-1 md:flex-none md:ml-auto" onClick={() => setImportData(null)}>Cancel</Button>
+          <Button pill size="l" variant="tonal" className="flex-1 md:flex-none md:ml-auto" onClick={() => setImportData(null)}>Cancel</Button>
           <Button pill size="l" variant="primary" className="flex-1 md:flex-none" onClick={confirmImport}>Import & replace</Button>
         </>
       }>

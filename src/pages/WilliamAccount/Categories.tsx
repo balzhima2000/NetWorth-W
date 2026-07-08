@@ -49,11 +49,11 @@ export function CategoriesPage({ kind }: { kind: 'expense' | 'income' }) {
           </div>
         ))}
       </Card>
-      <Button size="s" pill variant="secondary" className="w-fit" onClick={openAdd}>+ Add category</Button>
+      <Button size="s" pill variant="tonal" className="w-fit" onClick={openAdd}>+ Add category</Button>
 
       <Modal open={open} onClose={() => setOpen(false)} title={editing ? 'Edit category' : 'Add category'} footer={
         <>
-          <Button pill size="l" variant="secondary" className="flex-1 md:flex-none md:ml-auto" onClick={() => setOpen(false)}>Cancel</Button>
+          <Button pill size="l" variant="tonal" className="flex-1 md:flex-none md:ml-auto" onClick={() => setOpen(false)}>Cancel</Button>
           <Button pill size="l" variant="primary" className="flex-1 md:flex-none" disabled={!name.trim()} onClick={save}>{editing ? 'Save' : 'Add'}</Button>
         </>
       }>

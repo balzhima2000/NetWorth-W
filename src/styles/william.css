@@ -36,6 +36,14 @@
   --color-negative-bg:  var(--w-negative-bg);
   --color-danger-pressed: var(--w-danger-pressed);
 
+  /* button family (mirrors Figma btn-* tokens) */
+  --color-btn-neutral:         var(--w-btn-neutral);
+  --color-btn-neutral-hover:   var(--w-btn-neutral-hover);
+  --color-btn-neutral-pressed: var(--w-btn-neutral-pressed);
+  --color-btn-tonal:           var(--w-btn-tonal);
+  --color-btn-subtle-hover:    var(--w-btn-subtle-hover);
+  --color-btn-subtle-pressed:  var(--w-btn-subtle-pressed);
+
   --color-info:         var(--w-info);
   --color-info-bg:      var(--w-info-bg);
 
@@ -74,9 +82,18 @@
   --w-accent-bg:    #f5f5f5;
   --w-positive:     #65a30d;  /* lime — gains                  */
   --w-positive-bg:  #ecfccb;
-  --w-negative:     #f97316;  /* orange — losses ONLY          */
-  --w-negative-bg:  #fed7aa;
+  --w-negative:     #ea580c;  /* orange/600 — losses ONLY (darkened for
+                                 readable text on light, Balzhima 2026-07) */
+  --w-negative-bg:  #ffedd5;  /* orange/100 */
   --w-danger-pressed: #fdba74; /* danger button pressed (orange/300) */
+  /* buttons — borderless; neutral = white on the grey canvas,
+     tonal = grey on white cards. Shared hover/pressed ladder. */
+  --w-btn-neutral:         #ffffff;
+  --w-btn-neutral-hover:   #e5e5e5;
+  --w-btn-neutral-pressed: #d4d4d4;
+  --w-btn-tonal:           #f5f5f5;
+  --w-btn-subtle-hover:    #e5e5e5;
+  --w-btn-subtle-pressed:  #d4d4d4;
   --w-info:         #3b82f6;  /* categorical (chart)           */
   --w-info-bg:      #dbeafe;
   --w-sunken:        #f5f5f5;  /* recessed track / inset       */
@@ -128,6 +145,12 @@ html[data-theme="dark"] .william {
   --w-negative:     #f97316;
   --w-negative-bg:  #431407;
   --w-danger-pressed: #9a3412; /* danger button pressed (orange/800) */
+  --w-btn-neutral:         #262626;
+  --w-btn-neutral-hover:   #404040;
+  --w-btn-neutral-pressed: #525252;
+  --w-btn-tonal:           #262626;
+  --w-btn-subtle-hover:    #262626;
+  --w-btn-subtle-pressed:  #404040;
   --w-info:         #60a5fa;
   --w-info-bg:      #172554;
   --w-sunken:        #0a0a0a;

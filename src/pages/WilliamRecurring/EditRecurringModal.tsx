@@ -101,7 +101,7 @@ export function EditRecurringModal({ open, onClose, editing }: { open: boolean; 
           <div className="hidden w-full items-center gap-2.5 md:flex">
             {isEdit && <DangerButton pill size="l" onClick={remove}>Delete</DangerButton>}
             <div className="ml-auto flex gap-2.5">
-              <Button pill size="l" variant="secondary" onClick={onClose}>Cancel</Button>
+              <Button pill size="l" variant="tonal" onClick={onClose}>Cancel</Button>
               <Button pill size="l" variant="primary" disabled={!valid} onClick={submit}>Save</Button>
             </div>
           </div>

@@ -12,7 +12,7 @@ import { PixelSpinner } from './PixelSpinner';
  * which is the intentional design decision. Focus ring uses the neutral
  * accent (ink) rather than orange, since orange is reserved for negatives.
  */
-type Variant = 'primary' | 'secondary' | 'ghost';
+type Variant = 'primary' | 'secondary' | 'tonal' | 'ghost';
 type Size = 'l' | 'm' | 's' | 'xs';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -45,16 +45,19 @@ const sizes: Record<Size, string> = {
   xs: 'h-[28px] px-3 gap-1.5 text-[12px] font-medium',
 };
 
-// State fills match the Figma Button masters:
-// Primary: hover = surface-inverse-hover, pressed = darker; Secondary/Ghost:
-// hover/pressed = surface-raised. Disabled = border fill / muted text.
+// State fills match the Figma Button masters (all BORDERLESS, 2026-07):
+// - secondary (Figma "Neutral"): white pill for the grey CANVAS
+// - tonal: grey pill for WHITE CARDS + modal footers (same hover/pressed ladder)
+// - ghost (Figma "Subtle"): transparent, tints on hover
 const variants: Record<Variant, string> = {
   primary:
     'bg-inverse text-on-inverse hover:bg-inverse-hover active:brightness-90 disabled:bg-line disabled:text-muted',
   secondary:
-    'bg-surface text-ink border border-line hover:bg-raised active:bg-raised disabled:text-muted disabled:bg-surface',
+    'bg-btn-neutral text-ink hover:bg-btn-neutral-hover active:bg-btn-neutral-pressed disabled:text-muted disabled:bg-btn-neutral',
+  tonal:
+    'bg-btn-tonal text-ink hover:bg-btn-neutral-hover active:bg-btn-neutral-pressed disabled:bg-line disabled:text-muted',
   ghost:
-    'bg-transparent text-ink hover:bg-raised active:bg-raised disabled:text-muted',
+    'bg-transparent text-ink hover:bg-btn-subtle-hover active:bg-btn-subtle-pressed disabled:text-muted',
 };
 // Destructive actions use the standalone DangerButton (outline / subtle) —
 // deliberately not a Button variant.

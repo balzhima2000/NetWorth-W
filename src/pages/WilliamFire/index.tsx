@@ -213,7 +213,7 @@ function EditAssumptionsModal({ open, onClose }: { open: boolean; onClose: () =>
       maxWidth={480}
       footer={
         <>
-          <Button variant="secondary" size="l" className="flex-1" onClick={onClose}>Cancel</Button>
+          <Button variant="tonal" size="l" className="flex-1" onClick={onClose}>Cancel</Button>
           <Button variant="primary" size="l" className="flex-1" onClick={save}>Save changes</Button>
         </>
       }
@@ -521,7 +521,7 @@ export default function WilliamFire() {
                   <h2 className="ty-h2 text-ink">Assumptions</h2>
                   <p className="ty-body text-secondary">The inputs behind your FIRE number.</p>
                 </div>
-                <Button variant="secondary" size="s" pill className="font-semibold" onClick={() => setEditOpen(true)}>
+                <Button variant="tonal" size="s" pill className="font-semibold" onClick={() => setEditOpen(true)}>
                   <Icon name="edit" size={16} />
                   Edit
                 </Button>

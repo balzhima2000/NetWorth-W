@@ -59,7 +59,7 @@ export default function Danger() {
 
       <Modal open={soft} onClose={() => setSoft(false)} title="Reset this device?" footer={
         <>
-          <Button pill size="l" variant="secondary" className="flex-1 md:flex-none md:ml-auto" onClick={() => setSoft(false)}>Cancel</Button>
+          <Button pill size="l" variant="tonal" className="flex-1 md:flex-none md:ml-auto" onClick={() => setSoft(false)}>Cancel</Button>
           <Button pill size="l" variant="primary" className="flex-1 md:flex-none" onClick={doSoft}>Reset</Button>
         </>
       }>
@@ -68,7 +68,7 @@ export default function Danger() {
 
       <Modal open={hard} onClose={() => setHard(false)} title="Delete everything?" footer={
         <>
-          <Button pill size="l" variant="secondary" className="flex-1 md:flex-none md:ml-auto" onClick={() => setHard(false)}>Cancel</Button>
+          <Button pill size="l" variant="tonal" className="flex-1 md:flex-none md:ml-auto" onClick={() => setHard(false)}>Cancel</Button>
           <Button pill size="l" variant="primary" className="flex-1 md:flex-none !bg-negative !text-white" disabled={clearText !== 'DELETE'} onClick={doHard}>Delete everything</Button>
         </>
       }>
