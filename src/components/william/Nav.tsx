@@ -67,7 +67,7 @@ export function FloatingNav() {
       <div
         ref={listRef}
         onMouseLeave={() => setHovered(null)}
-        className="nav-glass relative flex items-center gap-1.5 rounded-full p-2 pl-2.5"
+        className="nav-glass relative flex items-center gap-1.5 rounded-full px-2 py-1 pl-2.5"
       >
         <div
           aria-hidden="true"
@@ -84,7 +84,7 @@ export function FloatingNav() {
               onClick={() => navigate(item.path)}
               aria-current={active ? 'page' : undefined}
               className={cn(
-                'relative z-10 flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[14px] font-medium transition-colors',
+                'relative z-10 flex items-center gap-1.5 rounded-full px-3 py-2 text-[14px] font-medium transition-colors',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink',
                 active || hovered === i ? 'text-ink' : 'text-secondary',
               )}
@@ -99,14 +99,18 @@ export function FloatingNav() {
         onClick={() => navigate(account.path)}
         aria-label={account.label}
         aria-current={pathname === account.path ? 'page' : undefined}
-        className={cn(
-          'flex h-11 w-11 items-center justify-center rounded-full transition-[background-color,color,filter] duration-150 hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink',
-          // Selected (on the Account page) = inverted accent fill so it reads
-          // on the canvas (accent-bg == canvas in light); else the glass island.
-          pathname === account.path ? 'bg-accent text-on-inverse' : 'nav-glass text-ink',
-        )}
+        className="nav-glass group relative flex h-[45px] w-[45px] items-center justify-center rounded-full text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
       >
-        <Icon name={account.icon} size={20} />
+        {/* Selected/hover highlight — same accent-bg pill as the other nav
+            items (37px, matching their height), just circular; on the glass. */}
+        <span
+          aria-hidden="true"
+          className={cn(
+            'absolute h-[37px] w-[37px] rounded-full bg-accent-bg transition-opacity duration-150',
+            pathname === account.path ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
+          )}
+        />
+        <Icon name={account.icon} size={20} className="relative z-10" />
       </button>
     </nav>
   );
