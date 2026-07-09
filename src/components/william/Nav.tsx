@@ -99,7 +99,12 @@ export function FloatingNav() {
         onClick={() => navigate(account.path)}
         aria-label={account.label}
         aria-current={pathname === account.path ? 'page' : undefined}
-        className="nav-glass flex h-11 w-11 items-center justify-center rounded-full text-ink transition-[filter] hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+        className={cn(
+          'flex h-11 w-11 items-center justify-center rounded-full transition-[background-color,color,filter] duration-150 hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink',
+          // Selected (on the Account page) = inverted accent fill so it reads
+          // on the canvas (accent-bg == canvas in light); else the glass island.
+          pathname === account.path ? 'bg-accent text-on-inverse' : 'nav-glass text-ink',
+        )}
       >
         <Icon name={account.icon} size={20} />
       </button>
