@@ -1,8 +1,8 @@
 import { cn } from './cn';
 import { Icon } from './Icon';
 
-/** Action Button — Trade / Income / Expense. Grey circle + pixel icon + label.
- *  (Circle is color/surface-inverse → mid-grey, intentional.) */
+/** Action Button — Trade / Income / Expense. Dark circle + pixel icon + label.
+ *  (Circle is color/btn-primary → neutral/800; white in dark mode.) */
 type Action = 'trade' | 'income' | 'expense';
 
 const defaultLabels: Record<Action, string> = {
@@ -27,9 +27,9 @@ export function ActionButton({ action, label, onClick, className }: ActionButton
     >
       <span
         className={cn(
-          'flex h-[34px] w-[54px] items-center justify-center rounded-full bg-inverse text-canvas',
+          'flex h-[34px] w-[54px] items-center justify-center rounded-full bg-btn-primary text-btn-on-primary',
           'transition-[transform,background-color] duration-150',
-          'group-hover:bg-inverse-hover group-active:scale-95 group-active:brightness-90',
+          'group-hover:bg-btn-primary-hover group-active:bg-btn-primary-pressed group-active:scale-95',
           'group-focus-visible:ring-2 group-focus-visible:ring-ink group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-canvas',
         )}
       >

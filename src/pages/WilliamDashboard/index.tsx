@@ -56,16 +56,12 @@ function BreakdownBar({ items, currency }: { items: { label: string; value: numb
   );
 }
 
-// Segmented FIRE progress bar — 4px steps, 1px gaps. The full track shows faint
-// unfilled steps so the segmented structure reads even at low progress; the
-// filled portion overlays accent steps.
+// FIRE progress bar — continuous accent fill on a raised track (Figma 953:37).
 function FireBar({ progress }: { progress: number }) {
   const pct = Math.max(Math.min(progress, 100), 0);
-  const steps = (color: string) => `repeating-linear-gradient(to right, ${color} 0, ${color} 4px, transparent 4px, transparent 5px)`;
   return (
-    <div className="relative h-3 w-full overflow-hidden rounded-full bg-raised">
-      <div className="absolute inset-y-[2px] left-[2px] right-[2px] opacity-40" style={{ backgroundImage: steps('var(--w-muted)') }} />
-      <div className="absolute inset-y-[2px] left-[2px]" style={{ width: `calc(${pct}% - 4px)`, backgroundImage: steps('var(--w-accent)') }} />
+    <div className="h-3 w-full overflow-hidden rounded-full bg-raised">
+      <div className="h-full rounded-full bg-accent" style={{ width: `${pct}%` }} />
     </div>
   );
 }
@@ -247,8 +243,14 @@ export default function WilliamDashboard() {
             className="group col-span-2 flex cursor-pointer flex-col gap-2 p-[18px] transition-colors hover:border-accent active:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink md:col-span-1 md:gap-2.5 md:p-5"
           >
             <div className="flex items-center justify-between">
-              <p className="ty-label text-muted">FIRE PROGRESS</p>
-              <span aria-hidden="true" className="text-accent transition-transform group-hover:translate-x-0.5">→</span>
+              <p className="ty-label whitespace-nowrap text-muted">FIRE PROGRESS</p>
+              {/* "See more" button-inside-card pill (decorative — the whole card navigates). */}
+              <span className="num-mono inline-flex h-7 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full bg-btn-tonal px-3 text-[12px] font-medium uppercase tracking-[0.6px] text-muted transition-colors group-hover:bg-btn-neutral-hover group-hover:text-ink">
+                See more
+                <svg width="7" height="12" viewBox="0 0 7 12" fill="none" aria-hidden="true" className="transition-transform group-hover:translate-x-0.5">
+                  <path d="m1 1 5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
             </div>
             {d.fireProgress !== null ? (
               <>

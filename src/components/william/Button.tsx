@@ -8,9 +8,9 @@ import { PixelSpinner } from './PixelSpinner';
  * Interactive states (hover / pressed / focus / disabled) are handled
  * via CSS pseudo-classes; `loading` and `disabled` are props.
  *
- * Note: primary fill is mid-grey (color/surface-inverse → neutral/400),
- * which is the intentional design decision. Focus ring uses the neutral
- * accent (ink) rather than orange, since orange is reserved for negatives.
+ * Note: primary fill is DARK (color/btn-primary → neutral/800), white in dark
+ * mode. Focus ring uses the neutral accent (ink) rather than orange, since
+ * orange is reserved for negatives.
  */
 type Variant = 'primary' | 'secondary' | 'tonal' | 'ghost';
 type Size = 'l' | 'm' | 's' | 'xs';
@@ -51,7 +51,7 @@ const sizes: Record<Size, string> = {
 // - ghost (Figma "Subtle"): transparent, tints on hover
 const variants: Record<Variant, string> = {
   primary:
-    'bg-inverse text-on-inverse hover:bg-inverse-hover active:brightness-90 disabled:bg-line disabled:text-muted',
+    'bg-btn-primary text-btn-on-primary hover:bg-btn-primary-hover active:bg-btn-primary-pressed disabled:bg-btn-disabled disabled:text-btn-disabled-text',
   secondary:
     'bg-btn-neutral text-ink hover:bg-btn-neutral-hover active:bg-btn-neutral-pressed disabled:text-muted disabled:bg-btn-neutral',
   tonal:
