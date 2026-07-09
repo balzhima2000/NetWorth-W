@@ -6,7 +6,7 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PieChart, Pie, Cell } from 'recharts';
-import { Card, Button, Icon, FloatingNav, TabBar } from '../../components/william';
+import { Card, Button, CardButton, Icon, FloatingNav, TabBar } from '../../components/william';
 import { cn } from '../../components/william/cn';
 import { AddTransactionModal } from '../WilliamPortfolio/modals';
 import { SetBudgetsModal } from './SetBudgetsModal';
@@ -243,9 +243,9 @@ export default function WilliamSpending() {
           <Card className="flex flex-col gap-4 p-5">
             <div className="flex items-center justify-between">
               <h2 className="text-[18px] font-semibold text-ink">By category</h2>
-              <Button pill variant="tonal" size="s" onClick={() => setBudgetsOpen(true)}>
+              <CardButton onClick={() => setBudgetsOpen(true)}>
                 Set targets
-              </Button>
+              </CardButton>
             </div>
             <div className="flex flex-col items-center gap-6 md:flex-row md:items-center md:gap-7">
               <Donut slices={d.categories} total={d.totalSpent} currency={cur} />

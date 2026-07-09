@@ -7,7 +7,7 @@
  */
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Button, Icon, FloatingNav, TabBar } from '../../components/william';
+import { Card, Button, CardButton, CardDropdown, Icon, FloatingNav, TabBar } from '../../components/william';
 import { usePortfolioData, type SortKey, type SortDir } from './usePortfolioData';
 import { AddTradeModal, SetTargetsModal } from './modals';
 import { formatCurrency } from '../../utils/formatters';
@@ -68,9 +68,9 @@ function AllocationCard({ d, onSetTargets }: { d: ReturnType<typeof usePortfolio
     <Card className="flex flex-col gap-3.5 p-5">
       <div className="flex items-center justify-between">
         <Eyebrow>Allocation</Eyebrow>
-        <Button pill size="s" variant="tonal" onClick={onSetTargets}>
+        <CardButton onClick={onSetTargets}>
           {hasTargets ? 'Edit targets' : 'Set targets'}
-        </Button>
+        </CardButton>
       </div>
       {hasTargets ? (
         <div className="relative">
@@ -191,15 +191,14 @@ function SortDropdown({ sortBy, sortDir, onSelectField, onToggleDir }: { sortBy:
   const menuItem = 'num flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-[12px] font-medium uppercase tracking-[0.6px]';
   return (
     <div ref={ref} className="relative">
-      {/* Outline pill so it reads as an adjustable control; arrow = current sort direction (↓ desc / ↑ asc). */}
-      <button
-        type="button"
+      {/* In-card dropdown; arrow = current sort direction (↓ desc / ↑ asc). */}
+      <CardDropdown
         onClick={() => setOpen((o) => !o)}
         aria-label={`Sort by ${colLabel(current)}, ${sortDir === 'desc' ? 'descending' : 'ascending'}`}
-        className="num inline-flex h-7 items-center gap-1.5 rounded-full bg-btn-tonal px-3 text-[12px] font-medium uppercase tracking-[0.6px] text-ink transition-colors hover:bg-btn-neutral-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+        arrow={sortArrow(sortDir)}
       >
-        {colLabel(current)} <span>{sortArrow(sortDir)}</span>
-      </button>
+        {colLabel(current)}
+      </CardDropdown>
       {open && (
         <div className="absolute right-0 z-10 mt-2 flex w-[200px] flex-col gap-0.5 rounded-xl border border-line bg-surface p-1.5">
           {SORT_COLS.map((c) => {

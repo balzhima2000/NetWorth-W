@@ -12,6 +12,7 @@ export { BackLink } from './BackLink';
 export { Skeleton } from './Skeleton';
 export { ActionButton } from './ActionButton';
 export { Card } from './Card';
+export { CardButton, CardDropdown } from './CardControl';
 export { List, ListRow, ListHeader } from './List';
 export { FloatingNav, TabBar } from './Nav';
 export { Modal } from './Modal';
