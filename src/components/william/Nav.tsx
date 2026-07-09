@@ -67,7 +67,7 @@ export function FloatingNav() {
       <div
         ref={listRef}
         onMouseLeave={() => setHovered(null)}
-        className="nav-glass relative flex items-center gap-1.5 rounded-full px-2 py-1 pl-2.5"
+        className="nav-glass relative flex items-center gap-1.5 rounded-full px-2 py-2"
       >
         <div
           aria-hidden="true"

@@ -51,7 +51,7 @@ export function SetBudgetsModal({ open, onClose, month, year }: { open: boolean;
           <div className="hidden w-full items-center gap-2.5 md:flex">
             <button type="button" onClick={clearAll} className="text-[14px] font-medium text-secondary transition-colors hover:text-ink">Clear all</button>
             <div className="ml-auto flex gap-2.5">
-              <Button pill size="l" variant="secondary" onClick={onClose}>Cancel</Button>
+              <Button pill size="l" variant="tonal" onClick={onClose}>Cancel</Button>
               <Button pill size="l" variant="primary" onClick={save}>Save</Button>
             </div>
           </div>

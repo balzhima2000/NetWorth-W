@@ -8,6 +8,7 @@ export { DangerButton } from './DangerButton';
 export { Badge } from './Badge';
 export { Chip } from './Chip';
 export { Segment, RangeSelector, Segmented } from './Segment';
+export { BackLink } from './BackLink';
 export { Skeleton } from './Skeleton';
 export { ActionButton } from './ActionButton';
 export { Card } from './Card';

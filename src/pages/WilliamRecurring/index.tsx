@@ -5,7 +5,7 @@
  */
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Button, Icon, FloatingNav, TabBar } from '../../components/william';
+import { Card, Button, Icon, FloatingNav, TabBar, BackLink } from '../../components/william';
 import { cn } from '../../components/william/cn';
 import { useRecurringStore } from '../../stores/recurringStore';
 import { formatCurrency, getCurrencySymbol } from '../../utils/formatters';
@@ -136,14 +136,7 @@ export default function WilliamRecurring() {
       <main className="mx-auto flex max-w-[1100px] flex-col gap-[18px] px-4 md:gap-5 md:px-6">
         {/* ── Header ── */}
         <div>
-          <button
-            type="button"
-            onClick={() => navigate('/william/spending')}
-            className="mb-2 inline-flex items-center gap-1 text-[14px] text-secondary transition-colors hover:text-ink focus-visible:outline-none"
-          >
-            <svg width="7" height="12" viewBox="0 0 7 12" fill="none" aria-hidden="true"><path d="M6 1 1 6l5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            Spending
-          </button>
+          <BackLink label="Spending" onClick={() => navigate('/william/spending')} className="mb-2" />
           <div className="flex items-start justify-between gap-3">
             <div className="flex flex-col gap-1">
               <h1 className="text-[28px] font-semibold tracking-[-0.01em] text-ink md:text-[32px]">Recurring</h1>

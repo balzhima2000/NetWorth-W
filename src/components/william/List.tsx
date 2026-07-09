@@ -9,7 +9,7 @@ import { cn } from './cn';
  */
 export function List({ className, children, ...rest }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={cn('divide-y divide-line rounded-card bg-surface px-5', className)} {...rest}>
+    <div className={cn('divide-y divide-line rounded-card bg-surface px-5 pt-1', className)} {...rest}>
       {children}
     </div>
   );
@@ -51,10 +51,11 @@ interface ListRowProps {
   chevron?: boolean;
   danger?: boolean;
   onClick?: () => void;
+  style?: React.CSSProperties;
 }
 
 /** List row (Figma Lists "Row": Height=Short 58px / Height=Tall 60px). */
-export function ListRow({ title, subtitle, marker, trailing, chevron, danger, onClick }: ListRowProps) {
+export function ListRow({ title, subtitle, marker, trailing, chevron, danger, onClick, style }: ListRowProps) {
   const inner = (
     <>
       <span className="flex min-w-0 items-center gap-3 transition-transform duration-150 group-hover:translate-x-0.5">
@@ -87,11 +88,12 @@ export function ListRow({ title, subtitle, marker, trailing, chevron, danger, on
       <button
         type="button"
         onClick={onClick}
+        style={style}
         className={cn(layout, 'group rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ink')}
       >
         {inner}
       </button>
     );
   }
-  return <div className={layout}>{inner}</div>;
+  return <div className={layout} style={style}>{inner}</div>;
 }

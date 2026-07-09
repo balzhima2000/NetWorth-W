@@ -5,7 +5,7 @@
  */
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, RangeSelector, FloatingNav, TabBar } from '../../components/william';
+import { Card, RangeSelector, FloatingNav, TabBar, BackLink } from '../../components/william';
 import { cn } from '../../components/william/cn';
 import { getCurrencySymbol } from '../../utils/formatters';
 import { TrendsChart } from '../WilliamSpending/TrendsChart';
@@ -13,15 +13,6 @@ import { useTrendsData, TREND_RANGES, type TrendRange, type CategoryTrend } from
 
 const money0 = (n: number, cur: string) => `${getCurrencySymbol(cur)}${Math.round(n).toLocaleString('en-US')}`;
 const RANGE_LABEL: Record<TrendRange, string> = { '3M': 'Last 3 months', '6M': 'Last 6 months', '1Y': 'Last 12 months', 'YTD': 'Year to date', 'ALL': 'All time' };
-
-function BackLink({ onClick }: { onClick: () => void }) {
-  return (
-    <button type="button" onClick={onClick} className="mb-2 inline-flex items-center gap-1 text-[14px] text-secondary transition-colors hover:text-ink focus-visible:outline-none">
-      <svg width="7" height="12" viewBox="0 0 7 12" fill="none" aria-hidden="true"><path d="M6 1 1 6l5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-      Spending
-    </button>
-  );
-}
 
 function Stat({ label, value, suffix, valueClass }: { label: string; value: string; suffix?: string; valueClass?: string }) {
   return (
@@ -80,7 +71,7 @@ export default function WilliamTrends() {
       <main className="mx-auto flex max-w-[1100px] flex-col gap-[18px] px-4 md:gap-5 md:px-6">
         {/* ── Header ── */}
         <div>
-          <BackLink onClick={() => navigate('/william/spending')} />
+          <BackLink label="Spending" onClick={() => navigate('/william/spending')} className="mb-2" />
           <h1 className="text-[28px] font-semibold tracking-[-0.01em] text-ink md:text-[32px]">Trends</h1>
           <p className="mt-1 text-[15px] text-secondary md:hidden">Your spending over time</p>
         </div>
