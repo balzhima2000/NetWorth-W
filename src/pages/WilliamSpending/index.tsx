@@ -38,7 +38,7 @@ export function MonthPicker({ month, year, onChange }: { month: number; year: nu
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex h-9 items-center gap-2 rounded-full border border-line bg-btn-neutral pl-4 pr-3.5 text-[16px] font-semibold text-ink transition-colors hover:bg-btn-neutral-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+        className="inline-flex h-9 items-center gap-2 rounded-full bg-btn-neutral pl-4 pr-3.5 text-[16px] font-semibold text-ink transition-colors hover:bg-btn-neutral-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
       >
         {MONTH_NAMES[month - 1]} {year}
         <svg width="11" height="7" viewBox="0 0 11 7" fill="none" aria-hidden="true" className="shrink-0 text-secondary">
