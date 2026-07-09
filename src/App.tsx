@@ -1,6 +1,8 @@
 
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useSettingsStore } from './stores/settingsStore';
+import { seedDemoData } from './data/demoSeed';
 import { AppShell } from './components/layout';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { ToastProvider } from './components/ui/Toast';
@@ -37,6 +39,10 @@ const NotFound = () => (
 // Inner component to use hooks after Router context is available
 function AppInner() {
   const hasCompletedSetup = useSettingsStore((s) => s.hasCompletedSetup);
+
+  // Seed placeholder data (no-op once setup is complete / stores are non-empty)
+  // so the preview screens always render filled instead of empty states.
+  useEffect(() => { seedDemoData(); }, []);
 
   // Auto-add recurring payments and installments on startup
   useAutoAdd();
