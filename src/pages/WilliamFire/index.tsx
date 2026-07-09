@@ -9,7 +9,7 @@
  *  - Assumptions grid + Edit modal (the inputs behind the FI number)
  */
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Card, Button, Icon, FloatingNav, TabBar, RangeSelector, Modal, Field, TextInput } from '../../components/william';
+import { Card, Button, CardButton, Icon, FloatingNav, TabBar, RangeSelector, Modal, Field, TextInput } from '../../components/william';
 import { cn } from '../../components/william/cn';
 import { getCurrencySymbol } from '../../utils/formatters';
 import { useSettingsStore } from '../../stores/settingsStore';
@@ -521,10 +521,10 @@ export default function WilliamFire() {
                   <h2 className="ty-h2 text-ink">Assumptions</h2>
                   <p className="ty-body text-secondary">The inputs behind your FIRE number.</p>
                 </div>
-                <Button variant="tonal" size="s" pill className="font-semibold" onClick={() => setEditOpen(true)}>
-                  <Icon name="edit" size={16} />
+                <CardButton className="shrink-0 gap-1" onClick={() => setEditOpen(true)}>
                   Edit
-                </Button>
+                  <Icon name="edit" size={12} />
+                </CardButton>
               </div>
 
               <div className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-3">
