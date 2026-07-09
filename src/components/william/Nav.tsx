@@ -1,3 +1,4 @@
+import { useLayoutEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { cn } from './cn';
 import { Icon, type IconName } from './Icon';
@@ -34,6 +35,28 @@ export function FloatingNav() {
   const account = ITEMS.find((i) => i.iconOnly)!;
   const mainItems = ITEMS.filter((i) => !i.iconOnly);
 
+  // Hover-follow pill: a single indicator that jumps to the hovered item and
+  // rests on the active one — hidden when neither applies (e.g. Account page).
+  const listRef = useRef<HTMLDivElement>(null);
+  const [hovered, setHovered] = useState<number | null>(null);
+  const [ind, setInd] = useState<{ left: number; top: number; width: number; height: number } | null>(null);
+  const activeIdx = mainItems.findIndex((i) => i.path === pathname);
+  const shownIdx = hovered ?? (activeIdx >= 0 ? activeIdx : null);
+
+  useLayoutEffect(() => {
+    const el = listRef.current;
+    if (!el) return;
+    const measure = () => {
+      if (shownIdx == null) return setInd(null);
+      const btn = el.querySelectorAll<HTMLElement>('[data-nav]')[shownIdx];
+      if (btn) setInd({ left: btn.offsetLeft, top: btn.offsetTop, width: btn.offsetWidth, height: btn.offsetHeight });
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [shownIdx]);
+
   return (
     // Two detached glass surfaces (Figma NavPill 202:2605): the 4-item pill +
     // a separate account island, ~10px apart. The wrapper is transparent.
@@ -41,18 +64,29 @@ export function FloatingNav() {
       aria-label="Primary"
       className="fixed left-1/2 top-5 z-50 hidden -translate-x-1/2 items-center gap-2.5 md:flex"
     >
-      <div className="nav-glass flex items-center gap-1.5 rounded-full p-2 pl-2.5">
-        {mainItems.map((item) => {
+      <div
+        ref={listRef}
+        onMouseLeave={() => setHovered(null)}
+        className="nav-glass relative flex items-center gap-1.5 rounded-full p-2 pl-2.5"
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute rounded-full bg-accent-bg transition-[left,top,width,height,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
+          style={ind ? { left: ind.left, top: ind.top, width: ind.width, height: ind.height, opacity: 1 } : { opacity: 0 }}
+        />
+        {mainItems.map((item, i) => {
           const active = pathname === item.path;
           return (
             <button
               key={item.id}
+              data-nav
+              onMouseEnter={() => setHovered(i)}
               onClick={() => navigate(item.path)}
               aria-current={active ? 'page' : undefined}
               className={cn(
-                'flex items-center gap-1.5 rounded-full py-1.5 text-[14px] font-medium transition-colors',
+                'relative z-10 flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[14px] font-medium transition-colors',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink',
-                active ? 'bg-accent-bg pl-2.5 pr-3.5 text-ink' : 'px-2.5 text-secondary hover:text-ink',
+                active || hovered === i ? 'text-ink' : 'text-secondary',
               )}
             >
               <Icon name={item.icon} size={20} />

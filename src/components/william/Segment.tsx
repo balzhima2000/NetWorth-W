@@ -26,26 +26,31 @@ interface SegmentedProps {
 export function Segmented({ options, value, onChange, track = 'raised', size = 'sm', fullWidth = false, className }: SegmentedProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [ind, setInd] = useState<{ left: number; width: number } | null>(null);
+  // Hover-follow: the pill jumps to the hovered segment and returns to the
+  // selected one on mouse-leave (à la the balzhima.com navbar).
+  const [hovered, setHovered] = useState<number | null>(null);
+  const selectedIdx = options.findIndex((o) => o.value === value);
+  const shownIdx = hovered ?? selectedIdx;
 
   useLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
     const measure = () => {
-      const idx = options.findIndex((o) => o.value === value);
-      const btn = el.querySelectorAll<HTMLElement>('[data-seg]')[idx];
+      const btn = el.querySelectorAll<HTMLElement>('[data-seg]')[shownIdx];
       if (btn) setInd({ left: btn.offsetLeft, width: btn.offsetWidth });
     };
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(el);
     return () => ro.disconnect();
-  }, [value, options]);
+  }, [shownIdx, options]);
 
   const equalWidth = fullWidth || size === 'md';
   return (
     <div
       ref={ref}
       role="tablist"
+      onMouseLeave={() => setHovered(null)}
       className={cn(
         'relative flex items-center gap-0.5 rounded-full p-1',
         track === 'sunken' ? 'bg-sunken' : 'bg-raised',
@@ -60,7 +65,7 @@ export function Segmented({ options, value, onChange, track = 'raised', size = '
           style={{ left: ind.left, width: ind.width }}
         />
       )}
-      {options.map((o) => {
+      {options.map((o, i) => {
         const active = o.value === value;
         return (
           <button
@@ -69,6 +74,7 @@ export function Segmented({ options, value, onChange, track = 'raised', size = '
             type="button"
             role="tab"
             aria-selected={active}
+            onMouseEnter={() => setHovered(i)}
             onClick={() => onChange(o.value)}
             className={cn(
               'relative z-10 whitespace-nowrap rounded-full font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink',
