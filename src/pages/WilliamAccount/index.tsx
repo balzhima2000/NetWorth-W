@@ -53,7 +53,8 @@ export default function WilliamAccount() {
       <main className="mx-auto flex max-w-[720px] flex-col gap-6 px-4 md:px-6">
         {/* Header */}
         <div className="flex flex-col gap-1 pt-2 md:pt-6">
-          <BackLink label="Dashboard" onClick={() => navigate('/william/dashboard')} className="num text-[12px]" />
+          {/* Redundant on desktop (FloatingNav has Dashboard); shown on mobile only. */}
+          <BackLink label="Dashboard" onClick={() => navigate('/william/dashboard')} className="num text-[12px] md:hidden" />
           <h1 className="text-[24px] font-semibold tracking-[-0.02em] text-ink md:text-[32px]">Account</h1>
           <p className="text-[13px] font-medium text-secondary md:text-[15px]">Manage your preferences, connections and data.</p>
         </div>
