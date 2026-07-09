@@ -205,6 +205,20 @@ html[data-theme="dark"] .william {
   font-variant-numeric: tabular-nums;
 }
 
+/* Fluid hero numbers — the big balance figures scale to their card so a large
+   value (7–8 figures) never overflows. Put `num-fit` on the enclosing panel to
+   make it a query container, then `num-hero` on the number. cqi = 1% of the
+   container's inline size, so the font tracks the available width, clamped
+   36→44px (matches the Figma hero scale at desktop). */
+.william .num-fit {
+  container-type: inline-size;
+}
+.william .num-hero {
+  font-size: clamp(1.5rem, 12cqi, 2.75rem); /* 24 … 44px */
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
 /* Geist Mono readout numbers (tile values, milestone amounts, delta badges,
    chart axes/tooltip). The design only ships Geist Mono Medium (500), so pair
    this with `font-medium` — heavier weights faux-bold and look chunky. */

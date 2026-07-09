@@ -135,9 +135,9 @@ export default function WilliamDashboard() {
             {/* Net Worth Card — white card (r24), grey inner balance panel (r18):
                 matches the rebuilt Figma Card/NetWorth on the tonal (borderless) canvas */}
             <div className="flex flex-col gap-3.5 rounded-[24px] bg-surface p-2.5 pb-4 md:p-3 md:pb-[18px]">
-              <div className="flex flex-col gap-1.5 rounded-[18px] bg-raised p-[18px] md:p-5">
+              <div className="num-fit flex flex-col gap-1.5 rounded-[18px] bg-raised p-[18px] md:p-5">
                 <p className="ty-label text-muted">CURRENT NET WORTH</p>
-                <p className={cn('num font-bold leading-none tracking-[-0.02em] text-[36px] md:text-[44px]', d.netWorth < 0 ? 'text-negative' : 'text-ink')}>
+                <p className={cn('num num-hero font-bold', d.netWorth < 0 ? 'text-negative' : 'text-ink')}>
                   {formatCurrency(d.netWorth, d.defaultCurrency)}
                 </p>
                 {d.periodDelta && (

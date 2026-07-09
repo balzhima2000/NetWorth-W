@@ -34,9 +34,9 @@ function MarketChip({ market }: { market: CurrentHolding['market'] }) {
 // ── Summary ───────────────────────────────────────────────────────────────────
 function SummaryCard({ d }: { d: ReturnType<typeof usePortfolioData> }) {
   return (
-    <Card className="flex flex-col gap-2.5 p-5">
+    <Card className="num-fit flex flex-col gap-2.5 p-5">
       <Eyebrow>Portfolio value</Eyebrow>
-      <p className="text-[36px] font-bold leading-none tracking-[-0.02em] text-ink md:text-[44px]">
+      <p className="num num-hero font-bold text-ink">
         {formatCurrency(d.totalValue, d.defaultCurrency)}
       </p>
       <p className={cn('num text-[15px] font-medium', dir(d.totalGain))}>
@@ -116,7 +116,11 @@ function AllocationCard({ d, onSetTargets }: { d: ReturnType<typeof usePortfolio
 }
 
 // ── Holdings: desktop sortable table ────────────────────────────────────────────
-const GRID = 'grid grid-cols-[1fr_110px_90px_130px_120px_92px] items-center gap-3';
+// Fluid columns: asset takes the slack (minmax(0,…) so it can shrink below its
+// content — the name wraps instead of forcing the grid wider); numeric columns
+// have a comfortable max but can shrink to a floor, so the grid always fits its
+// card and the figures stay column-aligned at every width (no overflow).
+const GRID = 'grid grid-cols-[minmax(0,1fr)_minmax(76px,100px)_minmax(48px,76px)_minmax(88px,120px)_minmax(84px,112px)_minmax(56px,84px)] items-center gap-3';
 const SORT_COLS: { key: SortKey; label: string; col: string }[] = [
   { key: 'value', label: 'Market value', col: 'value' },
   { key: 'gain', label: 'Gain', col: 'gain' },
@@ -157,12 +161,12 @@ function HoldingsTable({ d, sortBy, sortDir, onSort }: { d: ReturnType<typeof us
       </div>
       {d.holdings.map((h, i) => (
         <div key={h.ticker} className={cn(GRID, 'py-3.5', i < d.holdings.length - 1 && 'border-b border-line')}>
-          <div className="flex flex-col gap-0.5">
+          <div className="flex min-w-0 flex-col gap-0.5 pr-2">
             <div className="flex items-center gap-2">
               <span className="text-[15px] font-semibold text-ink">{h.ticker}</span>
               <MarketChip market={h.market} />
             </div>
-            <span className="text-[13px] font-medium text-secondary">{h.name}</span>
+            <span className="truncate text-[13px] font-medium text-secondary">{h.name}</span>
           </div>
           <span className="num text-right text-[14px] font-medium text-ink">{formatCurrency(h.currentPrice, h.currency)}</span>
           <span className="num text-right text-[14px] font-medium text-secondary">{h.sharesHeld.toLocaleString()}</span>
