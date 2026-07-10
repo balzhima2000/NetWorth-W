@@ -6,7 +6,7 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PieChart, Pie, Cell } from 'recharts';
-import { Card, Button, CardButton, Trailing, Icon, FloatingNav, TabBar } from '../../components/william';
+import { Card, Button, CardButton, CardLink, Trailing, Icon, FloatingNav, TabBar } from '../../components/william';
 import { cn } from '../../components/william/cn';
 import { AddTransactionModal } from '../WilliamPortfolio/modals';
 import { SetBudgetsModal } from './SetBudgetsModal';
@@ -264,9 +264,7 @@ export default function WilliamSpending() {
           <Card className="flex flex-col gap-1 p-5">
             <div className="flex items-center justify-between pb-1">
               <h2 className="text-[18px] font-semibold text-ink">Recent</h2>
-              <button type="button" onClick={() => navigate('/william/spending/transactions')} className="text-[13px] font-medium text-secondary transition-colors hover:text-ink focus-visible:outline-none">
-                See all
-              </button>
+              <CardLink onClick={() => navigate('/william/spending/transactions')}>See all</CardLink>
             </div>
             {d.recent.length > 0 ? (
               d.recent.map((row, i) => <RecentItem key={row.id} row={row} currency={cur} divider={i > 0} />)

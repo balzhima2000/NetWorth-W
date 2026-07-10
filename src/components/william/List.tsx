@@ -1,5 +1,6 @@
 import React from 'react';
 import { cn } from './cn';
+import { CardLink } from './CardControl';
 
 /**
  * List — ports the Figma Lists components (Row / Trailing / Header / Label).
@@ -29,13 +30,7 @@ export function ListHeader({ title, action, onAction }: { title: string; action?
     <div className="flex items-center justify-between py-2.5">
       <h2 className="text-[18px] font-semibold text-ink">{title}</h2>
       {action && (
-        <button
-          type="button"
-          onClick={onAction}
-          className="text-[13px] font-medium text-secondary transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
-        >
-          {action}
-        </button>
+        <CardLink onClick={onAction}>{action}</CardLink>
       )}
     </div>
   );

@@ -14,8 +14,9 @@ import { Icon, type IconName } from './Icon';
  *  - Trailing     ← "Trailing"           (931:13756)  — swappable trailing affordance
  */
 
-/** Right-pointing chevron matching the Figma Trailing chevron. */
-function ChevronRight({ className }: { className?: string }) {
+/** Right-pointing chevron matching the Figma Trailing chevron. Inherits
+ *  `currentColor` so it tracks its parent's text color (e.g. inside CardLink). */
+export function ChevronRight({ className }: { className?: string }) {
   return (
     <svg width="7" height="12" viewBox="0 0 7 12" fill="none" aria-hidden="true" className={className}>
       <path d="m1 1 5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -103,6 +104,23 @@ export const CardDropdown = React.forwardRef<
     <button ref={ref} type={type} className={cn(cardControlBase, 'gap-1', className)} {...rest}>
       {children}
       <span aria-hidden>{arrow}</span>
+    </button>
+  );
+});
+
+/**
+ * In-card navigational pill: the button-inside-card + a trailing chevron
+ * (Figma Trailing "Action", e.g. SEE ALL / SEE MORE). The chevron inherits the
+ * pill's text color so it tracks the hover state.
+ */
+export const CardLink = React.forwardRef<
+  HTMLButtonElement,
+  React.ButtonHTMLAttributes<HTMLButtonElement>
+>(function CardLink({ className, children, type = 'button', ...rest }, ref) {
+  return (
+    <button ref={ref} type={type} className={cn(cardControlBase, 'gap-1', className)} {...rest}>
+      {children}
+      <ChevronRight className="shrink-0" />
     </button>
   );
 });
