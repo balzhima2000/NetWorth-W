@@ -6,7 +6,7 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PieChart, Pie, Cell } from 'recharts';
-import { Card, Button, CardButton, Icon, FloatingNav, TabBar } from '../../components/william';
+import { Card, Button, CardButton, Trailing, Icon, FloatingNav, TabBar } from '../../components/william';
 import { cn } from '../../components/william/cn';
 import { AddTransactionModal } from '../WilliamPortfolio/modals';
 import { SetBudgetsModal } from './SetBudgetsModal';
@@ -170,16 +170,14 @@ function NavCard({ icon, title, subtitle, onClick }: { icon: 'recurring' | 'tren
     <button
       type="button"
       onClick={onClick}
-      className="flex items-center gap-3.5 rounded-card bg-surface px-5 py-[18px] text-left transition-colors hover:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+      className="group flex items-center gap-3.5 rounded-card bg-surface px-5 py-[18px] text-left transition-colors hover:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
     >
       <Icon name={icon} size={22} className="shrink-0 text-ink" />
       <span className="flex min-w-0 flex-1 flex-col gap-0.5">
         <span className="truncate text-[15px] font-semibold text-ink">{title}</span>
         <span className="truncate text-[13px] text-secondary">{subtitle}</span>
       </span>
-      <svg width="7" height="12" viewBox="0 0 7 12" fill="none" aria-hidden="true" className="shrink-0 text-secondary">
-        <path d="M1 1 6 6 1 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
+      <Trailing type="chevron-circled" />
     </button>
   );
 }

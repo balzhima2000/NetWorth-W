@@ -32,9 +32,9 @@ export function ListHeader({ title, action, onAction }: { title: string; action?
         <button
           type="button"
           onClick={onAction}
-          className="num flex items-center gap-1 text-[12px] font-medium uppercase tracking-[0.6px] text-muted transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+          className="text-[13px] font-medium text-secondary transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
         >
-          {action} <Chevron />
+          {action}
         </button>
       )}
     </div>
