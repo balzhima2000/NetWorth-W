@@ -170,7 +170,7 @@ function NavCard({ icon, title, subtitle, onClick }: { icon: 'recurring' | 'tren
     <button
       type="button"
       onClick={onClick}
-      className="group flex items-center gap-3.5 rounded-card bg-surface px-5 py-[18px] text-left transition-colors hover:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+      className="group flex items-center gap-3.5 rounded-card bg-surface px-5 py-[18px] text-left transition-colors hover:border-accent active:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
     >
       <Icon name={icon} size={22} className="shrink-0 text-ink" />
       <span className="flex min-w-0 flex-1 flex-col gap-0.5">
