@@ -4,7 +4,7 @@
  */
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, ActionButton, RangeSelector, Icon, FloatingNav, TabBar, Button, Badge, List, ListRow, ListHeader } from '../../components/william';
+import { Card, ActionButton, RangeSelector, Icon, FloatingNav, TabBar, Button, Badge, List, ListRow, ListHeader, Trailing } from '../../components/william';
 import { NetWorthChart } from './NetWorthChart';
 import { useDashboardData, type RangeOption } from './useDashboardData';
 import { AddTradeModal, AddTransactionModal } from '../WilliamPortfolio/modals';
@@ -244,13 +244,8 @@ export default function WilliamDashboard() {
           >
             <div className="flex items-center justify-between">
               <p className="ty-label whitespace-nowrap text-muted">FIRE PROGRESS</p>
-              {/* "See more" button-inside-card pill (decorative — the whole card navigates). */}
-              <span className="num-mono inline-flex h-7 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full bg-btn-tonal px-3 text-[12px] font-medium uppercase tracking-[0.6px] text-muted transition-colors group-hover:bg-btn-neutral-hover group-hover:text-ink">
-                See more
-                <svg width="7" height="12" viewBox="0 0 7 12" fill="none" aria-hidden="true" className="transition-transform group-hover:translate-x-0.5">
-                  <path d="m1 1 5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </span>
+              {/* Circled-chevron trailing (decorative — the whole card navigates). */}
+              <Trailing type="chevron-circled" />
             </div>
             {d.fireProgress !== null ? (
               <>
