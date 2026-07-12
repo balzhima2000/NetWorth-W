@@ -24,6 +24,7 @@ import WilliamTrends from './pages/WilliamTrends';
 import WilliamTransactions from './pages/WilliamTransactions';
 import WilliamAccount from './pages/WilliamAccount';
 import AccountSection from './pages/WilliamAccount/AccountSection';
+import WilliamSetup from './pages/WilliamSetup';
 import { useWilliamTheme } from './components/william/useWilliamTheme';
 import { GlassFilters } from './components/william/GlassFilters';
 
@@ -41,8 +42,11 @@ function AppInner() {
   const hasCompletedSetup = useSettingsStore((s) => s.hasCompletedSetup);
 
   // Seed placeholder data (no-op once setup is complete / stores are non-empty)
-  // so the preview screens always render filled instead of empty states.
-  useEffect(() => { seedDemoData(); }, []);
+  // so the preview screens always render filled instead of empty states. Skipped
+  // during the real setup flow so a genuine onboarding isn't polluted with demo data.
+  useEffect(() => {
+    if (!window.location.pathname.startsWith('/william/setup')) seedDemoData();
+  }, []);
 
   // Auto-add recurring payments and installments on startup
   useAutoAdd();
@@ -60,6 +64,7 @@ function AppInner() {
 
       {/* William redesign — standalone routes */}
       <Route path="/william" element={<WilliamPreview />} />
+      <Route path="/william/setup" element={<WilliamSetup />} />
       <Route path="/william/dashboard" element={<WilliamDashboard />} />
       <Route path="/william/portfolio" element={<WilliamPortfolio />} />
       <Route path="/william/fire" element={<WilliamFire />} />

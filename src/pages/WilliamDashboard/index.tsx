@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, ActionButton, RangeSelector, Icon, FloatingNav, TabBar, Button, Badge, List, ListRow, ListHeader, Trailing } from '../../components/william';
 import { NetWorthChart } from './NetWorthChart';
+import { FinishSetup } from './FinishSetup';
 import { useDashboardData, type RangeOption } from './useDashboardData';
 import { AddTradeModal, AddTransactionModal } from '../WilliamPortfolio/modals';
 import { formatCurrency, formatDate } from '../../utils/formatters';
@@ -126,6 +127,8 @@ export default function WilliamDashboard() {
         <h1 className="sr-only">Dashboard</h1>
 
         <MobileHeader name={d.userName} />
+
+        <FinishSetup />
 
         {/* ── Top row: left column (net worth + breakdown) + chart ── */}
         <div className="grid grid-cols-1 gap-[18px] md:grid-cols-[340px_1fr] md:gap-5 lg:grid-cols-[400px_1fr]">
