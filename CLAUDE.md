@@ -106,6 +106,7 @@ Parses a broker `.xlsx` snapshot (one row = one open position) into `ImportRow[]
 
 ## Workflow rules
 - **Auto-push**: Unless told otherwise, always push after executing the user's orders.
+- **No emojis, anywhere** (Balzhima's call): never use emojis in product UI, copy/microcopy, Figma designs, or code/comments. This includes onboarding greetings (no 👋) and success screens (no 🎉) — use plain words or a drawn glyph/icon instead. Functional line-drawn icons (e.g. a close ✕, chevrons) are fine; decorative pictographs are not.
 
 ## File map (key files)
 ```
