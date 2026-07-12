@@ -49,7 +49,7 @@ export function FinishSetup() {
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate(d.to); } }}
             className={cn(
               'group flex cursor-pointer flex-col gap-2.5 rounded-2xl bg-surface p-4 transition-colors',
-              'hover:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink',
+              'hover:bg-btn-neutral-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink',
             )}
           >
             <div className="flex items-start justify-between">

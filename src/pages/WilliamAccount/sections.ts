@@ -3,7 +3,7 @@ export interface AccountItem { slug: string; label: string; danger?: boolean }
 export interface AccountGroup { group: string; items: AccountItem[] }
 
 export const ACCOUNT_GROUPS: AccountGroup[] = [
-  { group: 'Connections', items: [
+  { group: 'Connection', items: [
     { slug: 'api', label: 'API configuration' },
     { slug: 'currency', label: 'Currency' },
   ] },

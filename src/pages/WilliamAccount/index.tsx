@@ -4,7 +4,7 @@
  * setting pages, and a desktop footer. Matches Figma "Account — Desktop/Mobile".
  */
 import { useNavigate } from 'react-router-dom';
-import { Card, List, ListRow, ListHeader, FloatingNav, TabBar, Segmented, Icon, BackLink } from '../../components/william';
+import { Card, List, ListRow, FloatingNav, TabBar, Segmented, Icon, BackLink } from '../../components/william';
 import type { IconName } from '../../components/william';
 import { useSettingsStore } from '../../stores/settingsStore';
 import { ACCOUNT_GROUPS } from './sections';
@@ -19,25 +19,23 @@ function ThemeToggle() {
   const theme = useSettingsStore((s) => s.theme ?? 'auto');
   const setTheme = useSettingsStore((s) => s.setTheme);
   return (
-    <div className="pt-1 pb-2.5">
-      <Segmented
-        options={THEMES.map((t) => ({
-          value: t.key,
-          label: (
-            <span className="num-mono inline-flex items-center justify-center gap-1.5 text-[13px] font-medium uppercase tracking-[0.65px] pt-1 pb-0.5">
-              {t.icon && <Icon name={t.icon} size={16} />}
-              {t.label}
-            </span>
-          ),
-        }))}
-        value={theme}
-        onChange={(v) => setTheme(v as 'light' | 'dark' | 'auto')}
-        track="sunken"
-        size="md"
-        fullWidth
-        className="[&_[data-seg]]:py-1"
-      />
-    </div>
+    <Segmented
+      options={THEMES.map((t) => ({
+        value: t.key,
+        label: (
+          <span className="num-mono inline-flex items-center justify-center gap-1.5 text-[13px] font-medium uppercase tracking-[0.65px] pt-1 pb-0.5">
+            {t.icon && <Icon name={t.icon} size={16} />}
+            {t.label}
+          </span>
+        ),
+      }))}
+      value={theme}
+      onChange={(v) => setTheme(v as 'light' | 'dark' | 'auto')}
+      track="sunken"
+      size="md"
+      fullWidth
+      className="[&_[data-seg]]:py-1"
+    />
   );
 }
 
@@ -59,21 +57,22 @@ export default function WilliamAccount() {
           <p className="text-[13px] font-medium text-secondary md:text-[15px]">Manage your preferences, connections and data.</p>
         </div>
 
-        {/* Appearance — in-card 18px header + theme toggle (Figma 971:1559) */}
-        <Card className="flex flex-col px-5 pb-2.5">
-          <ListHeader title="Appearance" />
-          <ThemeToggle />
-        </Card>
+        {/* Section = mono-uppercase label above a borderless card (Figma
+            Account / Desktop 965:2). */}
+        <section className="flex flex-col gap-2.5">
+          <p className="ty-label text-muted">Appearance</p>
+          <Card className="px-5 py-7"><ThemeToggle /></Card>
+        </section>
 
-        {/* Grouped sections — each a borderless List card with an in-card
-            18px header + divided rows (Figma Account / Desktop 971:1553). */}
         {ACCOUNT_GROUPS.map((grp) => (
-          <List key={grp.group}>
-            <ListHeader title={grp.group} />
-            {grp.items.map((it) => (
-              <ListRow key={it.slug} title={it.label} danger={it.danger} chevron onClick={() => go(it.slug)} style={{ borderRadius: 0 }} />
-            ))}
-          </List>
+          <section key={grp.group} className="flex flex-col gap-2.5">
+            <p className="ty-label text-muted">{grp.group}</p>
+            <List>
+              {grp.items.map((it) => (
+                <ListRow key={it.slug} title={it.label} danger={it.danger} chevron onClick={() => go(it.slug)} style={{ borderRadius: 0 }} />
+              ))}
+            </List>
+          </section>
         ))}
 
         {/* Footer */}
