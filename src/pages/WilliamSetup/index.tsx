@@ -142,9 +142,10 @@ export default function WilliamSetup() {
                       </Field>
                     )}
                     {mode === 'detailed' && (
-                      <p className="rounded-xl bg-surface p-4 text-[14px] leading-snug text-secondary">
-                        Track each holding — import from your broker or add trades from your dashboard.
-                      </p>
+                      <div className="flex flex-col items-center justify-center gap-1 rounded-2xl border-[1.5px] border-dashed border-line bg-surface px-5 py-7 text-center">
+                        <p className="text-[15px] font-semibold text-ink">Import from your broker (.xlsx)</p>
+                        <p className="text-[13px] text-secondary">or add holdings manually later</p>
+                      </div>
                     )}
                   </div>
                 </div>
