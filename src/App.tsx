@@ -84,8 +84,8 @@ function AppInner() {
         <Route path="/settings" element={<Settings />} />
       </Route>
 
-      {/* Root redirect */}
-      <Route path="/" element={<Navigate to={hasCompletedSetup ? '/dashboard' : '/setup'} replace />} />
+      {/* Root redirect — defaults to the William redesign (setup + dashboard). */}
+      <Route path="/" element={<Navigate to={hasCompletedSetup ? '/william/dashboard' : '/william/setup'} replace />} />
 
       {/* 404 */}
       <Route path="*" element={<NotFound />} />
