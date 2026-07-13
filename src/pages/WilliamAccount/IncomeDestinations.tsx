@@ -13,7 +13,7 @@ export default function IncomeDestinations() {
 
   const save = () => {
     if (!name.trim()) return;
-    add({ id: crypto.randomUUID(), name: name.trim(), icon: '' });
+    add({ id: crypto.randomUUID(), name: name.trim() });
     setName(''); setOpen(false);
   };
 

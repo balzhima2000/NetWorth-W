@@ -17,7 +17,7 @@ function clearAllStores() {
   useTransactionStore.setState({ transactions: [], lastUsedPaymentMethod: 'cash' });
   useBudgetStore.setState({ budgets: [] });
   useNetWorthStore.setState({ manualEntries: [], snapshots: [] });
-  useCardsStore.setState({ cards: [], incomeDestinations: [{ id: 'cash', name: 'Cash', icon: '💵' }] });
+  useCardsStore.setState({ cards: [], incomeDestinations: [{ id: 'cash', name: 'Cash' }] });
   useRecurringStore.setState({ recurringPayments: [], installmentPlans: [] });
   useAllocationStore.setState({ mode: 'none', targets: {} });
   ALL_STORE_KEYS.forEach((k) => localStorage.removeItem(k));

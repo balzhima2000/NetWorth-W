@@ -5,11 +5,10 @@ import type { Card } from '../types/index';
 export interface IncomeDestination {
   id: string;
   name: string;
-  icon: string;
 }
 
 const DEFAULT_DESTINATIONS: IncomeDestination[] = [
-  { id: 'cash', name: 'Cash', icon: '💵' },
+  { id: 'cash', name: 'Cash' },
 ];
 
 interface CardsStore {
