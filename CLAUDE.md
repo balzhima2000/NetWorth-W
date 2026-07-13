@@ -20,7 +20,7 @@
 
 - `Transaction.convertedAmount` is set once when the transaction is created, using the rate available at that moment. It is never updated afterwards.
 - `RecurringPayment` has **no** `convertedAmount` field — it stores only `amount` + `currency`. Conversion happens when the recurring payment generates a `Transaction`; the resulting `Transaction.convertedAmount` is then permanently fixed.
-- **Refresh All** (Settings → Currency) only updates the global `exchangeRates` table in `settingsStore`. It does **not** touch any stored `convertedAmount` on existing transactions or recurring payments.
+- **Refresh All** (Account → Currency) only updates the global `exchangeRates` table in `settingsStore`. It does **not** touch any stored `convertedAmount` on existing transactions or recurring payments.
 - `recalculateRatesForCurrency` was removed in commit `c0ae4bc` because it retroactively overwrote historical `convertedAmount` values on every rate refresh — violating the above rule.
 
 ## FX provider
@@ -89,20 +89,18 @@ Parses a broker `.xlsx` snapshot (one row = one open position) into `ImportRow[]
 | L | Average cost | ✅ `StockTrade.buyPrice` | Normalised (agorot→ILS) + converted to defaultCurrency |
 | N | Currency | ✅ `StockTrade.market` | ILS→tase, else→global |
 
-### Entry points
-- **Portfolio page**: `📥 Import Excel` button → `ExcelImportModal.tsx` (preview modal)
-- **Setup wizard step 5**: `Step5ExcelImport.tsx` (inline, no modal) — shown for Detailed mode only; skipped for Simple mode
+### Entry points (William-native, 2026-07)
+The parsing service (`excelImport.ts`) is unchanged; the UI is now a William modal.
+- **Portfolio page**: `Import` toolbar button → `src/pages/WilliamPortfolio/ImportExcelModal.tsx` (William-styled upload → preview → import; reuses `parsePortfolioExcel`, writes via `addTrade` + `updateCurrentPrice`).
+- **Dashboard finish-setup card**: the "Import your holdings" card mounts the same `ImportExcelModal` (shown only when `portfolioMode === 'detailed' && trades === 0`).
 
-## Setup wizard
+## Setup (William)
 
-`src/pages/Setup/index.tsx` — 8-step linear wizard
+`src/pages/WilliamSetup/index.tsx` — lean **3-step** onboarding: `Name → Portfolio → Done`, route `/william/setup`. Input is held locally and committed once on finish.
 
-```
-1 Name → 2 Privacy → 3 Currency → 4 Portfolio → [5 Import Holdings] → 6 Cards → 7 FIRE → 8 Done
-```
-
-- Step 5 is **automatically skipped** when `portfolioMode === 'simple'` (skip in `handleNext` at step 4; skip-back in `handleBack` at step 6).
-- Step 8 Done screen shows a summary including holdings imported count (from `portfolioStore.trades`).
+- The deferred tasks (cards, FIRE goal, device sync, import holdings) are **not** steps — they live on the dashboard as "Finish setting up" cards (`WilliamDashboard/FinishSetup.tsx`), each auto-hiding once its store state shows it's done.
+- **Restore from a backup** is inline on step 1 (file picker → confirm modal → `useRestoreBackup` applies + completes setup). No separate restore route.
+- The classic 8-step `pages/Setup` wizard was **deleted** (2026-07) — see "Classic app retired" below.
 
 ## Workflow rules
 - **Auto-push**: Unless told otherwise, always push after executing the user's orders.
@@ -121,16 +119,22 @@ src/
     transactionStore.ts     — Transactions (no recalculation functions)
     recurringStore.ts       — Recurring payments & installment plans (CRUD only)
     portfolioStore.ts       — Stock trades + currentPrices lookup (separate from buyPrice)
+  hooks/
+    useRefreshPrices.ts     — Live price refresh (global/TASE/crypto) → currentPrices; { refresh, refreshing, progress, canRefresh }
+    useRestoreBackup.ts     — Parse + apply a JSON backup to all stores (shared by Account→Data + WilliamSetup)
   pages/
-    Settings/index.tsx      — All settings UI including FX provider config & Refresh All
-    Portfolio/
-      index.tsx             — Portfolio page with Import Excel button
-      ExcelImportModal.tsx  — Standalone Excel import modal (post-setup)
-    Setup/
-      index.tsx             — 8-step wizard orchestrator with skip logic
-      Step5ExcelImport.tsx  — Inline Excel import step (setup wizard only)
+    WilliamSetup/index.tsx  — Lean 3-step onboarding (route /william/setup)
+    WilliamDashboard/       — Dashboard + FinishSetup.tsx (finish-setup cards)
+    WilliamPortfolio/
+      index.tsx             — Portfolio screen (route /william/portfolio); Refresh uses useRefreshPrices
+      ImportExcelModal.tsx  — William Excel import modal (Portfolio Import + finish-setup card)
+      modals.tsx            — AddTradeModal / AddTransactionModal / SetTargetsModal
+    WilliamAccount/         — Account hub + sub-pages (Api, Currency, Categories, Cards, Data, Danger, …)
   types/index.ts            — All TypeScript interfaces (Transaction, RecurringPayment, etc.)
 ```
+
+## Classic app retired (2026-07)
+The original non-William app is **deleted** — William is the only app. Removed: `pages/{Dashboard,Portfolio,Spending,Fire,Settings,Setup,SpendingHeatmap}`, `components/layout` (AppShell/Sidebar/TopBar/MobileNav/BackupReminderBanner), `components/mobile/QuickAddFAB`, and the classic routes (`/setup`, `/dashboard`, `/portfolio`, `/spending`, `/fire`, `/settings` — these now 404). The three features William used to bridge to classic for (Refresh prices, Excel import, backup restore) are now native (see the hooks + `ImportExcelModal` above). `App.tsx` holds only the `/william/*` routes + a root redirect.
 
 ## Design system — Figma file
 
@@ -382,7 +386,7 @@ Field/menu styles were extracted from the modals into reusable components. Share
 ### Code implementation (shipped)
 - **Screen**: `src/pages/WilliamPortfolio/` (`index.tsx` + `usePortfolioData.ts`), route `/william/portfolio`. Display via `calculateCurrentHoldings`; sortable columns (desktop) / sort dropdown (mobile); allocation top-3 + Other.
 - **Allocation drift state** (coded): when `allocationStore.mode === 'individual'`, the hook adds per-row `target` + `drift`; the card shows **target tick markers** (neutral grey `bg-muted` #737373, **2×10px rounded, vertically centered** on the 14px bar — `top-1/2 h-2.5 w-0.5 -translate-y-1/2 rounded-full` — grey reads on every segment incl. the black NVDA one, so no segment recolor needed; the "marks your target weight" caption uses a matching 2×10 rect prefix, not a glyph; matches Figma 508:2167 where ticks are 2×10 `rounded-rectangle`s), **neutral "vs target" drift chips** (`vs target` is `hidden md:inline`), and **"Set targets" → "Edit targets"**. Bar is continuous (no gaps) in drift mode so ticks align to cumulative target %.
-- **Modals**: `src/pages/WilliamPortfolio/modals.tsx` — `AddTradeModal`, `AddTransactionModal` (income/expense), `SetTargetsModal`, wired to real stores (`addTrade`, `addTransaction`, `allocationStore.setAllocation`). Mounted on **both** the Portfolio screen (Add trade, Set targets) and the **Dashboard** action buttons (Trade/Income/Expense). Refresh/Import still bridge to old `/portfolio`.
+- **Modals**: `src/pages/WilliamPortfolio/modals.tsx` — `AddTradeModal`, `AddTransactionModal` (income/expense), `SetTargetsModal`, wired to real stores (`addTrade`, `addTransaction`, `allocationStore.setAllocation`). Mounted on **both** the Portfolio screen (Add trade, Set targets) and the **Dashboard** action buttons (Trade/Income/Expense). **Refresh** uses `useRefreshPrices` and **Import** opens `ImportExcelModal` — both native now (no `/portfolio` bridge).
 - **New william components**: `Modal` (responsive — desktop dialog / mobile bottom sheet, scrim, Esc + scroll-lock) and `Field` primitives (`Field`, `TextInput`, `Textarea`, `SelectInput` with mono `↓`, `SegmentToggle`). `Button` gained a **`pill`** prop (toolbar/action buttons are pill; generic master stays r12) and a **`size`** prop — see the Button size scale below.
 
 ### Button size scale — L / M / S / XS (38px = the standard)
