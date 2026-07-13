@@ -126,6 +126,9 @@ export default function Portfolio() {
     if (quickAddTarget === 'trade') {
       openAddTrade();
       setQuickAddTarget(null);
+    } else if (quickAddTarget === 'import-excel') {
+      setShowExcelImport(true);
+      setQuickAddTarget(null);
     }
   }, [quickAddTarget]);
 

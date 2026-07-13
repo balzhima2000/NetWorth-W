@@ -11,14 +11,15 @@ import { useSettingsStore } from '../../stores/settingsStore';
 import { useCardsStore } from '../../stores/cardsStore';
 import { usePortfolioStore } from '../../stores/portfolioStore';
 import { useOnboardingStore } from '../../stores/onboardingStore';
-import { AddTradeModal } from '../WilliamPortfolio/modals';
+import { useQuickAddStore } from '../../stores/quickAddStore';
 import { EditAssumptionsModal } from '../WilliamFire/EditAssumptionsModal';
 
 interface TaskDef { id: string; icon: IconName; title: string; subtitle: string; onClick: () => void; done: boolean; show: boolean }
 
 export function FinishSetup() {
   const navigate = useNavigate();
-  const [modal, setModal] = useState<null | 'fire' | 'import'>(null);
+  const [modal, setModal] = useState<null | 'fire'>(null);
+  const setQuickAddTarget = useQuickAddStore((s) => s.setTarget);
   const cardsCount = useCardsStore((s) => s.cards.length);
   const trades = usePortfolioStore((s) => s.trades.length);
   const fireAnnualExpenses = useSettingsStore((s) => s.fireAnnualExpenses);
@@ -31,7 +32,7 @@ export function FinishSetup() {
   const defs: TaskDef[] = [
     { id: 'cards', icon: 'plus', title: 'Add payment cards', subtitle: 'Group your spending by card.', onClick: () => navigate('/william/account/cards'), done: cardsCount > 0, show: true },
     { id: 'fire', icon: 'target', title: 'Set your FIRE goal', subtitle: 'Track your progress to independence.', onClick: () => setModal('fire'), done: fireAnnualExpenses != null || fireTarget != null, show: true },
-    { id: 'import', icon: 'import', title: 'Import your holdings', subtitle: "From your broker's Excel.", onClick: () => setModal('import'), done: false, show: portfolioMode === 'detailed' && trades === 0 },
+    { id: 'import', icon: 'import', title: 'Import your holdings', subtitle: "From your broker's Excel.", onClick: () => { setQuickAddTarget('import-excel'); navigate('/portfolio'); }, done: false, show: portfolioMode === 'detailed' && trades === 0 },
     { id: 'sync', icon: 'refresh', title: 'Sync your devices', subtitle: 'Access on your phone and laptop.', onClick: () => navigate('/william/account/sync'), done: false, show: true },
   ];
   const visible = defs.filter((d) => d.show && !d.done && !dismissed.includes(d.id));
@@ -39,7 +40,6 @@ export function FinishSetup() {
 
   return (
     <section className="flex flex-col gap-3">
-      <AddTradeModal open={modal === 'import'} onClose={() => setModal(null)} />
       <EditAssumptionsModal open={modal === 'fire'} onClose={() => setModal(null)} />
       <div className="flex items-center justify-between">
         <h2 className="ty-h2 text-ink">Finish setting up</h2>

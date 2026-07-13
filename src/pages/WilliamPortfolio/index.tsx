@@ -7,6 +7,7 @@
  */
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQuickAddStore } from '../../stores/quickAddStore';
 import { Card, Button, CardButton, CardDropdown, Icon, FloatingNav, TabBar } from '../../components/william';
 import { usePortfolioData, type SortKey, type SortDir } from './usePortfolioData';
 import { AddTradeModal, SetTargetsModal } from './modals';
@@ -260,6 +261,7 @@ function HoldingsList({ d, sortBy, sortDir, onSelectField, onToggleDir }: { d: R
 // ── Main ──────────────────────────────────────────────────────────────────────
 export default function WilliamPortfolio() {
   const navigate = useNavigate();
+  const setQuickAddTarget = useQuickAddStore((s) => s.setTarget);
   const [sortBy, setSortBy] = useState<SortKey>('value');
   const [sortDir, setSortDir] = useState<SortDir>('desc');
   const [modal, setModal] = useState<null | 'trade' | 'targets'>(null);
@@ -270,7 +272,9 @@ export default function WilliamPortfolio() {
     if (k === sortBy) toggleDir();
     else { setSortBy(k); setSortDir('desc'); }
   };
-  const goPortfolio = () => navigate('/portfolio'); // Refresh/Import bridge to working flow
+  const goPortfolio = () => navigate('/portfolio'); // Refresh bridges to the working flow
+  // Import bridges to the classic flow and auto-opens the Excel import modal there.
+  const goImport = () => { setQuickAddTarget('import-excel'); navigate('/portfolio'); };
   const addTrade = () => setModal('trade');
   const setTargets = () => setModal('targets');
 
@@ -302,7 +306,7 @@ export default function WilliamPortfolio() {
           </div>
           <div className="flex items-center gap-2.5">
             <Button pill size="m" variant="secondary" onClick={goPortfolio}><Icon name="refresh" size={18} /> Refresh</Button>
-            <Button pill size="m" variant="secondary" onClick={goPortfolio}><Icon name="import" size={18} /> Import</Button>
+            <Button pill size="m" variant="secondary" onClick={goImport}><Icon name="import" size={18} /> Import</Button>
             <Button pill size="m" variant="primary" onClick={addTrade} className="font-semibold"><Icon name="plus" size={16} /> Add trade</Button>
           </div>
         </div>
@@ -311,7 +315,7 @@ export default function WilliamPortfolio() {
         <div className="flex items-center gap-2 md:hidden">
           <Button pill size="m" variant="primary" onClick={addTrade} className="font-semibold"><Icon name="plus" size={16} /> Add trade</Button>
           <Button pill size="m" variant="secondary" onClick={goPortfolio}><Icon name="refresh" size={18} /> Refresh</Button>
-          <Button pill size="m" variant="secondary" onClick={goPortfolio}><Icon name="import" size={18} /> Import</Button>
+          <Button pill size="m" variant="secondary" onClick={goImport}><Icon name="import" size={18} /> Import</Button>
         </div>
 
         {d.isEmpty ? (
