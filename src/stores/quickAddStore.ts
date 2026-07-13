@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-type QuickAddTarget = null | 'expense' | 'income' | 'trade' | 'import-excel';
+type QuickAddTarget = null | 'expense' | 'income' | 'trade';
 
 interface QuickAddStore {
   target: QuickAddTarget;

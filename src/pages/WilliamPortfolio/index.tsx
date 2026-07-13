@@ -7,10 +7,11 @@
  */
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useQuickAddStore } from '../../stores/quickAddStore';
+import { useRefreshPrices } from '../../hooks/useRefreshPrices';
 import { Card, Button, CardButton, CardDropdown, Icon, FloatingNav, TabBar } from '../../components/william';
 import { usePortfolioData, type SortKey, type SortDir } from './usePortfolioData';
 import { AddTradeModal, SetTargetsModal } from './modals';
+import { ImportExcelModal } from './ImportExcelModal';
 import { formatCurrency } from '../../utils/formatters';
 import { cn } from '../../components/william/cn';
 import type { CurrentHolding } from '../../types/index';
@@ -261,10 +262,9 @@ function HoldingsList({ d, sortBy, sortDir, onSelectField, onToggleDir }: { d: R
 // ── Main ──────────────────────────────────────────────────────────────────────
 export default function WilliamPortfolio() {
   const navigate = useNavigate();
-  const setQuickAddTarget = useQuickAddStore((s) => s.setTarget);
   const [sortBy, setSortBy] = useState<SortKey>('value');
   const [sortDir, setSortDir] = useState<SortDir>('desc');
-  const [modal, setModal] = useState<null | 'trade' | 'targets'>(null);
+  const [modal, setModal] = useState<null | 'trade' | 'targets' | 'import'>(null);
   const d = usePortfolioData(sortBy, sortDir);
   const toggleDir = () => setSortDir((dir) => (dir === 'desc' ? 'asc' : 'desc'));
   // Desktop column header: click active column flips direction; click another resets to desc.
@@ -272,9 +272,9 @@ export default function WilliamPortfolio() {
     if (k === sortBy) toggleDir();
     else { setSortBy(k); setSortDir('desc'); }
   };
-  const goPortfolio = () => navigate('/portfolio'); // Refresh bridges to the working flow
+  const { refresh, refreshing, canRefresh } = useRefreshPrices();
   // Import bridges to the classic flow and auto-opens the Excel import modal there.
-  const goImport = () => { setQuickAddTarget('import-excel'); navigate('/portfolio'); };
+  const goImport = () => setModal('import');
   const addTrade = () => setModal('trade');
   const setTargets = () => setModal('targets');
 
@@ -291,7 +291,7 @@ export default function WilliamPortfolio() {
             <p className="text-[13px] font-medium text-secondary">{d.subtitle}</p>
           </div>
           <button
-            type="button" aria-label="Account" onClick={() => navigate('/settings')}
+            type="button" aria-label="Account" onClick={() => navigate('/william/account')}
             className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-bg text-ink transition-[filter] hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
           >
             <Icon name="account" size={20} />
@@ -305,7 +305,7 @@ export default function WilliamPortfolio() {
             <p className="text-[14px] font-medium text-secondary">{d.subtitle}</p>
           </div>
           <div className="flex items-center gap-2.5">
-            <Button pill size="m" variant="secondary" onClick={goPortfolio}><Icon name="refresh" size={18} /> Refresh</Button>
+            <Button pill size="m" variant="secondary" onClick={refresh} loading={refreshing} disabled={!canRefresh}><Icon name="refresh" size={18} /> Refresh</Button>
             <Button pill size="m" variant="secondary" onClick={goImport}><Icon name="import" size={18} /> Import</Button>
             <Button pill size="m" variant="primary" onClick={addTrade} className="font-semibold"><Icon name="plus" size={16} /> Add trade</Button>
           </div>
@@ -314,7 +314,7 @@ export default function WilliamPortfolio() {
         {/* Mobile actions — [Add trade] [Refresh] [Import], icon+text pills (Figma 488:6940) */}
         <div className="flex items-center gap-2 md:hidden">
           <Button pill size="m" variant="primary" onClick={addTrade} className="font-semibold"><Icon name="plus" size={16} /> Add trade</Button>
-          <Button pill size="m" variant="secondary" onClick={goPortfolio}><Icon name="refresh" size={18} /> Refresh</Button>
+          <Button pill size="m" variant="secondary" onClick={refresh} loading={refreshing} disabled={!canRefresh}><Icon name="refresh" size={18} /> Refresh</Button>
           <Button pill size="m" variant="secondary" onClick={goImport}><Icon name="import" size={18} /> Import</Button>
         </div>
 
@@ -338,6 +338,7 @@ export default function WilliamPortfolio() {
       </main>
 
       <AddTradeModal open={modal === 'trade'} onClose={() => setModal(null)} />
+      <ImportExcelModal open={modal === 'import'} onClose={() => setModal(null)} />
       <SetTargetsModal open={modal === 'targets'} onClose={() => setModal(null)} holdings={d.holdings} totalValue={d.totalValue} />
     </div>
   );

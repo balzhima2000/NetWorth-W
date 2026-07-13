@@ -4,11 +4,12 @@
  * The deferred tasks (cards, FIRE, sync, import) live on the dashboard as
  * "Finish setting up" cards. Input is held locally and committed once on finish.
  */
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Field, TextInput, SelectInput, cn } from '../../components/william';
+import { Button, Field, TextInput, SelectInput, Modal, cn } from '../../components/william';
 import { useSettingsStore } from '../../stores/settingsStore';
 import { useNetWorthStore } from '../../stores/networthStore';
+import { useRestoreBackup } from '../../hooks/useRestoreBackup';
 import { CURRENCIES } from '../../utils/constants';
 import { getCurrencySymbol, formatCurrency } from '../../utils/formatters';
 
@@ -55,8 +56,25 @@ export default function WilliamSetup() {
   const [editingCurrency, setEditingCurrency] = useState(false);
   const [mode, setMode] = useState<Mode>(null);
   const [simpleValue, setSimpleValue] = useState('');
+  const restore = useRestoreBackup();
+  const backupInputRef = useRef<HTMLInputElement>(null);
 
   const numericValue = parseFloat(simpleValue.replace(/[^0-9.]/g, '')) || 0;
+
+  // Restore-from-backup during onboarding: apply the backup, keep whatever name
+  // was already typed, and complete setup straight to the dashboard.
+  const onBackupFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) restore.parseFile(file);
+    e.target.value = '';
+  };
+  const confirmRestore = () => restore.confirm(() => {
+    const s = useSettingsStore.getState();
+    if (name.trim()) { s.setUserName(name.trim()); s.setUserNickname(name.trim().split(' ')[0] || name.trim()); }
+    s.setDefaultCurrency(currency);
+    s.setHasCompletedSetup(true);
+    navigate('/william/dashboard');
+  });
 
   const finish = () => {
     const s = useSettingsStore.getState();
@@ -115,7 +133,8 @@ export default function WilliamSetup() {
             <div className="flex flex-col items-center gap-3.5">
               <Button size="l" className="w-full" onClick={() => setStep(2)} disabled={!name.trim()}>Continue</Button>
               <p className="text-center text-[13px] text-muted">Your data stays on this device unless you turn on sync.</p>
-              <button type="button" onClick={() => navigate('/setup')} className="text-[13px] font-medium text-secondary transition-colors hover:text-ink">Restore from a backup instead</button>
+              <button type="button" onClick={() => backupInputRef.current?.click()} className="text-[13px] font-medium text-secondary transition-colors hover:text-ink">Restore from a backup instead</button>
+              <input ref={backupInputRef} type="file" accept="application/json" className="hidden" onChange={onBackupFile} />
             </div>
           </>
         )}
@@ -185,6 +204,15 @@ export default function WilliamSetup() {
           </>
         )}
       </main>
+
+      <Modal open={!!restore.pending} onClose={restore.cancel} title="Restore this backup?" footer={
+        <>
+          <Button pill size="l" variant="tonal" className="flex-1 md:flex-none md:ml-auto" onClick={restore.cancel}>Cancel</Button>
+          <Button pill size="l" variant="primary" className="flex-1 md:flex-none" onClick={confirmRestore}>Restore &amp; continue</Button>
+        </>
+      }>
+        <p className="text-[14px] text-secondary">{restore.summary || 'This will load your data from the backup and finish setup.'}</p>
+      </Modal>
     </div>
   );
 }

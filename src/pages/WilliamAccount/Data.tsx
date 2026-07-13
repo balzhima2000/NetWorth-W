@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { Card, Button, Modal } from '../../components/william';
 import { useToast } from '../../hooks/useToast';
 import { useSettingsStore } from '../../stores/settingsStore';
@@ -9,10 +9,9 @@ import { useNetWorthStore } from '../../stores/networthStore';
 import { useCardsStore } from '../../stores/cardsStore';
 import { useRecurringStore } from '../../stores/recurringStore';
 import { useCategoriesStore } from '../../stores/categoriesStore';
-import { exportFullBackup, exportTransactionsCSV, parseBackup } from '../../services/exportImport';
+import { exportFullBackup, exportTransactionsCSV } from '../../services/exportImport';
+import { useRestoreBackup } from '../../hooks/useRestoreBackup';
 import { formatDate } from '../../utils/formatters';
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Backup = any;
 import { AccountSubPage } from './AccountSubPage';
 
 export default function Data() {
@@ -20,8 +19,7 @@ export default function Data() {
   const fileRef = useRef<HTMLInputElement>(null);
   const lastBackupDate = useSettingsStore((s) => s.lastBackupDate);
   const setLastBackupDate = useSettingsStore((s) => s.setLastBackupDate);
-  const [importData, setImportData] = useState<Backup | null>(null);
-  const [summary, setSummary] = useState<string | null>(null);
+  const { pending, summary, parseFile, cancel, confirm } = useRestoreBackup();
 
   const exportJSON = () => {
     const st = useSettingsStore.getState();
@@ -50,27 +48,8 @@ export default function Data() {
 
   const onFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]; if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const { backup, error, summary } = parseBackup(ev.target?.result as string);
-      if (error) { toast.error(`Import error: ${error}`); return; }
-      setImportData(backup); setSummary(summary ?? null);
-    };
-    reader.readAsText(file);
+    parseFile(file);
     e.target.value = '';
-  };
-
-  const confirmImport = () => {
-    const d = importData; if (!d) return;
-    if (d.trades) usePortfolioStore.setState({ trades: d.trades });
-    if (d.transactions) useTransactionStore.setState({ transactions: d.transactions });
-    if (d.budgets) useBudgetStore.setState({ budgets: d.budgets });
-    if (d.manualEntries && d.snapshots) useNetWorthStore.setState({ manualEntries: d.manualEntries, snapshots: d.snapshots });
-    if (d.cards) useCardsStore.setState({ cards: d.cards });
-    if (d.recurringPayments && d.installmentPlans) useRecurringStore.setState({ recurringPayments: d.recurringPayments, installmentPlans: d.installmentPlans });
-    if (d.categories) useCategoriesStore.setState({ categories: d.categories, ...(d.incomeCategories ? { incomeCategories: d.incomeCategories } : {}) });
-    setImportData(null); setSummary(null);
-    toast.success('Data imported.');
   };
 
   return (
@@ -83,10 +62,10 @@ export default function Data() {
         <span className="text-[13px] text-muted">{lastBackupDate ? `Last backup: ${formatDate(lastBackupDate)}` : 'No backup yet.'}</span>
       </Card>
 
-      <Modal open={!!importData} onClose={() => setImportData(null)} title="Import & replace?" footer={
+      <Modal open={!!pending} onClose={cancel} title="Import & replace?" footer={
         <>
-          <Button pill size="l" variant="tonal" className="flex-1 md:flex-none md:ml-auto" onClick={() => setImportData(null)}>Cancel</Button>
-          <Button pill size="l" variant="primary" className="flex-1 md:flex-none" onClick={confirmImport}>Import & replace</Button>
+          <Button pill size="l" variant="tonal" className="flex-1 md:flex-none md:ml-auto" onClick={cancel}>Cancel</Button>
+          <Button pill size="l" variant="primary" className="flex-1 md:flex-none" onClick={() => confirm()}>Import & replace</Button>
         </>
       }>
         <p className="text-[14px] text-secondary">{summary || 'This will replace your current data with the backup contents.'}</p>

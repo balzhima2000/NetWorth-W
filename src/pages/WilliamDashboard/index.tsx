@@ -81,7 +81,7 @@ function MobileHeader({ name }: { name?: string }) {
       <button
         type="button"
         aria-label="Account"
-        onClick={() => navigate('/settings')}
+        onClick={() => navigate('/william/account')}
         className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent-bg text-ink transition-[filter] hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
       >
         <Icon name="account" size={20} />
@@ -110,7 +110,7 @@ export default function WilliamDashboard() {
         <p className="ty-body text-secondary text-center max-w-sm">
           Add your first trade or transaction to start tracking your net worth.
         </p>
-        <Button size="l" variant="primary" onClick={() => navigate('/portfolio')}>Add your first trade</Button>
+        <Button size="l" variant="primary" onClick={() => navigate('/william/portfolio')}>Add your first trade</Button>
       </div>
     );
   }

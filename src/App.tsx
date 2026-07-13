@@ -3,17 +3,10 @@ import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useSettingsStore } from './stores/settingsStore';
 import { seedDemoData } from './data/demoSeed';
-import { AppShell } from './components/layout';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { ToastProvider } from './components/ui/Toast';
 import { useAutoAdd } from './hooks/useAutoAdd';
 import { useSyncManager } from './hooks/useSyncManager';
-import Setup from './pages/Setup';
-import Dashboard from './pages/Dashboard';
-import Portfolio from './pages/Portfolio';
-import Spending from './pages/Spending';
-import Fire from './pages/Fire';
-import Settings from './pages/Settings';
 import WilliamPreview from './pages/WilliamPreview';
 import WilliamDashboard from './pages/WilliamDashboard';
 import WilliamPortfolio from './pages/WilliamPortfolio';
@@ -59,10 +52,7 @@ function AppInner() {
     <>
       <GlassFilters />
     <Routes>
-      {/* Setup route */}
-      <Route path="/setup" element={<Setup />} />
-
-      {/* William redesign — standalone routes */}
+      {/* William redesign — the app. */}
       <Route path="/william" element={<WilliamPreview />} />
       <Route path="/william/setup" element={<WilliamSetup />} />
       <Route path="/william/dashboard" element={<WilliamDashboard />} />
@@ -75,16 +65,7 @@ function AppInner() {
       <Route path="/william/account" element={<WilliamAccount />} />
       <Route path="/william/account/:slug" element={<AccountSection />} />
 
-      {/* Main app routes */}
-      <Route element={<AppShell />}>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/portfolio" element={<Portfolio />} />
-        <Route path="/spending" element={<Spending />} />
-<Route path="/fire" element={<Fire />} />
-        <Route path="/settings" element={<Settings />} />
-      </Route>
-
-      {/* Root redirect — defaults to the William redesign (setup + dashboard). */}
+      {/* Root redirect — into the William app (setup or dashboard). */}
       <Route path="/" element={<Navigate to={hasCompletedSetup ? '/william/dashboard' : '/william/setup'} replace />} />
 
       {/* 404 */}

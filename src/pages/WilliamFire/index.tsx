@@ -12,7 +12,6 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Card, Button, CardButton, Icon, FloatingNav, TabBar, RangeSelector } from '../../components/william';
 import { cn } from '../../components/william/cn';
 import { getCurrencySymbol } from '../../utils/formatters';
-import { useSettingsStore } from '../../stores/settingsStore';
 import { FireProjectionChart } from './FireProjectionChart';
 import { EditAssumptionsModal } from './EditAssumptionsModal';
 import { useFireData, type FireRange, type Milestone } from './useFireData';

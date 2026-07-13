@@ -29,7 +29,7 @@ export default function Danger() {
   const [hard, setHard] = useState(false);
   const [clearText, setClearText] = useState('');
 
-  const doSoft = () => { clearAllStores(); setHasCompletedSetup(false); setSoft(false); window.location.href = '/setup'; };
+  const doSoft = () => { clearAllStores(); setHasCompletedSetup(false); setSoft(false); window.location.href = '/william/setup'; };
   const doHard = async () => {
     if (clearText !== 'DELETE') return;
     clearAllStores();
@@ -38,7 +38,7 @@ export default function Danger() {
       if (user) await supabase.from('sync_stores').delete().eq('user_id', user.id);
     }
     setHasCompletedSetup(false); setHard(false); setClearText('');
-    window.location.href = '/setup';
+    window.location.href = '/william/setup';
   };
 
   return (

@@ -21,16 +21,4 @@ export function AccountSubPage({ title, subtitle, children }: { title: string; s
   );
 }
 
-/** Temporary scaffold for sections not yet ported to William. */
-export function ComingSoon({ title }: { title: string }) {
-  return (
-    <AccountSubPage title={title}>
-      <div className="rounded-card bg-surface p-6 text-[14px] text-secondary">
-        This section is being moved to its own page. For now you can manage it from the
-        {' '}<a href="/settings" className="font-medium text-ink underline underline-offset-2">classic settings</a>.
-      </div>
-    </AccountSubPage>
-  );
-}
-
 export { cn };
