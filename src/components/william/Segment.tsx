@@ -15,8 +15,9 @@ interface SegmentedProps {
   options: SegOption[];
   value: string;
   onChange: (value: string) => void;
-  /** Track fill — raised (range selector) or sunken (form toggles). */
-  track?: 'raised' | 'sunken';
+  /** Track fill — raised (range selector on a card) · sunken (form toggles) ·
+   *  surface (floats on the grey canvas: surface fill + shadow, no border). */
+  track?: 'raised' | 'sunken' | 'surface';
   /** md = equal-width flex-1 py-2 14px (toggles); sm = hug px-3.5 py-1.5 13px (range). */
   size?: 'sm' | 'md';
   fullWidth?: boolean;
@@ -53,7 +54,7 @@ export function Segmented({ options, value, onChange, track = 'raised', size = '
       onMouseLeave={() => setHovered(null)}
       className={cn(
         'relative flex items-center gap-0.5 rounded-full p-1',
-        track === 'sunken' ? 'bg-sunken' : 'bg-raised',
+        track === 'sunken' ? 'bg-sunken' : track === 'surface' ? 'bg-surface shadow-[var(--w-shadow-1)]' : 'bg-raised',
         fullWidth ? 'w-full' : 'inline-flex',
         className,
       )}
@@ -61,7 +62,11 @@ export function Segmented({ options, value, onChange, track = 'raised', size = '
       {ind && (
         <div
           aria-hidden="true"
-          className="absolute bottom-1 top-1 rounded-full bg-surface transition-[left,width] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
+          className={cn(
+            'absolute bottom-1 top-1 rounded-full transition-[left,width] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]',
+            // On a surface (white) track the pill flips to raised so it still reads.
+            track === 'surface' ? 'bg-raised' : 'bg-surface',
+          )}
           style={{ left: ind.left, width: ind.width }}
         />
       )}
@@ -117,15 +122,17 @@ interface RangeSelectorProps {
   onChange: (value: string) => void;
   className?: string;
   fullWidth?: boolean;
+  /** 'raised' inside a card (default); 'surface' when it floats on the canvas. */
+  track?: 'raised' | 'surface';
 }
 
-export function RangeSelector({ options = ['1W', '1M', '1Y', 'YTD', 'ALL'], value, onChange, className, fullWidth = false }: RangeSelectorProps) {
+export function RangeSelector({ options = ['1W', '1M', '1Y', 'YTD', 'ALL'], value, onChange, className, fullWidth = false, track = 'raised' }: RangeSelectorProps) {
   return (
     <Segmented
       options={options.map((o) => ({ value: o, label: o }))}
       value={value}
       onChange={onChange}
-      track="raised"
+      track={track}
       size="sm"
       fullWidth={fullWidth}
       className={className}

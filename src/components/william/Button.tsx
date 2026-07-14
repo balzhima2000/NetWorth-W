@@ -54,14 +54,16 @@ const sizes: Record<Size, string> = {
 // - tonal: grey pill for WHITE CARDS + modal footers (same hover/pressed ladder)
 // - ghost (Figma "Subtle"): transparent, tints on hover
 const variants: Record<Variant, string> = {
+  // Disabled is uniform across variants: recessed btn-disabled fill (transparent
+  // for ghost) + btn-disabled-text, so a disabled button clearly reads as OFF.
   primary:
     'bg-btn-primary text-btn-on-primary hover:bg-btn-primary-hover active:bg-btn-primary-pressed disabled:bg-btn-disabled disabled:text-btn-disabled-text',
   secondary:
-    'bg-btn-neutral text-ink hover:bg-btn-neutral-hover active:bg-btn-neutral-pressed disabled:text-muted disabled:bg-btn-neutral',
+    'bg-btn-neutral text-ink hover:bg-btn-neutral-hover active:bg-btn-neutral-pressed disabled:bg-btn-disabled disabled:text-btn-disabled-text',
   tonal:
-    'bg-btn-tonal text-ink hover:bg-btn-neutral-hover active:bg-btn-neutral-pressed disabled:bg-line disabled:text-muted',
+    'bg-btn-tonal text-ink hover:bg-btn-neutral-hover active:bg-btn-neutral-pressed disabled:bg-btn-disabled disabled:text-btn-disabled-text',
   ghost:
-    'bg-transparent text-ink hover:bg-btn-subtle-hover active:bg-btn-subtle-pressed disabled:text-muted',
+    'bg-transparent text-ink hover:bg-btn-subtle-hover active:bg-btn-subtle-pressed disabled:bg-transparent disabled:text-btn-disabled-text',
 };
 // Destructive actions use the standalone DangerButton (outline / subtle) —
 // deliberately not a Button variant.

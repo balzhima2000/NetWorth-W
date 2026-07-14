@@ -174,6 +174,7 @@ export default function WilliamDashboard() {
             <div className="md:hidden">
               <RangeSelector
                 fullWidth
+                track="surface"
                 options={RANGES}
                 value={range}
                 onChange={(v) => setRange(v as RangeOption)}

@@ -48,9 +48,9 @@ const sizes: Record<Size, string> = {
 // (--w-danger-pressed, mirrors Figma btn-danger-pressed).
 const variants: Record<Variant, string> = {
   outline:
-    'bg-surface text-negative border border-negative hover:bg-negative-bg active:bg-danger-pressed disabled:border-line disabled:bg-surface disabled:text-muted',
+    'bg-surface text-negative border border-negative hover:bg-negative-bg active:bg-danger-pressed disabled:border-transparent disabled:bg-btn-disabled disabled:text-btn-disabled-text',
   subtle:
-    'bg-transparent text-negative hover:bg-negative-bg active:bg-danger-pressed disabled:text-muted',
+    'bg-transparent text-negative hover:bg-negative-bg active:bg-danger-pressed disabled:bg-transparent disabled:text-btn-disabled-text',
 };
 
 export const DangerButton = React.forwardRef<HTMLButtonElement, DangerButtonProps>(function DangerButton(

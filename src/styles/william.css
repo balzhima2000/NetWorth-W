@@ -166,7 +166,9 @@ html[data-theme="dark"] .william {
   --w-btn-primary-hover:   #fafafa;  /* n50 */
   --w-btn-primary-pressed: #737373;  /* n500 */
   --w-btn-on-primary:      #171717;  /* label/icon on white primary        */
-  --w-btn-disabled:        #262626;  /* n800 */
+  --w-btn-disabled:        #171717;  /* n900 — recessed vs the n800 enabled
+                                        neutral, so disabled reads as OFF (was
+                                        n800 = identical to enabled). */
   --w-btn-disabled-text:   #525252;  /* n600 */
   --w-btn-neutral:         #262626;
   --w-btn-neutral-hover:   #404040;
