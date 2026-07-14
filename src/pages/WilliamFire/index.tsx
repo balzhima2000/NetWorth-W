@@ -55,6 +55,7 @@ function money0(v: number, currency: string) {
 // Auto-placed above/below the trigger, centered, clamped to the viewport; the
 // beak stays aligned to the trigger. Same behavior on desktop and mobile.
 const TIP_WIDTH = 300;
+const TIP_MIN_WIDTH = 200; // floor before we allow off-center clamping
 const TIP_GAP = 8;      // trigger ↔ tooltip
 const TIP_MARGIN = 12;  // viewport edge
 
@@ -62,25 +63,37 @@ function InfoTip({ title, children }: { title?: string; children: React.ReactNod
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const tipRef = useRef<HTMLDivElement>(null);
-  const [pos, setPos] = useState<{ top: number; left: number; placement: 'top' | 'bottom' } | null>(null);
+  const [pos, setPos] = useState<{ top: number; left: number; placement: 'top' | 'bottom'; width: number } | null>(null);
 
   const compute = () => {
     const t = triggerRef.current?.getBoundingClientRect();
     const tip = tipRef.current?.getBoundingClientRect();
     if (!t || !tip) return;
     const vw = window.innerWidth, vh = window.innerHeight;
+    const cx = t.left + t.width / 2;
+    // The beak is ALWAYS centered on the tooltip, so to keep it pointing at the
+    // trigger we must center the tooltip on `cx`. Rather than shift it off-centre
+    // when it would overflow (which drifts the beak off the icon), narrow it so a
+    // centered tooltip still fits. Only if it can't fit even at TIP_MIN_WIDTH do
+    // we fall back to clamping.
+    const maxHalf = Math.min(cx - TIP_MARGIN, vw - TIP_MARGIN - cx);
+    const width = Math.max(TIP_MIN_WIDTH, Math.min(TIP_WIDTH, 2 * maxHalf));
     const spaceBelow = vh - t.bottom;
     const placement: 'top' | 'bottom' =
       spaceBelow < tip.height + TIP_GAP + TIP_MARGIN && t.top > tip.height + TIP_GAP + TIP_MARGIN ? 'top' : 'bottom';
-    const cx = t.left + t.width / 2;
-    // Keep the tooltip centered on the trigger (clamped to the viewport) so the
-    // always-centered beak points at it whenever there's room.
-    const left = Math.max(TIP_MARGIN, Math.min(cx - tip.width / 2, vw - tip.width - TIP_MARGIN));
+    const left = Math.max(TIP_MARGIN, Math.min(cx - width / 2, vw - width - TIP_MARGIN));
     const top = placement === 'bottom' ? t.bottom + TIP_GAP : t.top - tip.height - TIP_GAP;
-    setPos({ top, left, placement });
+    setPos({ top, left, placement, width });
   };
 
-  useLayoutEffect(() => { if (open) compute(); }, [open]);
+  // Run twice: the first pass sizes the tooltip, the rAF pass re-measures its
+  // (width-dependent) height so top-placement lands correctly.
+  useLayoutEffect(() => {
+    if (!open) return;
+    compute();
+    const r = requestAnimationFrame(compute);
+    return () => cancelAnimationFrame(r);
+  }, [open]);
   useEffect(() => {
     if (!open) return;
     const on = () => compute();
@@ -107,7 +120,7 @@ function InfoTip({ title, children }: { title?: string; children: React.ReactNod
         <div
           ref={tipRef}
           role="tooltip"
-          style={{ position: 'fixed', top: pos?.top ?? -9999, left: pos?.left ?? -9999, width: TIP_WIDTH, opacity: pos ? 1 : 0 }}
+          style={{ position: 'fixed', top: pos?.top ?? -9999, left: pos?.left ?? -9999, width: pos?.width ?? TIP_WIDTH, opacity: pos ? 1 : 0 }}
           className="pointer-events-none z-[60] flex flex-col gap-[5px] rounded-2xl border border-line bg-surface p-4 text-left shadow-[0_12px_32px_-8px_rgba(0,0,0,0.22)]"
         >
           {/* beak — an 8px rotated square, ALWAYS centered on the side (matches
