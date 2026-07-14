@@ -18,14 +18,17 @@ type Size = 'l' | 'm' | 's' | 'xs';
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
   loading?: boolean;
-  /** Pill shape (rounded-full) — used by toolbar/action buttons. Default is rounded-xl (Button master). */
+  /** Non-pill (rounded-xl) shape. The Figma Button master is a pill (r999) at
+   * every size, so pill is the DEFAULT; pass `pill={false}` for a 12px-radius rect. */
   pill?: boolean;
   /**
-   * Size scale (height / horizontal pad / label):
-   * - `l`  44px · px-5 · 15px Semi Bold — prominent CTAs (modal confirm, empty-state actions); pair 18px icon
-   * - `m`  38px · px-4 · 14px Medium — DEFAULT, toolbar/action pills; pair 18px icon (16 for the plus)
-   * - `s`  32px · px-3 · 13px Medium — compact secondary (Set/Edit targets); pair 16px icon
-   * - `xs` 28px · px-3 · 12px Medium — chips / inline controls (the sort-trigger pill mirrors this); pair 14px icon
+   * Size scale — ported 1:1 from the Figma Button master (897:7790). The master
+   * uses a 14px SemiBold label at EVERY size; only height / horizontal pad / icon
+   * change:
+   * - `l`  42px · px-5 (20) · 14px SemiBold — prominent CTAs (modal confirm, empty-state); pair 20px icon
+   * - `m`  36px · px-4 (16) · 14px SemiBold — DEFAULT, toolbar/action pills; pair 18px icon
+   * - `s`  27px · px-[18] · 14px SemiBold — compact secondary (Set/Edit targets); pair 16px icon
+   * - `xs` 28px · px-3 · 12px Medium — CODE-ONLY (no Figma peer) — chips / inline controls (sort-trigger, Account CRUD); pair 14px icon
    */
   size?: Size;
 }
@@ -36,12 +39,13 @@ const base =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-canvas ' +
   'disabled:pointer-events-none';
 
-// L/M/S/XS = 44/38/32/28. M (38) is the standard; values verified against the
-// Figma Button sizes reference. height + horizontal pad + gap + label type.
+// Ported 1:1 from the Figma Button master (897:7790): S/M/L = 27/36/42, gap 6px,
+// 14px SemiBold label at every size — only height / horizontal pad differ. `xs`
+// is a code-only inline size (no Figma peer).
 const sizes: Record<Size, string> = {
-  l:  'h-[44px] px-5 gap-2 text-[15px] font-semibold',
-  m:  'h-[38px] px-4 gap-1.5 text-[14px] font-medium',
-  s:  'h-[32px] px-3 gap-1.5 text-[13px] font-medium',
+  l:  'h-[42px] px-5 gap-1.5 text-[14px] font-semibold',
+  m:  'h-[36px] px-4 gap-1.5 text-[14px] font-semibold',
+  s:  'h-[27px] px-[18px] gap-1.5 text-[14px] font-semibold',
   xs: 'h-[28px] px-3 gap-1.5 text-[12px] font-medium',
 };
 
@@ -63,7 +67,7 @@ const variants: Record<Variant, string> = {
 // deliberately not a Button variant.
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  { variant = 'primary', loading = false, pill = false, size = 'm', disabled, children, className, ...rest },
+  { variant = 'primary', loading = false, pill = true, size = 'm', disabled, children, className, ...rest },
   ref,
 ) {
   return (
@@ -75,7 +79,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
       {...rest}
     >
       {loading && (
-        <PixelSpinner size={size === 's' ? 16 : size === 'xs' ? 14 : 18} />
+        <PixelSpinner size={size === 'l' ? 20 : size === 's' ? 16 : size === 'xs' ? 14 : 18} />
       )}
       {children}
     </button>

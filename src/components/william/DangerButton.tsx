@@ -15,8 +15,10 @@ import { PixelSpinner } from './PixelSpinner';
  *   negative-bg. Low-emphasis destructive action sitting near other
  *   controls (stacked mobile Delete, inline row actions).
  *
- * Size scale and shape rules match Button (L/M/S/XS = 44/38/32/28, pill or
- * rounded-xl) so danger buttons line up in the same footers/toolbars.
+ * Size scale ported from the Figma "Danger button" master (899:7421): S/M/L =
+ * 27/36/44, gap 6px, 14px SemiBold label, pill (r999) at every size. NB: the
+ * Danger master's Large is 44px — 2px taller than the regular Button master's
+ * 42px (an inconsistency in the Figma file). `xs` is code-only (no Figma peer).
  */
 type Variant = 'outline' | 'subtle';
 type Size = 'l' | 'm' | 's' | 'xs';
@@ -24,7 +26,7 @@ type Size = 'l' | 'm' | 's' | 'xs';
 interface DangerButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
   loading?: boolean;
-  /** Pill shape (rounded-full). Default is rounded-xl, matching the Button master. */
+  /** Non-pill (rounded-xl) shape. The Danger master is a pill (r999), so pill is the DEFAULT. */
   pill?: boolean;
   size?: Size;
 }
@@ -36,9 +38,9 @@ const base =
   'disabled:pointer-events-none';
 
 const sizes: Record<Size, string> = {
-  l:  'h-[44px] px-5 gap-2 text-[15px] font-semibold',
-  m:  'h-[38px] px-4 gap-1.5 text-[14px] font-medium',
-  s:  'h-[32px] px-3 gap-1.5 text-[13px] font-medium',
+  l:  'h-[44px] px-5 gap-1.5 text-[14px] font-semibold',
+  m:  'h-[36px] px-4 gap-1.5 text-[14px] font-semibold',
+  s:  'h-[27px] px-[18px] gap-1.5 text-[14px] font-semibold',
   xs: 'h-[28px] px-3 gap-1.5 text-[12px] font-medium',
 };
 
@@ -52,7 +54,7 @@ const variants: Record<Variant, string> = {
 };
 
 export const DangerButton = React.forwardRef<HTMLButtonElement, DangerButtonProps>(function DangerButton(
-  { variant = 'outline', loading = false, pill = false, size = 'm', disabled, children, className, ...rest },
+  { variant = 'outline', loading = false, pill = true, size = 'm', disabled, children, className, ...rest },
   ref,
 ) {
   return (
@@ -64,7 +66,7 @@ export const DangerButton = React.forwardRef<HTMLButtonElement, DangerButtonProp
       {...rest}
     >
       {loading && (
-        <PixelSpinner size={size === 's' ? 16 : size === 'xs' ? 14 : 18} />
+        <PixelSpinner size={size === 'l' ? 20 : size === 's' ? 16 : size === 'xs' ? 14 : 18} />
       )}
       {children}
     </button>
