@@ -74,9 +74,10 @@ function MobileHeader({ name }: { name?: string }) {
   const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
   return (
     <div className="mb-1 flex items-center justify-between gap-3 md:hidden">
-      {/* surface + hairline so the chrome stands out on the grey canvas —
-          accent-bg (#f5f5f5 light) matches the canvas and would disappear. */}
-      <div className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-2.5">
+      {/* surface fill + shadow (no border) so the chrome lifts off the grey
+          canvas — accent-bg (#f5f5f5 light) matches the canvas and would
+          disappear. Elevation is fills + shadows, not hairlines (2026-07). */}
+      <div className="inline-flex items-center gap-2 rounded-full bg-surface px-4 py-2.5 shadow-[var(--w-shadow-1)]">
         <Icon name="star" size={16} className="text-ink" />
         <span className="ty-label text-ink">{greeting}{name ? `, ${name}` : ''}</span>
       </div>
@@ -84,7 +85,7 @@ function MobileHeader({ name }: { name?: string }) {
         type="button"
         aria-label="Account"
         onClick={() => navigate('/william/account')}
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-ink transition-[filter] hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface text-ink shadow-[var(--w-shadow-1)] transition-[box-shadow,background-color] duration-150 hover:bg-btn-neutral-hover hover:shadow-[var(--w-shadow-2)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
       >
         <Icon name="account" size={20} />
       </button>

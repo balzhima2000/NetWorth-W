@@ -126,6 +126,11 @@
   --w-radius-lg: 20px;   /* standard card */
   --w-radius-card: 20px; /* alias for the standard card radius */
 
+  /* Elevation — fills + shadows replace hairline borders (2026-07). e1 = rest,
+     e2 = hover/raised. Use via shadow-[var(--w-shadow-1)]. */
+  --w-shadow-1: 0 1px 2px 0 rgb(0 0 0 / 0.05), 0 4px 12px -2px rgb(0 0 0 / 0.08);
+  --w-shadow-2: 0 2px 6px 0 rgb(0 0 0 / 0.08), 0 10px 24px -4px rgb(0 0 0 / 0.13);
+
   background-color: var(--w-canvas);
   color: var(--w-ink);
   font-family: var(--w-font-sans);
@@ -178,6 +183,11 @@ html[data-theme="dark"] .william {
   --w-chart-1: #60a5fa; --w-chart-2: #2dd4bf; --w-chart-3: #fbbf24; --w-chart-4: #818cf8; --w-chart-5: #fb7185;
   --w-alloc-lime: #bef264;  /* allocation bar — BRIGHT lime (dark) */
   --w-alloc-blue: #60a5fa;  /* allocation bar — BRIGHT blue (dark) */
+
+  /* Elevation shadows — deeper in dark so lift still reads on the near-black
+     canvas (fill contrast does the rest). */
+  --w-shadow-1: 0 1px 2px 0 rgb(0 0 0 / 0.5), 0 4px 12px -2px rgb(0 0 0 / 0.4);
+  --w-shadow-2: 0 2px 6px 0 rgb(0 0 0 / 0.6), 0 10px 24px -4px rgb(0 0 0 / 0.55);
 }
 
 /* ── Type scale (ported from Figma text styles) ──────────── */
