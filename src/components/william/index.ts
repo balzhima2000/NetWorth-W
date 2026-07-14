@@ -18,3 +18,4 @@ export { List, ListRow, ListHeader } from './List';
 export { FloatingNav, TabBar } from './Nav';
 export { Modal } from './Modal';
 export { Field, TextInput, Textarea, SelectInput, SegmentToggle } from './Field';
+export { InfoTip } from './InfoTip';

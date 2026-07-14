@@ -8,8 +8,8 @@
  *  - Milestones ladder (Coast / Lean / FIRE / Fat on one value axis)
  *  - Assumptions grid + Edit modal (the inputs behind the FI number)
  */
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Card, Button, CardButton, Icon, FloatingNav, TabBar, RangeSelector } from '../../components/william';
+import { useEffect, useState } from 'react';
+import { Card, Button, CardButton, Icon, FloatingNav, TabBar, RangeSelector, InfoTip } from '../../components/william';
 import { cn } from '../../components/william/cn';
 import { getCurrencySymbol } from '../../utils/formatters';
 import { FireProjectionChart } from './FireProjectionChart';
@@ -49,101 +49,6 @@ function money0(v: number, currency: string) {
   } catch {
     return `${getCurrencySymbol(currency)}${Math.round(v).toLocaleString('en-US')}`;
   }
-}
-
-// ── Info tooltip — matches the Figma Tooltip component (beak + placement) ──
-// Auto-placed above/below the trigger, centered, clamped to the viewport; the
-// beak stays aligned to the trigger. Same behavior on desktop and mobile.
-const TIP_WIDTH = 300;
-const TIP_MIN_WIDTH = 200; // floor before we allow off-center clamping
-const TIP_GAP = 8;      // trigger ↔ tooltip
-const TIP_MARGIN = 12;  // viewport edge
-
-function InfoTip({ title, children }: { title?: string; children: React.ReactNode }) {
-  const [open, setOpen] = useState(false);
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const tipRef = useRef<HTMLDivElement>(null);
-  const [pos, setPos] = useState<{ top: number; left: number; placement: 'top' | 'bottom'; width: number } | null>(null);
-
-  const compute = () => {
-    const t = triggerRef.current?.getBoundingClientRect();
-    const tip = tipRef.current?.getBoundingClientRect();
-    if (!t || !tip) return;
-    const vw = window.innerWidth, vh = window.innerHeight;
-    const cx = t.left + t.width / 2;
-    // The beak is ALWAYS centered on the tooltip, so to keep it pointing at the
-    // trigger we must center the tooltip on `cx`. Rather than shift it off-centre
-    // when it would overflow (which drifts the beak off the icon), narrow it so a
-    // centered tooltip still fits. Only if it can't fit even at TIP_MIN_WIDTH do
-    // we fall back to clamping.
-    const maxHalf = Math.min(cx - TIP_MARGIN, vw - TIP_MARGIN - cx);
-    const width = Math.max(TIP_MIN_WIDTH, Math.min(TIP_WIDTH, 2 * maxHalf));
-    const spaceBelow = vh - t.bottom;
-    const placement: 'top' | 'bottom' =
-      spaceBelow < tip.height + TIP_GAP + TIP_MARGIN && t.top > tip.height + TIP_GAP + TIP_MARGIN ? 'top' : 'bottom';
-    const left = Math.max(TIP_MARGIN, Math.min(cx - width / 2, vw - width - TIP_MARGIN));
-    const top = placement === 'bottom' ? t.bottom + TIP_GAP : t.top - tip.height - TIP_GAP;
-    setPos({ top, left, placement, width });
-  };
-
-  // Run twice: the first pass sizes the tooltip, the rAF pass re-measures its
-  // (width-dependent) height so top-placement lands correctly.
-  useLayoutEffect(() => {
-    if (!open) return;
-    compute();
-    const r = requestAnimationFrame(compute);
-    return () => cancelAnimationFrame(r);
-  }, [open]);
-  useEffect(() => {
-    if (!open) return;
-    const on = () => compute();
-    window.addEventListener('scroll', on, true);
-    window.addEventListener('resize', on);
-    return () => { window.removeEventListener('scroll', on, true); window.removeEventListener('resize', on); };
-  }, [open]);
-
-  return (
-    <span className="inline-flex align-middle">
-      <button
-        ref={triggerRef}
-        type="button"
-        aria-label={title ?? 'More information'}
-        onMouseEnter={() => setOpen(true)}
-        onMouseLeave={() => setOpen(false)}
-        onFocus={() => setOpen(true)}
-        onBlur={() => setOpen(false)}
-        className="inline-flex text-muted transition-colors hover:text-ink focus-visible:text-ink focus-visible:outline-none"
-      >
-        <Icon name="info" size={14} />
-      </button>
-      {open && (
-        <div
-          ref={tipRef}
-          role="tooltip"
-          style={{ position: 'fixed', top: pos?.top ?? -9999, left: pos?.left ?? -9999, width: pos?.width ?? TIP_WIDTH, opacity: pos ? 1 : 0 }}
-          className="pointer-events-none z-[60] flex flex-col gap-[5px] rounded-2xl border border-line bg-surface p-4 text-left shadow-[0_12px_32px_-8px_rgba(0,0,0,0.22)]"
-        >
-          {/* beak — an 8px rotated square, ALWAYS centered on the side (matches
-              the Figma Tooltip master 1123:18711). Its center sits on the
-              tooltip's outer edge so the fill covers the body's 1px border seam
-              (otherwise the border shows through the base and the beak reads as
-              detached). Only the two outer edges carry the border → a clean,
-              connected point. */}
-          <span
-            aria-hidden="true"
-            className={cn(
-              'absolute left-1/2 h-2 w-2 -translate-x-1/2 rotate-45 border-line bg-surface',
-              pos?.placement === 'top'
-                ? '-bottom-px translate-y-1/2 border-b border-r'
-                : '-top-px -translate-y-1/2 border-l border-t',
-            )}
-          />
-          {title && <span className="text-[15px] font-semibold leading-[1.4] tracking-[-0.01em] text-ink">{title}</span>}
-          <span className="text-[14px] leading-[1.4] text-secondary">{children}</span>
-        </div>
-      )}
-    </span>
-  );
 }
 
 function ProgressBar({ pct }: { pct: number }) {

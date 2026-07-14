@@ -8,7 +8,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRefreshPrices } from '../../hooks/useRefreshPrices';
-import { Card, Button, CardButton, CardDropdown, Icon, FloatingNav, TabBar } from '../../components/william';
+import { Card, Button, CardButton, CardDropdown, Icon, FloatingNav, TabBar, InfoTip } from '../../components/william';
 import { usePortfolioData, type SortKey, type SortDir } from './usePortfolioData';
 import { AddTradeModal, SetTargetsModal } from './modals';
 import { ImportExcelModal } from './ImportExcelModal';
@@ -69,7 +69,13 @@ function AllocationCard({ d, onSetTargets }: { d: ReturnType<typeof usePortfolio
   return (
     <Card className="flex flex-col gap-3.5 p-5">
       <div className="flex items-center justify-between">
-        <Eyebrow>Allocation</Eyebrow>
+        <div className="flex items-center gap-1.5">
+          <Eyebrow>Allocation</Eyebrow>
+          <InfoTip title="Allocation & drift">
+            Your mix across Stocks, Cash, Crypto and Other. Set targets to track drift — the tick
+            marks your goal weight, and each chip shows how far a holding sits from it.
+          </InfoTip>
+        </div>
         <CardButton onClick={onSetTargets}>
           {hasTargets ? 'Edit targets' : 'Set targets'}
         </CardButton>
@@ -152,7 +158,13 @@ function ColHeader({ label, sortKey, active, dir, onSort }: { label: string; sor
 function HoldingsTable({ d, sortBy, sortDir, onSort }: { d: ReturnType<typeof usePortfolioData>; sortBy: SortKey; sortDir: SortDir; onSort: (k: SortKey) => void }) {
   return (
     <Card className="hidden flex-col px-5 pb-2 pt-5 md:flex">
-      <h2 className="mb-3.5 text-[18px] font-semibold tracking-[-0.01em] text-ink">Holdings</h2>
+      <div className="mb-3.5 flex items-center gap-1.5">
+        <h2 className="text-[18px] font-semibold tracking-[-0.01em] text-ink">Holdings</h2>
+        <InfoTip title="Gain vs return">
+          Gain is shown in your base currency and includes exchange-rate movement since you bought.
+          Return % is measured in each holding's own currency, so currency swings don't affect it.
+        </InfoTip>
+      </div>
       <div className={cn(GRID, 'pb-1')}>
         <span className="num text-[11px] font-medium uppercase tracking-[0.03em] text-muted">Asset</span>
         <span className="num text-[11px] font-medium uppercase tracking-[0.03em] text-right text-muted">Price</span>
@@ -235,7 +247,13 @@ function HoldingsList({ d, sortBy, sortDir, onSelectField, onToggleDir }: { d: R
   return (
     <Card className="flex flex-col px-[18px] pb-1.5 pt-[18px] md:hidden">
       <div className="mb-3 flex items-center justify-between">
-        <h2 className="text-[18px] font-semibold text-ink">Holdings</h2>
+        <div className="flex items-center gap-1.5">
+          <h2 className="text-[18px] font-semibold text-ink">Holdings</h2>
+          <InfoTip title="Gain vs return">
+            Gain is shown in your base currency and includes exchange-rate movement since you bought.
+            Return % is measured in each holding's own currency, so currency swings don't affect it.
+          </InfoTip>
+        </div>
         <SortDropdown sortBy={sortBy} sortDir={sortDir} onSelectField={onSelectField} onToggleDir={onToggleDir} />
       </div>
       {d.holdings.map((h, i) => (
