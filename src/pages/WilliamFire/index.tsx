@@ -62,7 +62,7 @@ function InfoTip({ title, children }: { title?: string; children: React.ReactNod
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const tipRef = useRef<HTMLDivElement>(null);
-  const [pos, setPos] = useState<{ top: number; left: number; placement: 'top' | 'bottom'; beak: number } | null>(null);
+  const [pos, setPos] = useState<{ top: number; left: number; placement: 'top' | 'bottom' } | null>(null);
 
   const compute = () => {
     const t = triggerRef.current?.getBoundingClientRect();
@@ -73,10 +73,11 @@ function InfoTip({ title, children }: { title?: string; children: React.ReactNod
     const placement: 'top' | 'bottom' =
       spaceBelow < tip.height + TIP_GAP + TIP_MARGIN && t.top > tip.height + TIP_GAP + TIP_MARGIN ? 'top' : 'bottom';
     const cx = t.left + t.width / 2;
+    // Keep the tooltip centered on the trigger (clamped to the viewport) so the
+    // always-centered beak points at it whenever there's room.
     const left = Math.max(TIP_MARGIN, Math.min(cx - tip.width / 2, vw - tip.width - TIP_MARGIN));
     const top = placement === 'bottom' ? t.bottom + TIP_GAP : t.top - tip.height - TIP_GAP;
-    const beak = Math.max(16, Math.min(cx - left, tip.width - 16)); // beak x within tooltip
-    setPos({ top, left, placement, beak });
+    setPos({ top, left, placement });
   };
 
   useLayoutEffect(() => { if (open) compute(); }, [open]);
@@ -109,15 +110,16 @@ function InfoTip({ title, children }: { title?: string; children: React.ReactNod
           style={{ position: 'fixed', top: pos?.top ?? -9999, left: pos?.left ?? -9999, width: TIP_WIDTH, opacity: pos ? 1 : 0 }}
           className="pointer-events-none z-[60] flex flex-col gap-[5px] rounded-2xl border border-line bg-surface p-4 text-left shadow-[0_12px_32px_-8px_rgba(0,0,0,0.22)]"
         >
-          {/* beak — a rotated square whose CENTER sits exactly on the tooltip
-              edge, so its fill covers the body's 1px border seam (otherwise the
-              border shows through the base and the beak reads as detached). Only
-              the two outer edges carry the border → a clean, connected point. */}
+          {/* beak — an 8px rotated square, ALWAYS centered on the side (matches
+              the Figma Tooltip master 1123:18711). Its center sits on the
+              tooltip's outer edge so the fill covers the body's 1px border seam
+              (otherwise the border shows through the base and the beak reads as
+              detached). Only the two outer edges carry the border → a clean,
+              connected point. */}
           <span
             aria-hidden="true"
-            style={{ left: pos?.beak ?? 0 }}
             className={cn(
-              'absolute h-2.5 w-2.5 -translate-x-1/2 rotate-45 border-line bg-surface',
+              'absolute left-1/2 h-2 w-2 -translate-x-1/2 rotate-45 border-line bg-surface',
               pos?.placement === 'top'
                 ? '-bottom-px translate-y-1/2 border-b border-r'
                 : '-top-px -translate-y-1/2 border-l border-t',
