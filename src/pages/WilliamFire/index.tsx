@@ -109,13 +109,18 @@ function InfoTip({ title, children }: { title?: string; children: React.ReactNod
           style={{ position: 'fixed', top: pos?.top ?? -9999, left: pos?.left ?? -9999, width: TIP_WIDTH, opacity: pos ? 1 : 0 }}
           className="pointer-events-none z-[60] flex flex-col gap-[5px] rounded-2xl border border-line bg-surface p-4 text-left shadow-[0_12px_32px_-8px_rgba(0,0,0,0.22)]"
         >
-          {/* beak — a rotated square straddling the edge facing the trigger */}
+          {/* beak — a rotated square whose CENTER sits exactly on the tooltip
+              edge, so its fill covers the body's 1px border seam (otherwise the
+              border shows through the base and the beak reads as detached). Only
+              the two outer edges carry the border → a clean, connected point. */}
           <span
             aria-hidden="true"
             style={{ left: pos?.beak ?? 0 }}
             className={cn(
-              'absolute h-3 w-3 -translate-x-1/2 rotate-45 border-line bg-surface',
-              pos?.placement === 'top' ? '-bottom-1.5 border-b border-r' : '-top-1.5 border-l border-t',
+              'absolute h-2.5 w-2.5 -translate-x-1/2 rotate-45 border-line bg-surface',
+              pos?.placement === 'top'
+                ? '-bottom-px translate-y-1/2 border-b border-r'
+                : '-top-px -translate-y-1/2 border-l border-t',
             )}
           />
           {title && <span className="text-[15px] font-semibold leading-[1.4] tracking-[-0.01em] text-ink">{title}</span>}
