@@ -19,7 +19,9 @@ export function Badge({ tone = 'neutral', children, className, ...rest }: BadgeP
   return (
     <span
       className={cn(
-        'num inline-flex items-center rounded-full px-2.5 py-1.5 text-[12px] font-semibold leading-none',
+        // Geist Mono tabular per the Badge master (14:12). Mono only ships
+        // Medium, so weight is 500 (font-semibold would faux-bold).
+        'num-mono inline-flex items-center rounded-full px-2.5 py-1.5 text-[12px] font-medium leading-none',
         tones[tone],
         className,
       )}

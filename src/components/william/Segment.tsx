@@ -78,7 +78,9 @@ export function Segmented({ options, value, onChange, track = 'raised', size = '
             onClick={() => onChange(o.value)}
             className={cn(
               'relative z-10 whitespace-nowrap rounded-full font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink',
-              size === 'md' ? 'flex-1 py-2 text-[14px]' : 'px-3.5 py-1.5 text-[13px]',
+              // Range codes (sm) render Geist Mono uppercase per the Segment
+              // master (231:54); word toggles (md) stay sans.
+              size === 'md' ? 'flex-1 py-2 text-[14px]' : 'num-mono px-4 py-1.5 text-[13px] uppercase tracking-[0.65px]',
               equalWidth && size === 'sm' && 'flex-1',
               active ? 'text-ink' : 'text-secondary hover:text-ink',
             )}
