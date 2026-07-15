@@ -23,6 +23,19 @@
 - **Refresh All** (Account → Currency) only updates the global `exchangeRates` table in `settingsStore`. It does **not** touch any stored `convertedAmount` on existing transactions or recurring payments.
 - `recalculateRatesForCurrency` was removed in commit `c0ae4bc` because it retroactively overwrote historical `convertedAmount` values on every rate refresh — violating the above rule.
 
+### ⚠️ Changing `defaultCurrency` re-labels history, it does not restate it (open question)
+
+Immutability is about rate *refreshes*, but it has a consequence for **base-currency changes**. `convertedAmount` (and `ManualEntry.value`, `NetWorthSnapshot.*`, `MonthlyBudget.amount`, `StockTrade.buyRateToDefault`) is denominated in whatever `defaultCurrency` was at entry time — and **none of them record which currency that was**. So flipping `defaultCurrency` cannot convert them; it silently re-labels them (₪1,030,975 → $1,030,975).
+
+**Interim behaviour (shipped):** `hasCurrencyDenominatedData()` (`src/utils/currencyDenomination.ts`) reports whether anything is denominated in the current default. Callers use it to stop the base currency moving *silently*:
+- `WilliamSetup` locale-guesses **only on an empty install**; once data exists the stored currency wins (it used to guess over it, so a US-locale browser flipped the ILS demo/restored dataset to USD).
+- Its restore path no longer calls `setDefaultCurrency` at all — a backup carries no currency of its own to restore (`exportImport` writes `settings: {}`).
+- `Account → Currency` confirms the change when there's history to re-label.
+
+**Not fixed — needs Balzhima's call.** The interim only warns; it doesn't make the data right. Two real options: (a) convert stored amounts once on an explicit base change — collides head-on with the immutability rule; (b) record the denomination per record (e.g. `convertedCurrency`) so display can be honest — a data-model change + migration. Don't reintroduce `recalculateRatesForCurrency` either way.
+
+**Related, also unfixed:** `WilliamFire/EditAssumptionsModal.tsx` has an inline currency select inside a money-field accessory that calls the global `setDefaultCurrency` — it reads as a unit label but re-bases the whole app.
+
 ## FX provider
 `settingsStore.fxProvider` controls which service is used:
 

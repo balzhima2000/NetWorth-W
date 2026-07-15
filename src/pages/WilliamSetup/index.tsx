@@ -11,6 +11,7 @@ import { useSettingsStore } from '../../stores/settingsStore';
 import { useNetWorthStore } from '../../stores/networthStore';
 import { useRestoreBackup } from '../../hooks/useRestoreBackup';
 import { CURRENCIES } from '../../utils/constants';
+import { hasCurrencyDenominatedData } from '../../utils/currencyDenomination';
 import { getCurrencySymbol, formatCurrency } from '../../utils/formatters';
 
 /** Best-effort currency from the device region; falls back to the stored default. */
@@ -52,7 +53,15 @@ export default function WilliamSetup() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [name, setName] = useState(() => useSettingsStore.getState().userName || '');
-  const [currency, setCurrency] = useState(() => guessCurrencyFromLocale(useSettingsStore.getState().defaultCurrency || 'ILS'));
+  // The currency any existing data is already denominated in. Setup is reachable
+  // with data behind it (a re-run, or the demo seed), and that data records no
+  // currency of its own — so this is the only thing that says what it means.
+  const [storedCurrency] = useState(() => useSettingsStore.getState().defaultCurrency || 'ILS');
+  const [hasData] = useState(hasCurrencyDenominatedData);
+  // Locale is a helpful guess for a genuinely empty install, but it must not
+  // guess over a currency that stored amounts are denominated in: switching the
+  // base currency re-labels them rather than converting them.
+  const [currency, setCurrency] = useState(() => (hasData ? storedCurrency : guessCurrencyFromLocale(storedCurrency)));
   const [editingCurrency, setEditingCurrency] = useState(false);
   const [mode, setMode] = useState<Mode>(null);
   const [simpleValue, setSimpleValue] = useState('');
@@ -71,7 +80,11 @@ export default function WilliamSetup() {
   const confirmRestore = () => restore.confirm(() => {
     const s = useSettingsStore.getState();
     if (name.trim()) { s.setUserName(name.trim()); s.setUserNickname(name.trim().split(' ')[0] || name.trim()); }
-    s.setDefaultCurrency(currency);
+    // Deliberately no setDefaultCurrency here. The restored amounts are already
+    // denominated in some currency, and a backup carries none of its own to say
+    // which (exportImport writes `settings: {}`), so the stored default is the
+    // best information available — stamping this wizard's locale guess over it
+    // would re-label the whole restored dataset without converting it.
     s.setHasCompletedSetup(true);
     navigate('/william/dashboard');
   });
@@ -128,6 +141,11 @@ export default function WilliamSetup() {
                     {CURRENCIES.map((c) => <option key={c.code} value={c.code}>{c.symbol} {c.code} — {c.name}</option>)}
                   </SelectInput>
                 </Field>
+              )}
+              {hasData && currency !== storedCurrency && (
+                <p className="text-[13px] leading-snug text-secondary">
+                  Amounts already recorded in {getCurrencySymbol(storedCurrency)} {storedCurrency} won't be converted — they'll be shown as {getCurrencySymbol(currency)} {currency} at their existing values.
+                </p>
               )}
             </div>
             <div className="flex flex-col items-center gap-3.5">
