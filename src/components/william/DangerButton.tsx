@@ -16,9 +16,9 @@ import { PixelSpinner } from './PixelSpinner';
  *   controls (stacked mobile Delete, inline row actions).
  *
  * Size scale: S/M/L = 27/36/44 tall, gap 4px, 14px SemiBold label, pill (r999)
- * at every size. Horizontal pad is px-4 at l/m/s — height alone separates them,
- * same as Button. NB: Large is 44px here vs Button's 42px (an inconsistency
- * inherited from the Figma masters). `xs` is code-only (no Figma peer).
+ * at every size. H-pad walks 12/16/24, mirroring Button. NB: Large is 44px here
+ * vs Button's 42px (an inconsistency inherited from the Figma masters). `xs` is
+ * code-only (no Figma peer).
  */
 type Variant = 'outline' | 'subtle';
 type Size = 'l' | 'm' | 's' | 'xs';
@@ -37,10 +37,11 @@ const base =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-canvas ' +
   'disabled:pointer-events-none';
 
+// H-pad mirrors Button's hand-set 12/16/24 exception — see Button.tsx.
 const sizes: Record<Size, string> = {
-  l:  'h-[44px] px-4 gap-1 text-[14px] font-semibold',
+  l:  'h-[44px] px-6 gap-1 text-[14px] font-semibold',
   m:  'h-[36px] px-4 gap-1 text-[14px] font-semibold',
-  s:  'h-[27px] px-4 gap-1 text-[14px] font-semibold',
+  s:  'h-[27px] px-3 gap-1 text-[14px] font-semibold',
   xs: 'h-[28px] px-3 gap-1 text-[12px] font-medium',
 };
 
