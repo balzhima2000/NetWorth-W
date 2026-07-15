@@ -3,15 +3,22 @@ import { cn } from './cn';
 import { Icon, type IconName } from './Icon';
 
 /**
- * In-card controls — the mono, uppercase tonal pills used *inside* cards for
- * secondary actions and dropdowns. Distinct from the page-level `Button`:
- * these use Geist Mono (`num`) / uppercase / 0.6px tracking / `text-secondary`
- * on a 28px `btn-tonal` pill, matching the tabular-number treatment in cards.
+ * In-card controls.
  *
- * Figma:
- *  - CardButton   ← "Button-inside-card" (1428:14011) — e.g. SET TARGETS
- *  - CardDropdown ← "SortDropdown"       (1428:13993) — e.g. VALUE ▾
- *  - Trailing     ← "Trailing"           (931:13756)  — swappable trailing affordance
+ * ⚠️ Rule (2026-07, Balzhima — Jakob's law): **navigation = link, action =
+ * button.** The old mono/UPPERCASE tonal pill is retired for both:
+ * mono+uppercase+tracking is this DS's *label* language (CURRENT NET WORTH,
+ * ALLOCATION), so wearing it made actions read as labels; the tonal pill made
+ * them read as badges; text-muted made them the quietest thing in the card.
+ *
+ *  - CardLink   → "See all" etc. = navigation → a plain TEXT LINK + chevron.
+ *  - Card actions ("Set targets", "Edit") → use the real DS `Button size="s"
+ *    variant="tonal"`. The bespoke `CardButton` was deleted — a button inside a
+ *    card should look like every other button (its Figma master 1428:14011 is
+ *    gone, so it wasn't DS-backed anyway).
+ *  - CardDropdown keeps the mono treatment: it surfaces a *value* (VALUE ↓),
+ *    which is the tabular/label language on purpose.
+ *  - Trailing ← Figma "Trailing" (931:13756) — swappable trailing affordance.
  */
 
 /** Right-pointing chevron matching the Figma Trailing chevron. Inherits
@@ -73,35 +80,28 @@ export function Trailing({
       return <span className={cn('text-[15px] text-muted', className)}>{children}</span>;
   }
 }
-const cardControlBase =
-  'num-mono inline-flex h-7 items-center rounded-full bg-btn-tonal px-3 ' +
-  'text-[12px] font-medium uppercase tracking-[0.6px] text-muted ' +
-  'transition-colors hover:bg-btn-neutral-hover hover:text-ink ' +
-  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus';
-
-/** Mono uppercase tonal pill for an in-card action (Set targets, See all…). */
-export const CardButton = React.forwardRef<
-  HTMLButtonElement,
-  React.ButtonHTMLAttributes<HTMLButtonElement>
->(function CardButton({ className, children, type = 'button', ...rest }, ref) {
-  return (
-    <button ref={ref} type={type} className={cn(cardControlBase, className)} {...rest}>
-      {children}
-    </button>
-  );
-});
-
 /**
- * In-card dropdown trigger: the CardButton pill + a trailing arrow glyph.
- * `arrow` overrides the default ▾ (e.g. the portfolio sort trigger passes the
- * live ↓/↑ direction arrow). The arrow inherits the mono treatment.
+ * In-card dropdown trigger — keeps the mono/uppercase pill because it surfaces a
+ * VALUE (the active sort field), not an action. `arrow` overrides the default ▾
+ * (the portfolio sort trigger passes the live ↓/↑ direction arrow).
  */
 export const CardDropdown = React.forwardRef<
   HTMLButtonElement,
   React.ButtonHTMLAttributes<HTMLButtonElement> & { arrow?: React.ReactNode }
 >(function CardDropdown({ className, children, arrow = '▾', type = 'button', ...rest }, ref) {
   return (
-    <button ref={ref} type={type} className={cn(cardControlBase, 'gap-1', className)} {...rest}>
+    <button
+      ref={ref}
+      type={type}
+      className={cn(
+        'num-mono inline-flex h-7 items-center gap-1 rounded-full bg-btn-tonal px-3',
+        'text-[12px] font-medium uppercase tracking-[0.6px] text-muted',
+        'transition-colors hover:bg-btn-neutral-hover hover:text-ink',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
+        className,
+      )}
+      {...rest}
+    >
       {children}
       <span aria-hidden>{arrow}</span>
     </button>
@@ -109,16 +109,25 @@ export const CardDropdown = React.forwardRef<
 });
 
 /**
- * In-card navigational pill: the button-inside-card + a trailing chevron
- * (Figma Trailing "Action", e.g. SEE ALL / SEE MORE). The chevron inherits the
- * pill's text color so it tracks the hover state.
+ * In-card navigational link ("See all" / "See more") — sentence case text +
+ * chevron, no container. Navigation reads as a link, not a button/badge.
  */
 export const CardLink = React.forwardRef<
   HTMLButtonElement,
   React.ButtonHTMLAttributes<HTMLButtonElement>
 >(function CardLink({ className, children, type = 'button', ...rest }, ref) {
   return (
-    <button ref={ref} type={type} className={cn(cardControlBase, 'gap-1', className)} {...rest}>
+    <button
+      ref={ref}
+      type={type}
+      className={cn(
+        'inline-flex items-center gap-1.5 whitespace-nowrap rounded-sm text-[14px] font-medium text-secondary',
+        'transition-colors hover:text-ink',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-surface',
+        className,
+      )}
+      {...rest}
+    >
       {children}
       <ChevronRight className="shrink-0" />
     </button>

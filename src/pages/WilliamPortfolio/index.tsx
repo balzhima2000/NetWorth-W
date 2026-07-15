@@ -8,7 +8,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRefreshPrices } from '../../hooks/useRefreshPrices';
-import { Card, Button, CardButton, CardDropdown, Icon, FloatingNav, TabBar, InfoTip } from '../../components/william';
+import { Card, Button, CardDropdown, Icon, FloatingNav, TabBar, InfoTip } from '../../components/william';
 import { usePortfolioData, type SortKey, type SortDir } from './usePortfolioData';
 import { AddTradeModal, SetTargetsModal } from './modals';
 import { ImportExcelModal } from './ImportExcelModal';
@@ -76,9 +76,9 @@ function AllocationCard({ d, onSetTargets }: { d: ReturnType<typeof usePortfolio
             marks your goal weight, and each chip shows how far a holding sits from it.
           </InfoTip>
         </div>
-        <CardButton onClick={onSetTargets}>
+        <Button size="s" variant="tonal" onClick={onSetTargets}>
           {hasTargets ? 'Edit targets' : 'Set targets'}
-        </CardButton>
+        </Button>
       </div>
       {hasTargets ? (
         <div className="relative">

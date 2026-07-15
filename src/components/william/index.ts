@@ -12,7 +12,7 @@ export { BackLink } from './BackLink';
 export { Skeleton } from './Skeleton';
 export { ActionButton } from './ActionButton';
 export { Card } from './Card';
-export { CardButton, CardDropdown, CardLink, Trailing } from './CardControl';
+export { CardDropdown, CardLink, Trailing } from './CardControl';
 export type { TrailingType } from './CardControl';
 export { List, ListRow, ListHeader } from './List';
 export { FloatingNav, TabBar } from './Nav';
