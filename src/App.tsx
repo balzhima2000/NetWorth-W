@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useSettingsStore } from './stores/settingsStore';
 import { seedDemoData } from './data/demoSeed';
+import { IS_DEMO } from './lib/demoMode';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { ToastProvider } from './components/ui/Toast';
 import { useAutoAdd } from './hooks/useAutoAdd';
@@ -37,8 +38,13 @@ function AppInner() {
   // Seed placeholder data (no-op once setup is complete / stores are non-empty)
   // so the preview screens always render filled instead of empty states. Skipped
   // during the real setup flow so a genuine onboarding isn't polluted with demo data.
+  //
+  // Demo builds seed on every route instead, and mark setup complete: `/` then
+  // opens on a filled dashboard, and /william/setup stays visitable without
+  // stranding a visitor in an empty app if they walk through it.
   useEffect(() => {
-    if (!window.location.pathname.startsWith('/william/setup')) seedDemoData();
+    if (IS_DEMO) seedDemoData({ completeSetup: true });
+    else if (!window.location.pathname.startsWith('/william/setup')) seedDemoData();
   }, []);
 
   // Auto-add recurring payments and installments on startup

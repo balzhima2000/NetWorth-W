@@ -210,8 +210,12 @@ const DEMO_RATES: ExchangeRate[] = [
 /**
  * Seed placeholder data into any store that is still empty. No-op once the user
  * has completed setup (a real install) — so it never touches real data.
+ *
+ * `completeSetup` additionally marks setup as done. Demo builds pass it so `/`
+ * redirects to a filled dashboard rather than the onboarding wizard; a real
+ * install never does, so genuine onboarding is unaffected.
  */
-export function seedDemoData(): void {
+export function seedDemoData({ completeSetup = false } = {}): void {
   const settings = useSettingsStore.getState();
   if (settings.hasCompletedSetup) return;
 
@@ -266,5 +270,6 @@ export function seedDemoData(): void {
   if (settings.fireCurrentAge == null) patch.fireCurrentAge = 32;
   if (settings.fireTargetAge == null) patch.fireTargetAge = 50;
   if (!settings.userName) patch.userName = 'Alex';
+  if (completeSetup) patch.hasCompletedSetup = true;
   if (Object.keys(patch).length > 0) useSettingsStore.setState(patch);
 }
