@@ -38,7 +38,7 @@ function OptionCard({ title, desc, selected, onClick }: { title: string; desc: s
       aria-pressed={selected}
       className={cn(
         'flex flex-col gap-1 rounded-2xl bg-surface p-4 text-left transition-shadow',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
         selected ? 'shadow-[inset_0_0_0_1.5px_var(--w-accent)]' : 'shadow-[inset_0_0_0_1px_var(--w-line)] hover:shadow-[inset_0_0_0_1px_var(--w-muted)]',
       )}
     >

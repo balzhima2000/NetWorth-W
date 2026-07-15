@@ -82,7 +82,7 @@ export function Segmented({ options, value, onChange, track = 'raised', size = '
             onMouseEnter={() => setHovered(i)}
             onClick={() => onChange(o.value)}
             className={cn(
-              'relative z-10 whitespace-nowrap rounded-full font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink',
+              'relative z-10 whitespace-nowrap rounded-full font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
               // Range codes (sm) render Geist Mono uppercase per the Segment
               // master (231:54); word toggles (md) stay sans.
               size === 'md' ? 'flex-1 py-2 text-[14px]' : 'num-mono px-4 py-1.5 text-[13px] uppercase tracking-[0.65px]',
@@ -107,7 +107,7 @@ export function Segment({ selected = false, children, onClick }: { selected?: bo
       aria-pressed={selected}
       className={cn(
         'rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-colors',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
         selected ? 'bg-surface text-ink' : 'text-secondary hover:text-ink',
       )}
     >

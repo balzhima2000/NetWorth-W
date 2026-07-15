@@ -85,7 +85,7 @@ export function FloatingNav() {
               aria-current={active ? 'page' : undefined}
               className={cn(
                 'relative z-10 flex items-center gap-1.5 rounded-full px-3 py-2 text-[14px] font-medium transition-colors',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
                 active || hovered === i ? 'text-ink' : 'text-secondary',
               )}
             >
@@ -99,7 +99,7 @@ export function FloatingNav() {
         onClick={() => navigate(account.path)}
         aria-label={account.label}
         aria-current={pathname === account.path ? 'page' : undefined}
-        className="nav-glass group relative flex h-[45px] w-[45px] items-center justify-center rounded-full text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+        className="nav-glass group relative flex h-[53px] w-[53px] items-center justify-center rounded-full text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
       >
         {/* Selected/hover highlight — same accent-bg pill as the other nav
             items (37px, matching their height), just circular; on the glass. */}
@@ -137,7 +137,7 @@ export function TabBar() {
             aria-current={active ? 'page' : undefined}
             className={cn(
               'flex flex-1 flex-col items-center gap-0.5 rounded-full py-2 transition-colors',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
               // Active item = grey pill (surface-raised) + ink; inactive = muted.
               active ? 'bg-raised text-ink' : 'text-muted',
             )}

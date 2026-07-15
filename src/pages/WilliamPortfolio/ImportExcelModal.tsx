@@ -99,7 +99,7 @@ export function ImportExcelModal({ open, onClose }: { open: boolean; onClose: ()
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="flex flex-col items-center gap-2 rounded-2xl border-2 border-dashed border-line px-6 py-12 text-center transition-colors hover:border-ink/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+            className="flex flex-col items-center gap-2 rounded-2xl border-2 border-dashed border-line px-6 py-12 text-center transition-colors hover:border-ink/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
           >
             <Icon name="import" size={28} className="text-secondary" />
             <span className="text-[15px] font-semibold text-ink">Click to select an .xlsx file</span>
@@ -168,7 +168,7 @@ export function ImportExcelModal({ open, onClose }: { open: boolean; onClose: ()
                         <select
                           value={row.assetCategory}
                           onChange={(e) => setCategory(row.rowKey, e.target.value as AssetCategory)}
-                          className="w-full rounded-lg bg-sunken px-2 py-1 text-[12px] text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+                          className="w-full rounded-lg bg-sunken px-2 py-1 text-[12px] text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                         >
                           {CATEGORY_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
                         </select>

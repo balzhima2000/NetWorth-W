@@ -30,7 +30,7 @@ export function ActionButton({ action, label, onClick, className }: ActionButton
           'flex h-[34px] w-[54px] items-center justify-center rounded-full bg-btn-primary text-btn-on-primary',
           'transition-[transform,background-color] duration-150',
           'group-hover:bg-btn-primary-hover group-active:bg-btn-primary-pressed group-active:scale-95',
-          'group-focus-visible:ring-2 group-focus-visible:ring-ink group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-canvas',
+          'group-focus-visible:ring-2 group-focus-visible:ring-focus group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-canvas',
         )}
       >
         <Icon name={action} size={22} />

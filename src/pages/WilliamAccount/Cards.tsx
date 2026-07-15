@@ -58,7 +58,7 @@ export default function Cards() {
         <Field label="Color">
           <div className="flex flex-wrap gap-2">
             {CARD_COLORS.map((c) => (
-              <button key={c} type="button" onClick={() => setColor(c)} className={cn('h-7 w-7 rounded-full', color === c && 'ring-2 ring-ink ring-offset-2 ring-offset-surface')} style={{ background: c }} />
+              <button key={c} type="button" onClick={() => setColor(c)} className={cn('h-7 w-7 rounded-full', color === c && 'ring-2 ring-focus ring-offset-2 ring-offset-surface')} style={{ background: c }} />
             ))}
           </div>
         </Field>

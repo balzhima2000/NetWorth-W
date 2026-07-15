@@ -86,7 +86,7 @@ function MobileHeader({ name }: { name?: string }) {
         type="button"
         aria-label="Account"
         onClick={() => navigate('/william/account')}
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface text-ink transition-colors duration-150 hover:bg-btn-neutral-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface text-ink transition-colors duration-150 hover:bg-btn-neutral-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
       >
         <Icon name="account" size={20} />
       </button>
@@ -248,7 +248,7 @@ export default function WilliamDashboard() {
             aria-label="FIRE progress — open FIRE page"
             onClick={() => navigate('/william/fire')}
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate('/william/fire'); } }}
-            className="group col-span-2 flex cursor-pointer flex-col gap-2 p-[18px] transition-colors hover:bg-raised active:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink md:col-span-1 md:gap-2.5 md:p-5"
+            className="group col-span-2 flex cursor-pointer flex-col gap-2 p-[18px] transition-colors hover:bg-raised active:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus md:col-span-1 md:gap-2.5 md:p-5"
           >
             <div className="flex items-center justify-between">
               <p className="ty-label whitespace-nowrap text-muted">FIRE PROGRESS</p>

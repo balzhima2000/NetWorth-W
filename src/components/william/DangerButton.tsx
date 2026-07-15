@@ -34,7 +34,7 @@ interface DangerButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement
 const base =
   'inline-flex items-center justify-center whitespace-nowrap ' +
   'transition-[background-color,filter,color] duration-150 select-none ' +
-  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-canvas ' +
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-canvas ' +
   'disabled:pointer-events-none';
 
 const sizes: Record<Size, string> = {

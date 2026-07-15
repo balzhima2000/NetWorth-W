@@ -12,7 +12,7 @@ export function BackLink({ label, onClick, className }: BackLinkProps) {
       type="button"
       onClick={onClick}
       className={cn(
-        'inline-flex items-center gap-1.5 text-[14px] font-medium text-secondary transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink',
+        'inline-flex items-center gap-1.5 text-[14px] font-medium text-secondary transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
         className,
       )}
     >

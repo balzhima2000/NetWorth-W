@@ -113,7 +113,9 @@
   --w-sunken:        #f5f5f5;  /* recessed track / inset       */
   --w-on-inverse:    #ffffff;  /* text on primary/inverse      */
   --w-inverse-hover: #737373;  /* primary button hover          */
-  --w-focus:         #171717;  /* focus ring (tracks accent)   */
+  --w-focus:         #525252;  /* focus ring — Figma color/focus = n600 (L).
+                                  ~7:1 on the canvas, so it's a softer ring
+                                  than the accent without losing contrast. */
   --w-chart-1: #3b82f6; --w-chart-2: #0d9488; --w-chart-3: #d97706; --w-chart-4: #6366f1; --w-chart-5: #e11d48;
   --w-alloc-lime: #ecfccb;  /* allocation bar — pale lime tint (light) */
   --w-alloc-blue: #dbeafe;  /* allocation bar — pale blue tint (light) */
@@ -185,7 +187,8 @@ html[data-theme="dark"] .william {
   --w-sunken:        #0a0a0a;
   --w-on-inverse:    #171717;
   --w-inverse-hover: #a3a3a3;  /* primary button hover (dark)  */
-  --w-focus:         #ffffff;
+  --w-focus:         #a3a3a3;  /* Figma color/focus = n400 (D) — ~7.9:1 on the
+                                  n950 canvas, so contrast holds in dark too. */
   --w-chart-1: #60a5fa; --w-chart-2: #2dd4bf; --w-chart-3: #fbbf24; --w-chart-4: #818cf8; --w-chart-5: #fb7185;
   --w-alloc-lime: #bef264;  /* allocation bar — BRIGHT lime (dark) */
   --w-alloc-blue: #60a5fa;  /* allocation bar — BRIGHT blue (dark) */

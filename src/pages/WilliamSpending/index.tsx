@@ -38,7 +38,7 @@ export function MonthPicker({ month, year, onChange }: { month: number; year: nu
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex h-9 items-center gap-2 rounded-full bg-btn-neutral pl-4 pr-3.5 text-[16px] font-semibold text-ink transition-colors hover:bg-btn-neutral-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+        className="inline-flex h-9 items-center gap-2 rounded-full bg-btn-neutral pl-4 pr-3.5 text-[16px] font-semibold text-ink transition-colors hover:bg-btn-neutral-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
       >
         {MONTH_NAMES[month - 1]} {year}
         <svg width="11" height="7" viewBox="0 0 11 7" fill="none" aria-hidden="true" className="shrink-0 text-secondary">
@@ -170,7 +170,7 @@ function NavCard({ icon, title, subtitle, onClick }: { icon: 'recurring' | 'tren
     <button
       type="button"
       onClick={onClick}
-      className="group flex items-center gap-3.5 rounded-card bg-surface px-5 py-[18px] text-left transition-colors hover:bg-raised active:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+      className="group flex items-center gap-3.5 rounded-card bg-surface px-5 py-[18px] text-left transition-colors hover:bg-raised active:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
     >
       <Icon name={icon} size={22} className="shrink-0 text-ink" />
       <span className="flex min-w-0 flex-1 flex-col gap-0.5">

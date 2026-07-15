@@ -77,7 +77,7 @@ const cardControlBase =
   'num-mono inline-flex h-7 items-center rounded-full bg-btn-tonal px-3 ' +
   'text-[12px] font-medium uppercase tracking-[0.6px] text-muted ' +
   'transition-colors hover:bg-btn-neutral-hover hover:text-ink ' +
-  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink';
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus';
 
 /** Mono uppercase tonal pill for an in-card action (Set targets, See all…). */
 export const CardButton = React.forwardRef<

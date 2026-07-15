@@ -36,7 +36,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 const base =
   'inline-flex items-center justify-center whitespace-nowrap ' +
   'transition-[background-color,filter,color] duration-150 select-none ' +
-  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-canvas ' +
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-canvas ' +
   'disabled:pointer-events-none';
 
 // Ported 1:1 from the Figma Button master (897:7790): S/M/L = 27/36/42, gap 6px,

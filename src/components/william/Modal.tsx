@@ -51,7 +51,7 @@ export function Modal({ open, onClose, title, children, footer, maxWidth = 480 }
           <h2 className="text-[20px] font-semibold tracking-[-0.01em] text-ink">{title}</h2>
           <button
             type="button" aria-label="Close" onClick={onClose}
-            className="-mr-1 flex h-8 w-8 items-center justify-center rounded-full text-secondary transition-colors hover:bg-raised hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+            className="-mr-1 flex h-8 w-8 items-center justify-center rounded-full text-secondary transition-colors hover:bg-raised hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
           >✕</button>
         </div>
         {/* body */}

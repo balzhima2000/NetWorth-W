@@ -84,7 +84,7 @@ export function ListRow({ title, subtitle, marker, trailing, chevron, danger, on
         type="button"
         onClick={onClick}
         style={style}
-        className={cn(layout, 'group rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ink')}
+        className={cn(layout, 'group rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus')}
       >
         {inner}
       </button>

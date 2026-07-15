@@ -33,7 +33,7 @@ function RowMenu({ active, onEdit, onToggle, onDelete }: { active: boolean; onEd
         type="button"
         aria-label="More actions"
         onClick={() => setOpen((v) => !v)}
-        className="flex size-7 items-center justify-center rounded-lg text-ink transition-colors hover:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+        className="flex size-7 items-center justify-center rounded-lg text-ink transition-colors hover:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
       >
         <Icon name="more" size={18} />
       </button>

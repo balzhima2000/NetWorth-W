@@ -310,7 +310,7 @@ export default function WilliamPortfolio() {
           </div>
           <button
             type="button" aria-label="Account" onClick={() => navigate('/william/account')}
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-bg text-ink transition-[filter] hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-bg text-ink transition-[filter] hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
           >
             <Icon name="account" size={20} />
           </button>
