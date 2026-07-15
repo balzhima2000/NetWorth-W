@@ -6,17 +6,22 @@ import { Icon } from './Icon';
  * InfoTip — an "i" trigger + hover/focus tooltip, matched to the Figma Tooltip
  * master (1123:18711).
  *
- * - Beak is ALWAYS centered on the tooltip side; its center sits on the outer
- *   edge so the fill covers the body's 1px border (a connected point, no seam).
- * - The tooltip centers on the trigger. Near a viewport edge it NARROWS (down to
- *   TIP_MIN_WIDTH) rather than shifting off-centre, so the centered beak keeps
- *   pointing at the icon. Only below that floor does it clamp.
+ * - The tooltip centers on the trigger, so the beak is centered on its side (the
+ *   Figma master's default). Near a viewport edge it first NARROWS (down to
+ *   TIP_MIN_WIDTH) to stay centered.
+ * - Within ~half-min-width of an edge, centering and pointing-at-the-icon become
+ *   geometrically exclusive, so the beak SHIFTS to stay on the icon — pointing at
+ *   the trigger wins (what every tooltip does; Figma can't express clamping).
+ *   `beak = cx - left` is self-centering: it only moves by however much the
+ *   viewport clamp forced, and equals the centre whenever nothing clamped.
+ * - Beak center sits on the tooltip's outer edge so its fill merges seamlessly.
  * - Auto-flips above/below depending on available space.
  */
 const TIP_WIDTH = 300;
 const TIP_MIN_WIDTH = 200; // floor before we allow off-center clamping
 const TIP_GAP = 8;      // trigger ↔ tooltip
 const TIP_MARGIN = 12;  // viewport edge
+const BEAK_INSET = 16;  // keep the beak clear of the r16 rounded corners
 
 interface InfoTipProps {
   title?: string;
@@ -31,7 +36,7 @@ export function InfoTip({ title, children, size = 14, className }: InfoTipProps)
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const tipRef = useRef<HTMLDivElement>(null);
-  const [pos, setPos] = useState<{ top: number; left: number; placement: 'top' | 'bottom'; width: number } | null>(null);
+  const [pos, setPos] = useState<{ top: number; left: number; placement: 'top' | 'bottom'; width: number; beak: number } | null>(null);
 
   const compute = () => {
     const t = triggerRef.current?.getBoundingClientRect();
@@ -51,7 +56,11 @@ export function InfoTip({ title, children, size = 14, className }: InfoTipProps)
       spaceBelow < tip.height + TIP_GAP + TIP_MARGIN && t.top > tip.height + TIP_GAP + TIP_MARGIN ? 'top' : 'bottom';
     const left = Math.max(TIP_MARGIN, Math.min(cx - width / 2, vw - width - TIP_MARGIN));
     const top = placement === 'bottom' ? t.bottom + TIP_GAP : t.top - tip.height - TIP_GAP;
-    setPos({ top, left, placement, width });
+    // Trigger's x within the tooltip. Equals width/2 (dead centre) whenever the
+    // tooltip wasn't clamped; near an edge it shifts by exactly the clamp amount
+    // so the beak stays on the icon. Inset so it never rides a rounded corner.
+    const beak = Math.max(BEAK_INSET, Math.min(cx - left, width - BEAK_INSET));
+    setPos({ top, left, placement, width, beak });
   };
 
   // Run twice: the first pass sizes the tooltip, the rAF pass re-measures its
@@ -91,14 +100,16 @@ export function InfoTip({ title, children, size = 14, className }: InfoTipProps)
           style={{ position: 'fixed', top: pos?.top ?? -9999, left: pos?.left ?? -9999, width: pos?.width ?? TIP_WIDTH, opacity: pos ? 1 : 0 }}
           className="pointer-events-none z-[60] flex flex-col gap-[5px] rounded-2xl bg-surface p-4 text-left shadow-[var(--w-shadow-2)]"
         >
-          {/* beak — an 8px rotated square, ALWAYS centered on the side (matches
-              the Figma Tooltip master 1123:18711). Borderless like the body, so
-              it's just a filled diamond straddling the edge — its center sits on
-              the edge and the fill merges seamlessly into the body. */}
+          {/* beak — an 8px rotated square (Figma Tooltip master 1123:18711).
+              Borderless like the body, so it's a filled diamond straddling the
+              edge: its centre sits on the edge and the fill merges seamlessly.
+              `pos.beak` is the trigger's x within the tooltip — dead centre
+              unless the viewport clamped us, in which case it stays on the icon. */}
           <span
             aria-hidden="true"
+            style={{ left: pos?.beak ?? 0 }}
             className={cn(
-              'absolute left-1/2 h-2 w-2 -translate-x-1/2 rotate-45 bg-surface',
+              'absolute h-2 w-2 -translate-x-1/2 rotate-45 bg-surface',
               pos?.placement === 'top' ? '-bottom-px translate-y-1/2' : '-top-px -translate-y-1/2',
             )}
           />
