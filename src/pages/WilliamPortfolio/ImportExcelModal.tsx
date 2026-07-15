@@ -168,13 +168,13 @@ export function ImportExcelModal({ open, onClose }: { open: boolean; onClose: ()
                         <select
                           value={row.assetCategory}
                           onChange={(e) => setCategory(row.rowKey, e.target.value as AssetCategory)}
-                          className="w-full rounded-lg border border-line bg-sunken px-2 py-1 text-[12px] text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+                          className="w-full rounded-lg bg-sunken px-2 py-1 text-[12px] text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-ink"
                         >
                           {CATEGORY_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
                         </select>
                       </td>
                       <td className="py-2.5">
-                        <span className="inline-block whitespace-nowrap rounded-full border border-line px-2 py-0.5 text-[11px] font-medium text-secondary">
+                        <span className="inline-block whitespace-nowrap rounded-full bg-sunken px-2 py-0.5 text-[11px] font-medium text-secondary">
                           {row.market === 'tase' ? 'TASE' : 'Global'}
                         </span>
                       </td>

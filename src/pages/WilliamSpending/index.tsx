@@ -48,7 +48,7 @@ export function MonthPicker({ month, year, onChange }: { month: number; year: nu
       {open && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} aria-hidden="true" />
-          <div className="absolute left-0 top-[calc(100%+6px)] z-50 flex max-h-[280px] w-[200px] flex-col gap-0.5 overflow-y-auto rounded-xl border border-line bg-surface p-1.5">
+          <div className="absolute left-0 top-[calc(100%+6px)] z-50 flex max-h-[280px] w-[200px] flex-col gap-0.5 overflow-y-auto rounded-xl bg-surface p-1.5 shadow-[var(--w-shadow-2)]">
             {options.map(({ m, y }) => {
               const active = m === month && y === year;
               return (
@@ -170,7 +170,7 @@ function NavCard({ icon, title, subtitle, onClick }: { icon: 'recurring' | 'tren
     <button
       type="button"
       onClick={onClick}
-      className="group flex items-center gap-3.5 rounded-card bg-surface px-5 py-[18px] text-left transition-colors hover:border-accent active:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+      className="group flex items-center gap-3.5 rounded-card bg-surface px-5 py-[18px] text-left transition-colors hover:bg-raised active:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
     >
       <Icon name={icon} size={22} className="shrink-0 text-ink" />
       <span className="flex min-w-0 flex-1 flex-col gap-0.5">

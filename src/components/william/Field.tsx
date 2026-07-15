@@ -4,9 +4,11 @@ import { Segmented } from './Segment';
 
 /** Form field primitives matched to the Figma Forms components. */
 
+// Borderless (2026-07): the sunken fill IS the field affordance; focus is an
+// accent ring rather than a border, so there's no layout shift and no hairline.
 const inputBase =
-  'w-full rounded-xl border border-line bg-sunken px-3.5 text-[15px] text-ink placeholder:text-muted ' +
-  'focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent';
+  'w-full rounded-xl bg-sunken px-3.5 text-[15px] text-ink placeholder:text-muted ' +
+  'focus:outline-none focus:ring-2 focus:ring-accent';
 
 export function Field({ label, children, htmlFor }: { label: string; children: React.ReactNode; htmlFor?: string }) {
   return (

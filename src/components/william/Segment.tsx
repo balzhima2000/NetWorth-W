@@ -16,7 +16,7 @@ interface SegmentedProps {
   value: string;
   onChange: (value: string) => void;
   /** Track fill — raised (range selector on a card) · sunken (form toggles) ·
-   *  surface (floats on the grey canvas: surface fill + shadow, no border). */
+   *  surface (sits on the grey canvas: surface fill, no border/shadow). */
   track?: 'raised' | 'sunken' | 'surface';
   /** md = equal-width flex-1 py-2 14px (toggles); sm = hug px-3.5 py-1.5 13px (range). */
   size?: 'sm' | 'md';
@@ -54,7 +54,7 @@ export function Segmented({ options, value, onChange, track = 'raised', size = '
       onMouseLeave={() => setHovered(null)}
       className={cn(
         'relative flex items-center gap-0.5 rounded-full p-1',
-        track === 'sunken' ? 'bg-sunken' : track === 'surface' ? 'bg-surface shadow-[var(--w-shadow-1)]' : 'bg-raised',
+        track === 'sunken' ? 'bg-sunken' : track === 'surface' ? 'bg-surface' : 'bg-raised',
         fullWidth ? 'w-full' : 'inline-flex',
         className,
       )}

@@ -89,21 +89,17 @@ export function InfoTip({ title, children, size = 14, className }: InfoTipProps)
           ref={tipRef}
           role="tooltip"
           style={{ position: 'fixed', top: pos?.top ?? -9999, left: pos?.left ?? -9999, width: pos?.width ?? TIP_WIDTH, opacity: pos ? 1 : 0 }}
-          className="pointer-events-none z-[60] flex flex-col gap-[5px] rounded-2xl border border-line bg-surface p-4 text-left shadow-[0_12px_32px_-8px_rgba(0,0,0,0.22)]"
+          className="pointer-events-none z-[60] flex flex-col gap-[5px] rounded-2xl bg-surface p-4 text-left shadow-[var(--w-shadow-2)]"
         >
           {/* beak — an 8px rotated square, ALWAYS centered on the side (matches
-              the Figma Tooltip master 1123:18711). Its center sits on the
-              tooltip's outer edge so the fill covers the body's 1px border seam
-              (otherwise the border shows through the base and the beak reads as
-              detached). Only the two outer edges carry the border → a clean,
-              connected point. */}
+              the Figma Tooltip master 1123:18711). Borderless like the body, so
+              it's just a filled diamond straddling the edge — its center sits on
+              the edge and the fill merges seamlessly into the body. */}
           <span
             aria-hidden="true"
             className={cn(
-              'absolute left-1/2 h-2 w-2 -translate-x-1/2 rotate-45 border-line bg-surface',
-              pos?.placement === 'top'
-                ? '-bottom-px translate-y-1/2 border-b border-r'
-                : '-top-px -translate-y-1/2 border-l border-t',
+              'absolute left-1/2 h-2 w-2 -translate-x-1/2 rotate-45 bg-surface',
+              pos?.placement === 'top' ? '-bottom-px translate-y-1/2' : '-top-px -translate-y-1/2',
             )}
           />
           {title && <span className="text-[15px] font-semibold leading-[1.4] tracking-[-0.01em] text-ink">{title}</span>}

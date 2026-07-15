@@ -40,7 +40,7 @@ function RowMenu({ active, onEdit, onToggle, onDelete }: { active: boolean; onEd
       {open && (
         <>
           <div className="fixed inset-0 z-40" onClick={close} aria-hidden="true" />
-          <div className="absolute right-0 top-[calc(100%+4px)] z-50 flex w-[160px] flex-col gap-0.5 rounded-xl border border-line bg-surface p-1.5">
+          <div className="absolute right-0 top-[calc(100%+4px)] z-50 flex w-[160px] flex-col gap-0.5 rounded-xl bg-surface p-1.5 shadow-[var(--w-shadow-2)]">
             {confirming ? (
               <>
                 <button type="button" onClick={() => { onDelete(); close(); }} className="rounded-lg px-3 py-2 text-left text-[14px] font-medium text-negative transition-colors hover:bg-negative-bg">

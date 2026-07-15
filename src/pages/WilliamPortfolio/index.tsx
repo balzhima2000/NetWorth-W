@@ -218,7 +218,7 @@ function SortDropdown({ sortBy, sortDir, onSelectField, onToggleDir }: { sortBy:
         {colLabel(current)}
       </CardDropdown>
       {open && (
-        <div className="absolute right-0 z-10 mt-2 flex w-[200px] flex-col gap-0.5 rounded-xl border border-line bg-surface p-1.5">
+        <div className="absolute right-0 z-10 mt-2 flex w-[200px] flex-col gap-0.5 rounded-xl bg-surface p-1.5 shadow-[var(--w-shadow-2)]">
           {SORT_COLS.map((c) => {
             const active = c.key === sortBy;
             return (

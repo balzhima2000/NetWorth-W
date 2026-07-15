@@ -2,8 +2,10 @@
    William — redesign token layer  (SCOPED to .william)
    ------------------------------------------------------------
    Direction: cool grey + white · Instrument Sans + Geist Mono ·
-   no shadows (hairline borders) · color ONLY on money
-   direction (lime = up / orange = down, everything else mono).
+   NO borders — separation is tonal (fills); shadows ONLY on things
+   floating on top (tooltips/menus/modals), never on cards ·
+   color ONLY on money direction (lime = up / orange = down,
+   everything else mono).
    Values ported 1:1 from Figma "William — Design System v1".
 
    Scoping: all tokens live on `.william`. The old global design
@@ -126,8 +128,10 @@
   --w-radius-lg: 20px;   /* standard card */
   --w-radius-card: 20px; /* alias for the standard card radius */
 
-  /* Elevation — fills + shadows replace hairline borders (2026-07). e1 = rest,
-     e2 = hover/raised. Use via shadow-[var(--w-shadow-1)]. */
+  /* Shadows are ONLY for things floating ON TOP of the screen — tooltips,
+     menus, modals/overlays. Cards and in-page chrome get NO shadow (and no
+     border): they separate tonally, via a surface fill on the grey canvas.
+     1 = resting overlay, 2 = deeper/hover. Use shadow-[var(--w-shadow-1)]. */
   --w-shadow-1: 0 1px 2px 0 rgb(0 0 0 / 0.05), 0 4px 12px -2px rgb(0 0 0 / 0.08);
   --w-shadow-2: 0 2px 6px 0 rgb(0 0 0 / 0.08), 0 10px 24px -4px rgb(0 0 0 / 0.13);
 
@@ -186,7 +190,7 @@ html[data-theme="dark"] .william {
   --w-alloc-lime: #bef264;  /* allocation bar — BRIGHT lime (dark) */
   --w-alloc-blue: #60a5fa;  /* allocation bar — BRIGHT blue (dark) */
 
-  /* Elevation shadows — deeper in dark so lift still reads on the near-black
+  /* Overlay shadows — deeper in dark so the lift still reads on the near-black
      canvas (fill contrast does the rest). */
   --w-shadow-1: 0 1px 2px 0 rgb(0 0 0 / 0.5), 0 4px 12px -2px rgb(0 0 0 / 0.4);
   --w-shadow-2: 0 2px 6px 0 rgb(0 0 0 / 0.6), 0 10px 24px -4px rgb(0 0 0 / 0.55);

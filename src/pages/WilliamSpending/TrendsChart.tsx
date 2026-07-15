@@ -11,7 +11,7 @@ import type { TrendPoint } from './useTrendsData';
 function CustomTooltip({ active, payload, label, currency }: any) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="flex flex-col gap-1 rounded-xl border border-line bg-surface px-3 py-2 shadow-[0_8px_24px_-8px_rgba(0,0,0,0.18)]">
+    <div className="flex flex-col gap-1 rounded-xl bg-surface px-3 py-2 shadow-[var(--w-shadow-2)]">
       <p className="ty-label text-muted">{label}</p>
       <div className="flex items-center gap-1.5">
         <span aria-hidden="true" className="h-3.5 w-0.5 rounded-full bg-accent" />

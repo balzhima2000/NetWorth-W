@@ -37,7 +37,8 @@ export function Modal({ open, onClose, title, children, footer, maxWidth = 480 }
           'relative flex max-h-[92vh] w-full flex-col overflow-hidden bg-surface',
           // Mobile: full-width bottom sheet — top corners rounded, flush to the
           // bottom edge. Desktop: floating card — all four corners rounded.
-          'rounded-t-[24px] border-t border-line md:rounded-[24px] md:border',
+          // Floats on top → fill + shadow, no border.
+          'rounded-t-[24px] shadow-[var(--w-shadow-2)] md:rounded-[24px]',
         )}
         style={{ maxWidth: `min(${maxWidth}px, 100%)` }}
       >

@@ -74,10 +74,11 @@ function MobileHeader({ name }: { name?: string }) {
   const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
   return (
     <div className="mb-1 flex items-center justify-between gap-3 md:hidden">
-      {/* surface fill + shadow (no border) so the chrome lifts off the grey
-          canvas — accent-bg (#f5f5f5 light) matches the canvas and would
-          disappear. Elevation is fills + shadows, not hairlines (2026-07). */}
-      <div className="inline-flex items-center gap-2 rounded-full bg-surface px-4 py-2.5 shadow-[var(--w-shadow-1)]">
+      {/* Tonal separation only — surface fill on the grey canvas, no border and
+          no shadow (shadows are reserved for things floating ON TOP of the
+          screen). accent-bg (#f5f5f5 light) matches the canvas and would
+          disappear, hence surface. */}
+      <div className="inline-flex items-center gap-2 rounded-full bg-surface px-4 py-2.5">
         <Icon name="star" size={16} className="text-ink" />
         <span className="ty-label text-ink">{greeting}{name ? `, ${name}` : ''}</span>
       </div>
@@ -85,7 +86,7 @@ function MobileHeader({ name }: { name?: string }) {
         type="button"
         aria-label="Account"
         onClick={() => navigate('/william/account')}
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface text-ink shadow-[var(--w-shadow-1)] transition-[box-shadow,background-color] duration-150 hover:bg-btn-neutral-hover hover:shadow-[var(--w-shadow-2)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface text-ink transition-colors duration-150 hover:bg-btn-neutral-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
       >
         <Icon name="account" size={20} />
       </button>
@@ -247,7 +248,7 @@ export default function WilliamDashboard() {
             aria-label="FIRE progress — open FIRE page"
             onClick={() => navigate('/william/fire')}
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate('/william/fire'); } }}
-            className="group col-span-2 flex cursor-pointer flex-col gap-2 p-[18px] transition-colors hover:border-accent active:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink md:col-span-1 md:gap-2.5 md:p-5"
+            className="group col-span-2 flex cursor-pointer flex-col gap-2 p-[18px] transition-colors hover:bg-raised active:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink md:col-span-1 md:gap-2.5 md:p-5"
           >
             <div className="flex items-center justify-between">
               <p className="ty-label whitespace-nowrap text-muted">FIRE PROGRESS</p>

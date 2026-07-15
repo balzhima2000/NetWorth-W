@@ -38,7 +38,7 @@ function CustomTooltip({ active, payload, label, currency }: any) {
   const primary = payload.find((p: any) => p.dataKey === 'primary');
   if (!primary) return null;
   return (
-    <div className="rounded-[8px] border border-line bg-surface px-3 py-2">
+    <div className="rounded-[8px] bg-surface px-3 py-2 shadow-[var(--w-shadow-2)]">
       <p className="ty-label text-muted mb-1">{formatAxisDate(label)}</p>
       <p className="num text-[14px] font-semibold text-ink">
         {formatCurrency(primary.value, currency)}
