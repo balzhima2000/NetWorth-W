@@ -209,8 +209,10 @@ function SortDropdown({ sortBy, sortDir, onSelectField, onToggleDir }: { sortBy:
   const menuItem = 'num flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-[12px] font-medium uppercase tracking-[0.6px]';
   return (
     <div ref={ref} className="relative">
-      {/* In-card dropdown; arrow = current sort direction (↓ desc / ↑ asc). */}
+      {/* In-card dropdown; the "Sort:" prefix says what the pill does, so the
+          arrow reads as the direction (↓ desc / ↑ asc) rather than "opens menu". */}
       <CardDropdown
+        prefix="Sort:"
         onClick={() => setOpen((o) => !o)}
         aria-label={`Sort by ${colLabel(current)}, ${sortDir === 'desc' ? 'descending' : 'ascending'}`}
         arrow={sortArrow(sortDir)}

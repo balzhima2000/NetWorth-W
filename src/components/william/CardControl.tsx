@@ -81,29 +81,37 @@ export function Trailing({
   }
 }
 /**
- * In-card dropdown trigger — keeps the mono/uppercase pill because it surfaces a
- * VALUE (the active sort field), not an action. `arrow` overrides the default ▾
- * (the portfolio sort trigger passes the live ↓/↑ direction arrow).
+ * In-card dropdown trigger — e.g. the portfolio sort control: `Sort: VALUE ↓`.
+ *
+ * The field name stays in the MONO/uppercase language on purpose: it names a
+ * *column* (Market value / Gain / Return), and column headers are mono uppercase
+ * here — so it reads as a data field, not an action. But mono alone gave no hint
+ * that the pill sorts, and a bare `↓` on a dropdown reads as "opens a menu" when
+ * it actually means *descending*. The sans `prefix` ("Sort:") supplies the
+ * missing convention and disambiguates the arrow as direction.
+ *
+ * `arrow` overrides the default ▾ (the sort trigger passes the live ↓/↑).
  */
 export const CardDropdown = React.forwardRef<
   HTMLButtonElement,
-  React.ButtonHTMLAttributes<HTMLButtonElement> & { arrow?: React.ReactNode }
->(function CardDropdown({ className, children, arrow = '▾', type = 'button', ...rest }, ref) {
+  React.ButtonHTMLAttributes<HTMLButtonElement> & { arrow?: React.ReactNode; prefix?: React.ReactNode }
+>(function CardDropdown({ className, children, arrow = '▾', prefix, type = 'button', ...rest }, ref) {
   return (
     <button
       ref={ref}
       type={type}
       className={cn(
-        'num-mono inline-flex h-7 items-center gap-1 rounded-full bg-btn-tonal px-3',
-        'text-[12px] font-medium uppercase tracking-[0.6px] text-muted',
-        'transition-colors hover:bg-btn-neutral-hover hover:text-ink',
+        'inline-flex h-7 items-center gap-1 rounded-full bg-btn-tonal px-3',
+        'text-[13px] font-medium text-ink',
+        'transition-colors hover:bg-btn-neutral-hover',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
         className,
       )}
       {...rest}
     >
-      {children}
-      <span aria-hidden>{arrow}</span>
+      {prefix && <span className="text-secondary">{prefix}</span>}
+      <span className="num-mono text-[12px] uppercase tracking-[0.6px]">{children}</span>
+      <span className="num-mono" aria-hidden>{arrow}</span>
     </button>
   );
 });
