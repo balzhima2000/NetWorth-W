@@ -36,14 +36,14 @@ export default function Assets() {
   };
 
   const Section = ({ label, items }: { label: string; items: ManualEntry[] }) => (
-    <div className="flex flex-col gap-2.5">
+    <div className="flex flex-col gap-2">
       <span className="num text-[12px] font-medium uppercase tracking-[0.05em] text-secondary">{label}</span>
       {items.length === 0 ? (
-        <Card className="p-5 text-[14px] text-secondary">None yet.</Card>
+        <Card className="p-4 text-[14px] text-secondary">None yet.</Card>
       ) : (
         <Card className="flex flex-col p-0 overflow-hidden">
           {items.map((e, i) => (
-            <div key={e.id} className={cn('flex items-center justify-between px-5 py-3.5', i < items.length - 1 && 'border-b border-line')}>
+            <div key={e.id} className={cn('flex items-center justify-between px-4 py-3', i < items.length - 1 && 'border-b border-line')}>
               <span className="text-[15px] font-medium text-ink">{e.name}</span>
               <div className="flex items-center gap-2">
                 <span className={cn('num text-[15px] font-medium', e.isLiability ? 'text-negative' : 'text-ink')}>{formatCurrency(e.value, currency)}</span>

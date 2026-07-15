@@ -17,7 +17,7 @@ export default function Currency() {
 
   return (
     <AccountSubPage title="Currency" subtitle="Your base currency and where exchange rates come from.">
-      <Card className="flex flex-col gap-4 p-5">
+      <Card className="flex flex-col gap-4 p-4">
         <Field label="Default currency">
           <SelectInput value={defaultCurrency} onChange={(e) => setDefaultCurrency(e.target.value)}>
             {CURRENCIES.map((c) => <option key={c} value={c}>{c}</option>)}

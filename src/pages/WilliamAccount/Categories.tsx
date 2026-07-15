@@ -37,7 +37,7 @@ export function CategoriesPage({ kind }: { kind: 'expense' | 'income' }) {
     <AccountSubPage title={title} subtitle="Used to tag your transactions.">
       <Card className="flex flex-col p-0 overflow-hidden">
         {list.map((c, i) => (
-          <div key={c.id} className={cn('flex items-center justify-between px-5 py-3.5', i < list.length - 1 && 'border-b border-line')}>
+          <div key={c.id} className={cn('flex items-center justify-between px-4 py-3', i < list.length - 1 && 'border-b border-line')}>
             <div className="flex items-center gap-3">
               <Mono name={c.name} color={c.color} />
               <span className="text-[15px] font-medium text-ink">{c.name}</span>

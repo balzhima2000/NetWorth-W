@@ -98,7 +98,7 @@ export function InfoTip({ title, children, size = 14, className }: InfoTipProps)
           ref={tipRef}
           role="tooltip"
           style={{ position: 'fixed', top: pos?.top ?? -9999, left: pos?.left ?? -9999, width: pos?.width ?? TIP_WIDTH, opacity: pos ? 1 : 0 }}
-          className="pointer-events-none z-[60] flex flex-col gap-[5px] rounded-2xl bg-surface p-4 text-left shadow-[var(--w-shadow-2)]"
+          className="pointer-events-none z-[60] flex flex-col gap-1 rounded-2xl bg-surface p-4 text-left shadow-[var(--w-shadow-2)]"
         >
           {/* beak — an 8px rotated square (Figma Tooltip master 1123:18711).
               Borderless like the body, so it's a filled diamond straddling the

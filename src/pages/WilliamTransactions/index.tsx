@@ -47,7 +47,7 @@ function TxRow({ tx, name, category, color, currency, divider }: { tx: Transacti
       {divider && <div className="mx-3 h-px bg-line md:mx-4" />}
       <div className="flex items-center gap-3 px-3 py-3 md:px-4">
         <span className="h-8 w-[3px] shrink-0 rounded-full" style={{ background: color }} />
-        <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+        <div className="flex min-w-0 flex-1 flex-col gap-0">
           <span className="truncate text-[15px] font-semibold text-ink">{name}</span>
           <span className="truncate text-[13px] text-secondary">{category}</span>
         </div>
@@ -101,12 +101,12 @@ export default function WilliamTransactions() {
       <FloatingNav />
       <TabBar />
 
-      <main className="mx-auto flex max-w-[760px] flex-col gap-[18px] px-4 md:gap-5 md:px-6">
+      <main className="mx-auto flex max-w-[760px] flex-col gap-4 px-4 md:gap-4 md:px-6">
         {/* ── Header ── */}
         <div>
           <BackLink label="Spending" onClick={() => navigate('/william/spending')} className="mb-2" />
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-            <div className="flex flex-col gap-1.5 md:flex-row md:items-center md:gap-3.5">
+            <div className="flex flex-col gap-1 md:flex-row md:items-center md:gap-3">
               <h1 className="text-[28px] font-semibold tracking-[-0.01em] text-ink md:text-[32px]">Transactions for</h1>
               <MonthPicker month={month} year={year} onChange={(m, y) => { setMonth(m); setYear(y); }} />
             </div>
@@ -153,7 +153,7 @@ export default function WilliamTransactions() {
             </section>
           ))
         ) : (
-          <Card className="flex flex-col items-center gap-3 p-10 text-center">
+          <Card className="flex flex-col items-center gap-3 p-8 text-center">
             <Icon name="spending" size={40} className="text-muted" />
             <p className="text-[15px] text-secondary">No transactions for this month.</p>
             <Button variant="primary" size="l" onClick={() => setAddOpen(true)}>Add a transaction</Button>

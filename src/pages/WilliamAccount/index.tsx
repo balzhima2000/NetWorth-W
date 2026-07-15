@@ -23,7 +23,7 @@ function ThemeToggle() {
       options={THEMES.map((t) => ({
         value: t.key,
         label: (
-          <span className="num-mono inline-flex items-center justify-center gap-1.5 text-[13px] font-medium uppercase tracking-[0.65px] pt-1 pb-0.5">
+          <span className="num-mono inline-flex items-center justify-center gap-1 text-[13px] font-medium uppercase tracking-[0.65px] pt-1 pb-0">
             {t.icon && <Icon name={t.icon} size={16} />}
             {t.label}
           </span>
@@ -59,13 +59,13 @@ export default function WilliamAccount() {
 
         {/* Section = mono-uppercase label above a borderless card (Figma
             Account / Desktop 965:2). */}
-        <section className="flex flex-col gap-2.5">
+        <section className="flex flex-col gap-2">
           <p className="ty-label text-muted">Appearance</p>
-          <Card className="px-5 py-7"><ThemeToggle /></Card>
+          <Card className="px-4 py-6"><ThemeToggle /></Card>
         </section>
 
         {ACCOUNT_GROUPS.map((grp) => (
-          <section key={grp.group} className="flex flex-col gap-2.5">
+          <section key={grp.group} className="flex flex-col gap-2">
             <p className="ty-label text-muted">{grp.group}</p>
             <List>
               {grp.items.map((it) => (
@@ -76,7 +76,7 @@ export default function WilliamAccount() {
         ))}
 
         {/* Footer */}
-        <footer className="mt-2 flex flex-col items-center gap-3 border-t border-line pt-5 text-[13px] md:flex-row md:justify-between">
+        <footer className="mt-2 flex flex-col items-center gap-3 border-t border-line pt-4 text-[13px] md:flex-row md:justify-between">
           <span className="font-medium text-muted">NW</span>
           <div className="flex items-center gap-3">
             <a href="https://balzhima.com" target="_blank" rel="noreferrer" className="font-medium text-ink underline underline-offset-2 hover:text-secondary">Balzhima</a>

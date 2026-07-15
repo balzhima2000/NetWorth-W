@@ -48,9 +48,9 @@ export function SetBudgetsModal({ open, onClose, month, year }: { open: boolean;
       footer={
         <>
           {/* Desktop: Clear all (left) · Cancel · Save (right) */}
-          <div className="hidden w-full items-center gap-2.5 md:flex">
+          <div className="hidden w-full items-center gap-2 md:flex">
             <button type="button" onClick={clearAll} className="text-[14px] font-medium text-secondary transition-colors hover:text-ink">Clear all</button>
-            <div className="ml-auto flex gap-2.5">
+            <div className="ml-auto flex gap-2">
               <Button pill size="l" variant="tonal" onClick={onClose}>Cancel</Button>
               <Button pill size="l" variant="primary" onClick={save}>Save</Button>
             </div>
@@ -66,10 +66,10 @@ export function SetBudgetsModal({ open, onClose, month, year }: { open: boolean;
       <p className="-mt-1 text-[13px] text-secondary">
         Set a monthly spend limit per category — we’ll track your progress against it.
       </p>
-      <div className="flex flex-col gap-2.5">
+      <div className="flex flex-col gap-2">
         {cats.map((c) => (
           <div key={c.id} className="flex items-center justify-between gap-3">
-            <div className="flex min-w-0 items-center gap-2.5">
+            <div className="flex min-w-0 items-center gap-2">
               <span className="h-6 w-[3px] shrink-0 rounded-full" style={{ background: c.color }} />
               <span className="truncate text-[15px] font-medium text-ink">{c.name}</span>
             </div>
@@ -78,7 +78,7 @@ export function SetBudgetsModal({ open, onClose, month, year }: { open: boolean;
               <TextInput
                 type="number" inputMode="decimal" value={values[c.id] ?? ''}
                 onChange={(e) => set(c.id, e.target.value)} placeholder="0"
-                className="num-mono pl-7 text-right"
+                className="num-mono pl-6 text-right"
               />
             </div>
           </div>

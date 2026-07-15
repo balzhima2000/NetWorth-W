@@ -16,7 +16,7 @@ const RANGE_LABEL: Record<TrendRange, string> = { '3M': 'Last 3 months', '6M': '
 
 function Stat({ label, value, suffix, valueClass }: { label: string; value: string; suffix?: string; valueClass?: string }) {
   return (
-    <div className="flex flex-col gap-1.5">
+    <div className="flex flex-col gap-1">
       <p className="num-mono text-[12px] uppercase tracking-[0.6px] text-secondary">{label}</p>
       <div className="flex items-baseline gap-2">
         <span className={cn('text-[26px] font-bold leading-none', valueClass ?? 'text-ink')}>{value}</span>
@@ -43,7 +43,7 @@ function CategoryRow({ row, currency, divider }: { row: CategoryTrend; currency:
   return (
     <>
       {divider && <div className="h-px w-full bg-line" />}
-      <div className="flex h-12 items-center gap-3.5">
+      <div className="flex h-12 items-center gap-3">
         <span className="h-7 w-[3px] shrink-0 rounded-lg" style={{ background: row.color }} />
         <span className="min-w-0 flex-1 truncate text-[15px] font-semibold text-ink">{row.name}</span>
         <span className="num-mono shrink-0 text-right text-[15px]">
@@ -68,7 +68,7 @@ export default function WilliamTrends() {
       <FloatingNav />
       <TabBar />
 
-      <main className="mx-auto flex max-w-[1100px] flex-col gap-[18px] px-4 md:gap-5 md:px-6">
+      <main className="mx-auto flex max-w-[1100px] flex-col gap-4 px-4 md:gap-4 md:px-6">
         {/* ── Header ── */}
         <div>
           <BackLink label="Spending" onClick={() => navigate('/william/spending')} className="mb-2" />
@@ -77,9 +77,9 @@ export default function WilliamTrends() {
         </div>
 
         {/* ── Row 1: chart + stats ── */}
-        <div className="grid grid-cols-1 gap-[18px] md:gap-5 lg:grid-cols-[740fr_328fr] lg:items-stretch">
+        <div className="grid grid-cols-1 gap-4 md:gap-4 lg:grid-cols-[740fr_328fr] lg:items-stretch">
           {/* Chart */}
-          <Card className="flex flex-col justify-between gap-4 p-5">
+          <Card className="flex flex-col justify-between gap-4 p-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <h2 className="text-[18px] font-semibold leading-[1.3] text-ink">{RANGE_LABEL[range]}</h2>
               <RangeSelector options={TREND_RANGES as unknown as string[]} value={range} onChange={(v) => setRange(v as TrendRange)} />
@@ -98,14 +98,14 @@ export default function WilliamTrends() {
           </Card>
 
           {/* Stats */}
-          <Card className="flex flex-col p-5">
-            <div className="pb-[18px]"><Stat label="Avg / month" value={money0(d.avg, cur)} /></div>
+          <Card className="flex flex-col p-4">
+            <div className="pb-4"><Stat label="Avg / month" value={money0(d.avg, cur)} /></div>
             <div className="h-px w-full bg-line" />
-            <div className="py-[18px]"><Stat label="Highest month" value={money0(d.highest.total, cur)} suffix={d.highest.label} /></div>
+            <div className="py-4"><Stat label="Highest month" value={money0(d.highest.total, cur)} suffix={d.highest.label} /></div>
             <div className="h-px w-full bg-line" />
-            <div className="py-[18px]"><Stat label="Lowest month" value={money0(d.lowest.total, cur)} suffix={d.lowest.label} /></div>
+            <div className="py-4"><Stat label="Lowest month" value={money0(d.lowest.total, cur)} suffix={d.lowest.label} /></div>
             <div className="h-px w-full bg-line" />
-            <div className="pt-[18px]">
+            <div className="pt-4">
               <Stat
                 label={d.vsPriorLabel}
                 value={d.vsPriorPct === null ? '—' : `${vsUp ? '↑' : '↓'} ${Math.abs(Math.round(d.vsPriorPct))}%`}
@@ -117,7 +117,7 @@ export default function WilliamTrends() {
         </div>
 
         {/* ── Row 2: by category ── */}
-        <Card className="flex flex-col gap-1 p-5">
+        <Card className="flex flex-col gap-1 p-4">
           <div className="pb-2">
             <h2 className="text-[18px] font-semibold text-ink">By category</h2>
             <p className="text-[13px] text-secondary">Average per month · vs prior {d.n} months</p>

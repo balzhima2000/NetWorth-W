@@ -93,7 +93,7 @@ export default function WilliamSetup() {
   };
 
   const Progress = ({ n }: { n: number }) => (
-    <div className="flex flex-col gap-2.5">
+    <div className="flex flex-col gap-2">
       <span className="ty-label text-muted">Step {n} of 3</span>
       <div className="h-1.5 w-full overflow-hidden rounded-full bg-line">
         <div className="h-full rounded-full bg-accent transition-[width] duration-300 ease-out" style={{ width: `${(n / 3) * 100}%` }} />
@@ -103,7 +103,7 @@ export default function WilliamSetup() {
 
   return (
     <div className="william flex min-h-screen flex-col bg-canvas">
-      <main className="mx-auto flex w-full max-w-[440px] flex-1 flex-col justify-center gap-7 px-5 py-12">
+      <main className="mx-auto flex w-full max-w-[440px] flex-1 flex-col justify-center gap-6 px-4 py-12">
         {step === 1 && (
           <>
             <Progress n={1} />
@@ -111,7 +111,7 @@ export default function WilliamSetup() {
               <h1 className="text-[28px] font-semibold leading-tight tracking-[-0.01em] text-ink">What's your name?</h1>
               <p className="ty-body text-secondary">Takes about a minute — you can change anything later.</p>
             </div>
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-4">
               <Field label="Your name">
                 <TextInput tone="surface" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Eitan Cohen" autoFocus />
               </Field>
@@ -130,7 +130,7 @@ export default function WilliamSetup() {
                 </Field>
               )}
             </div>
-            <div className="flex flex-col items-center gap-3.5">
+            <div className="flex flex-col items-center gap-3">
               <Button size="l" className="w-full" onClick={() => setStep(2)} disabled={!name.trim()}>Continue</Button>
               <p className="text-center text-[13px] text-muted">Your data stays on this device unless you turn on sync.</p>
               <button type="button" onClick={() => backupInputRef.current?.click()} className="text-[13px] font-medium text-secondary transition-colors hover:text-ink">Restore from a backup instead</button>
@@ -161,7 +161,7 @@ export default function WilliamSetup() {
                       </Field>
                     )}
                     {mode === 'detailed' && (
-                      <div className="flex flex-col items-center justify-center gap-1 rounded-2xl border-[1.5px] border-dashed border-line bg-surface px-5 py-7 text-center">
+                      <div className="flex flex-col items-center justify-center gap-1 rounded-2xl border-[1.5px] border-dashed border-line bg-surface px-4 py-6 text-center">
                         <p className="text-[15px] font-semibold text-ink">Import from your broker (.xlsx)</p>
                         <p className="text-[13px] text-secondary">or add holdings manually later</p>
                       </div>
@@ -184,14 +184,14 @@ export default function WilliamSetup() {
               <h1 className="text-[32px] font-semibold leading-tight tracking-[-0.01em] text-ink">You're all set</h1>
               <p className="ty-body text-secondary">Here's your starting point — tweak anything from Settings.</p>
             </div>
-            <div className="flex flex-col rounded-2xl bg-surface px-5">
+            <div className="flex flex-col rounded-2xl bg-surface px-4">
               {[
                 ['Name', name.trim() || '—'],
                 ['Currency', `${getCurrencySymbol(currency)} ${currency}`],
                 ['Portfolio', mode === 'detailed' ? 'Detailed' : 'Simple'],
                 ...(mode !== 'detailed' && numericValue > 0 ? [['Starting value', formatCurrency(numericValue, currency)]] : []),
               ].map(([label, value], i) => (
-                <div key={label} className={cn('flex items-center justify-between py-3.5', i > 0 && 'border-t border-line')}>
+                <div key={label} className={cn('flex items-center justify-between py-3', i > 0 && 'border-t border-line')}>
                   <span className="text-[14px] text-secondary">{label}</span>
                   <span className="num text-[15px] font-semibold text-ink">{value}</span>
                 </div>

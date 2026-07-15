@@ -151,20 +151,20 @@ export function ImportExcelModal({ open, onClose }: { open: boolean; onClose: ()
                 {rows.map((row) => (
                   <React.Fragment key={row.rowKey}>
                     <tr className={cn('transition-opacity', !row.selected && 'opacity-40')}>
-                      <td className="py-2.5 pr-2 text-center">
+                      <td className="py-2 pr-2 text-center">
                         <input type="checkbox" checked={row.selected} onChange={() => toggle(row.rowKey)} className="align-middle accent-[var(--w-accent)]" />
                       </td>
-                      <td className="py-2.5 pr-4">
+                      <td className="py-2 pr-4">
                         <div className="max-w-[180px] truncate font-medium text-ink">{row.name}</div>
                         <div className="num-mono text-[12px] text-muted">{row.ticker}</div>
                       </td>
-                      <td className="num-mono py-2.5 pr-3 text-right text-ink">{row.quantity.toLocaleString()}</td>
-                      <td className="num-mono py-2.5 pr-3 text-right text-ink">{fmt(row.buyPrice, row.currency)}</td>
-                      <td className="num-mono py-2.5 pr-3 text-right text-muted">{fmt(row.rawLastRate, row.currency)}</td>
-                      <td className={cn('num-mono py-2.5 pr-3 text-right', row.totalPL >= 0 ? 'text-positive' : 'text-negative')}>
+                      <td className="num-mono py-2 pr-3 text-right text-ink">{row.quantity.toLocaleString()}</td>
+                      <td className="num-mono py-2 pr-3 text-right text-ink">{fmt(row.buyPrice, row.currency)}</td>
+                      <td className="num-mono py-2 pr-3 text-right text-muted">{fmt(row.rawLastRate, row.currency)}</td>
+                      <td className={cn('num-mono py-2 pr-3 text-right', row.totalPL >= 0 ? 'text-positive' : 'text-negative')}>
                         {row.totalPL >= 0 ? '+' : ''}{fmt(row.totalPL, row.currency)}
                       </td>
-                      <td className="py-2.5 pr-3">
+                      <td className="py-2 pr-3">
                         <select
                           value={row.assetCategory}
                           onChange={(e) => setCategory(row.rowKey, e.target.value as AssetCategory)}
@@ -173,8 +173,8 @@ export function ImportExcelModal({ open, onClose }: { open: boolean; onClose: ()
                           {CATEGORY_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
                         </select>
                       </td>
-                      <td className="py-2.5">
-                        <span className="inline-block whitespace-nowrap rounded-full bg-sunken px-2 py-0.5 text-[11px] font-medium text-secondary">
+                      <td className="py-2">
+                        <span className="inline-block whitespace-nowrap rounded-full bg-sunken px-2 py-0 text-[11px] font-medium text-secondary">
                           {row.market === 'tase' ? 'TASE' : 'Global'}
                         </span>
                       </td>

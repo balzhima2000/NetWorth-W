@@ -152,7 +152,7 @@ function MilestonesLadder({
             )}
             style={{ top: DOT_Y }}
           />
-          <div className="pl-9">
+          <div className="pl-8">
             {it.you
               ? <p className="ty-label text-muted">You are here</p>
               : <p className="text-[15px] font-semibold text-ink">{it.name}</p>}
@@ -168,7 +168,7 @@ function MilestonesLadder({
 function Tile({ label, value, info }: { label: string; value: string; info?: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-2 rounded-xl bg-raised p-3 md:p-4">
-      <div className="flex items-center gap-1.5">
+      <div className="flex items-center gap-1">
         <span className="text-[13px] text-secondary">{label}</span>
         {info}
       </div>
@@ -180,7 +180,7 @@ function Tile({ label, value, info }: { label: string; value: string; info?: Rea
 // ── Empty state ───────────────────────────────────────────────────────────────
 function EmptyState({ onEdit }: { onEdit: () => void }) {
   return (
-    <Card className="flex flex-col items-center gap-3 p-10 text-center">
+    <Card className="flex flex-col items-center gap-3 p-8 text-center">
       <Icon name="fire" size={40} className="text-muted" />
       <h2 className="ty-h2 text-ink">Plan your path to FIRE</h2>
       <p className="ty-body max-w-sm text-secondary">
@@ -214,9 +214,9 @@ export default function WilliamFire() {
       <FloatingNav />
       <TabBar />
 
-      <main className="mx-auto flex max-w-[1100px] flex-col gap-[18px] px-4 md:gap-5 md:px-6">
+      <main className="mx-auto flex max-w-[1100px] flex-col gap-4 px-4 md:gap-4 md:px-6">
         {/* Header */}
-        <header className="flex flex-col gap-1.5">
+        <header className="flex flex-col gap-1">
           <h1 className="text-[32px] font-bold leading-none tracking-[-0.02em] text-ink md:text-[40px]">FIRE</h1>
           <p className="ty-body text-secondary">{subtitle}</p>
         </header>
@@ -226,9 +226,9 @@ export default function WilliamFire() {
         ) : (
           <>
             {/* Top row: FIRE Progress + Projection */}
-            <div className="grid grid-cols-1 gap-[18px] md:gap-5 lg:grid-cols-[400px_1fr]">
+            <div className="grid grid-cols-1 gap-4 md:gap-4 lg:grid-cols-[400px_1fr]">
               {/* FIRE Progress */}
-              <Card className="flex flex-col p-5">
+              <Card className="flex flex-col p-4">
                 <p className="ty-label text-muted">FINANCIAL INDEPENDENCE</p>
                 <p className="num mt-3 text-[72px] font-bold leading-none tracking-[-0.03em] text-ink md:text-[80px]">
                   {Math.round(d.progressPct)}%
@@ -258,7 +258,7 @@ export default function WilliamFire() {
                     <dd className="num text-[15px] font-semibold text-ink">{money0(d.netWorth, cur)}</dd>
                   </div>
                   <div className="flex items-center justify-between">
-                    <dt className="flex items-center gap-1.5 ty-body text-secondary">
+                    <dt className="flex items-center gap-1 ty-body text-secondary">
                       FI number
                       <InfoTip title="Your FI number">
                         {Math.round(d.expensesMultiple)}× your annual expenses — the portfolio that funds your
@@ -277,12 +277,12 @@ export default function WilliamFire() {
               </Card>
 
               {/* Projection */}
-              <Card className="flex flex-col gap-3.5 p-5 md:gap-[18px] md:p-6">
+              <Card className="flex flex-col gap-3 p-4 md:gap-4 md:p-6">
                 <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                   <div className="flex flex-col gap-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <p className="text-[15px] font-semibold text-ink">Now → {d.horizonYear}</p>
-                      <span className="num-mono rounded-full bg-positive-bg px-2 py-0.5 text-[12px] font-medium text-positive">
+                      <span className="num-mono rounded-full bg-positive-bg px-2 py-0 text-[12px] font-medium text-positive">
                         {gainPositive ? '+' : '−'}{short(Math.abs(d.gainOverHorizon), cur)}
                       </span>
                     </div>
@@ -308,13 +308,13 @@ export default function WilliamFire() {
             </div>
 
             {/* Milestones */}
-            <Card className="flex flex-col p-5 md:p-6">
+            <Card className="flex flex-col p-4 md:p-6">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex flex-col gap-1">
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1">
                     <h2 className="ty-h2 text-ink">Milestones</h2>
                     <InfoTip title="The FIRE ladder">
-                      <span className="flex flex-col gap-[5px]">
+                      <span className="flex flex-col gap-1">
                         <span><strong className="text-ink">Coast FIRE</strong> — invested enough that growth alone reaches FI by retirement; you can stop saving.</span>
                         <span><strong className="text-ink">Lean FIRE</strong> — covers bare-bones expenses.</span>
                         <span><strong className="text-ink">FIRE</strong> — covers your full expenses ({Math.round(d.expensesMultiple)}× = the {d.withdrawalRate}% rule).</span>
@@ -336,7 +336,7 @@ export default function WilliamFire() {
             </Card>
 
             {/* Assumptions */}
-            <Card className="flex flex-col p-5 md:p-6">
+            <Card className="flex flex-col p-4 md:p-6">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex flex-col gap-1">
                   <h2 className="ty-h2 text-ink">Assumptions</h2>

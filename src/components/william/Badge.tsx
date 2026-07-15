@@ -21,7 +21,7 @@ export function Badge({ tone = 'neutral', children, className, ...rest }: BadgeP
       className={cn(
         // Geist Mono tabular per the Badge master (14:12). Mono only ships
         // Medium, so weight is 500 (font-semibold would faux-bold).
-        'num-mono inline-flex items-center rounded-full px-2.5 py-1.5 text-[12px] font-medium leading-none',
+        'num-mono inline-flex items-center rounded-full px-2 py-1 text-[12px] font-medium leading-none',
         tones[tone],
         className,
       )}

@@ -25,8 +25,8 @@ function KeyField({ label, hint, current, onSave, onRemove, onTest }: {
   };
 
   return (
-    <Card className="flex flex-col gap-3 p-5">
-      <div className="flex flex-col gap-0.5">
+    <Card className="flex flex-col gap-3 p-4">
+      <div className="flex flex-col gap-0">
         <span className="text-[15px] font-semibold text-ink">{label}</span>
         <span className="text-[13px] text-secondary">{hint}</span>
       </div>

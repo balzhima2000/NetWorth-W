@@ -40,7 +40,7 @@ function RowMenu({ active, onEdit, onToggle, onDelete }: { active: boolean; onEd
       {open && (
         <>
           <div className="fixed inset-0 z-40" onClick={close} aria-hidden="true" />
-          <div className="absolute right-0 top-[calc(100%+4px)] z-50 flex w-[160px] flex-col gap-0.5 rounded-xl bg-surface p-1.5 shadow-[var(--w-shadow-2)]">
+          <div className="absolute right-0 top-[calc(100%+4px)] z-50 flex w-[160px] flex-col gap-0 rounded-xl bg-surface p-1 shadow-[var(--w-shadow-2)]">
             {confirming ? (
               <>
                 <button type="button" onClick={() => { onDelete(); close(); }} className="rounded-lg px-3 py-2 text-left text-[14px] font-medium text-negative transition-colors hover:bg-negative-bg">
@@ -74,13 +74,13 @@ function Divider() { return <div className="h-px w-full bg-line" />; }
 
 function SubscriptionRow({ row, currency, onEdit, onToggle, onDelete }: { row: SubRow; currency: string; onEdit: () => void; onToggle: () => void; onDelete: () => void }) {
   return (
-    <div className={cn('flex h-14 items-center gap-3.5 py-3', !row.active && 'opacity-50')}>
+    <div className={cn('flex h-14 items-center gap-3 py-3', !row.active && 'opacity-50')}>
       <span className="h-8 w-[3px] shrink-0 rounded-lg" style={{ background: row.color }} />
-      <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+      <div className="flex min-w-0 flex-1 flex-col gap-0">
         <span className="truncate text-[15px] font-semibold text-ink">{row.name}</span>
         <span className="truncate text-[13px] text-secondary">{row.category}</span>
       </div>
-      <span className="hidden shrink-0 rounded-full bg-sunken px-2 py-[3px] md:block">
+      <span className="hidden shrink-0 rounded-full bg-sunken px-2 py-1 md:block">
         <span className="num-mono text-[10px] uppercase tracking-[0.5px] text-secondary">{row.frequency}</span>
       </span>
       <span className="num-mono hidden w-[70px] shrink-0 text-right text-[13px] text-muted md:block">{shortDate(row.nextDue)}</span>
@@ -92,13 +92,13 @@ function SubscriptionRow({ row, currency, onEdit, onToggle, onDelete }: { row: S
 
 function InstallmentRow({ row, currency, onEdit, onToggle, onDelete }: { row: InstallRow; currency: string; onEdit: () => void; onToggle: () => void; onDelete: () => void }) {
   return (
-    <div className={cn('flex min-h-16 items-center gap-3.5 py-3.5', !row.active && 'opacity-50')}>
+    <div className={cn('flex min-h-16 items-center gap-3 py-3', !row.active && 'opacity-50')}>
       <span className="h-8 w-[3px] shrink-0 rounded-lg" style={{ background: row.color }} />
-      <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+      <div className="flex min-w-0 flex-1 flex-col gap-0">
         <span className="truncate text-[15px] font-semibold text-ink">{row.name}</span>
         <span className="truncate text-[13px] text-secondary">{row.category}&nbsp;&nbsp;·&nbsp;&nbsp;{formatCurrency(row.perMonth, currency)} / mo</span>
       </div>
-      <div className="flex w-[160px] shrink-0 flex-col items-end gap-1.5 md:w-[240px]">
+      <div className="flex w-[160px] shrink-0 flex-col items-end gap-1 md:w-[240px]">
         <div className="h-2 w-full overflow-hidden rounded-full bg-line">
           <div className="h-full rounded-full bg-accent" style={{ width: `${row.pct}%` }} />
         </div>
@@ -133,7 +133,7 @@ export default function WilliamRecurring() {
       <FloatingNav />
       <TabBar />
 
-      <main className="mx-auto flex max-w-[1100px] flex-col gap-[18px] px-4 md:gap-5 md:px-6">
+      <main className="mx-auto flex max-w-[1100px] flex-col gap-4 px-4 md:gap-4 md:px-6">
         {/* ── Header ── */}
         <div>
           <BackLink label="Spending" onClick={() => navigate('/william/spending')} className="mb-2" />
@@ -152,24 +152,24 @@ export default function WilliamRecurring() {
         </div>
 
         {/* ── Summary ── */}
-        <Card className="flex flex-col gap-5 p-5 lg:flex-row lg:items-center lg:justify-between">
+        <Card className="flex flex-col gap-4 p-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex flex-col gap-1">
             <p className="num-mono text-[12px] uppercase tracking-[0.6px] text-secondary">Monthly recurring</p>
             <p className="text-[40px] font-bold leading-none text-ink">{formatCurrency(d.monthlyTotal, cur)}</p>
             <p className="text-[15px] text-secondary">{d.activeCount} active&nbsp;&nbsp;·&nbsp;&nbsp;annualized {money0(d.annualized, cur)}</p>
           </div>
           <div className="flex flex-col gap-3 lg:w-[360px]">
-            <div className="flex h-3.5 w-full gap-[3px]">
+            <div className="flex h-3.5 w-full gap-1">
               <div className="rounded-lg" style={{ width: `${subsPct}%`, background: BAR_SUBS }} />
               <div className="rounded-lg" style={{ width: `${instPct}%`, background: BAR_INST }} />
             </div>
-            <div className="hidden gap-5 lg:flex">
-              <div className="flex items-center gap-1.5">
+            <div className="hidden gap-4 lg:flex">
+              <div className="flex items-center gap-1">
                 <span className="size-2 rounded-full" style={{ background: BAR_SUBS }} />
                 <span className="text-[13px] font-medium text-secondary">Subscriptions</span>
                 <span className="text-[13px] font-semibold text-ink">{money0(d.subsMonthly, cur)}</span>
               </div>
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1">
                 <span className="size-2 rounded-full" style={{ background: BAR_INST }} />
                 <span className="text-[13px] font-medium text-secondary">Installments</span>
                 <span className="text-[13px] font-semibold text-ink">{money0(d.installMonthly, cur)}</span>
@@ -180,7 +180,7 @@ export default function WilliamRecurring() {
 
         {/* ── Subscriptions ── */}
         {d.subscriptions.length > 0 && (
-          <Card className="flex flex-col gap-1 px-5 pb-3 pt-5">
+          <Card className="flex flex-col gap-1 px-4 pb-3 pt-4">
             <h2 className="pb-1 text-[18px] font-semibold text-ink">Subscriptions</h2>
             {d.subscriptions.map((row, i) => (
               <div key={row.id}>
@@ -198,7 +198,7 @@ export default function WilliamRecurring() {
 
         {/* ── Installment plans ── */}
         {d.installments.length > 0 && (
-          <Card className="flex flex-col gap-1 px-5 pb-3 pt-5">
+          <Card className="flex flex-col gap-1 px-4 pb-3 pt-4">
             <h2 className="pb-1 text-[18px] font-semibold text-ink">Installment plans</h2>
             {d.installments.map((row, i) => (
               <div key={row.id}>
@@ -215,7 +215,7 @@ export default function WilliamRecurring() {
         )}
 
         {d.isEmpty && (
-          <Card className="flex flex-col items-center gap-3 p-10 text-center">
+          <Card className="flex flex-col items-center gap-3 p-8 text-center">
             <Icon name="recurring" size={40} className="text-muted" />
             <p className="text-[15px] text-secondary">No recurring payments or installment plans yet.</p>
             <Button variant="primary" size="l" onClick={() => setEditing('new')}>Add your first</Button>

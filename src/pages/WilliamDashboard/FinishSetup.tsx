@@ -54,7 +54,7 @@ export function FinishSetup() {
             onClick={d.onClick}
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); d.onClick(); } }}
             className={cn(
-              'group flex cursor-pointer flex-col gap-2.5 rounded-2xl bg-surface p-4 transition-colors',
+              'group flex cursor-pointer flex-col gap-2 rounded-2xl bg-surface p-4 transition-colors',
               'hover:bg-btn-neutral-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
             )}
           >
@@ -69,7 +69,7 @@ export function FinishSetup() {
                 ✕
               </button>
             </div>
-            <div className="flex flex-col gap-0.5">
+            <div className="flex flex-col gap-0">
               <span className="text-[15px] font-semibold text-ink">{d.title}</span>
               <span className="text-[13px] leading-snug text-secondary">{d.subtitle}</span>
             </div>

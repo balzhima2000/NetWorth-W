@@ -38,7 +38,7 @@ export function MonthPicker({ month, year, onChange }: { month: number; year: nu
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex h-9 items-center gap-2 rounded-full bg-btn-neutral pl-4 pr-3.5 text-[16px] font-semibold text-ink transition-colors hover:bg-btn-neutral-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+        className="inline-flex h-9 items-center gap-2 rounded-full bg-btn-neutral pl-4 pr-3 text-[16px] font-semibold text-ink transition-colors hover:bg-btn-neutral-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
       >
         {MONTH_NAMES[month - 1]} {year}
         <svg width="11" height="7" viewBox="0 0 11 7" fill="none" aria-hidden="true" className="shrink-0 text-secondary">
@@ -48,7 +48,7 @@ export function MonthPicker({ month, year, onChange }: { month: number; year: nu
       {open && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} aria-hidden="true" />
-          <div className="absolute left-0 top-[calc(100%+6px)] z-50 flex max-h-[280px] w-[200px] flex-col gap-0.5 overflow-y-auto rounded-xl bg-surface p-1.5 shadow-[var(--w-shadow-2)]">
+          <div className="absolute left-0 top-[calc(100%+6px)] z-50 flex max-h-[280px] w-[200px] flex-col gap-0 overflow-y-auto rounded-xl bg-surface p-1 shadow-[var(--w-shadow-2)]">
             {options.map(({ m, y }) => {
               const active = m === month && y === year;
               return (
@@ -113,7 +113,7 @@ function Legend({ slices, currency }: { slices: CategorySlice[]; currency: strin
   return (
     <div className="flex flex-1 flex-col gap-3">
       {slices.map((s, i) => (
-        <div key={s.id} className="flex items-center gap-2.5">
+        <div key={s.id} className="flex items-center gap-2">
           <span className="size-2.5 shrink-0 rounded-full" style={{ background: CHART_COLORS[i % CHART_COLORS.length] }} />
           <span className="min-w-0 flex-1 truncate text-[14px] font-medium text-ink">{s.name}</span>
           <span className="shrink-0 text-[13px] text-secondary">{Math.round(s.pct)}%</span>
@@ -129,9 +129,9 @@ function RecentItem({ row, currency, divider }: { row: RecentRow; currency: stri
   return (
     <>
       {divider && <div className="h-px w-full bg-line" />}
-      <div className="flex h-12 items-center gap-3 py-2.5">
+      <div className="flex h-12 items-center gap-3 py-2">
         <span className="h-[30px] w-[3px] shrink-0 rounded-full" style={{ background: row.color }} />
-        <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+        <div className="flex min-w-0 flex-1 flex-col gap-0">
           <span className="truncate text-[14px] font-semibold text-ink">{row.name}</span>
           <span className="truncate text-[12px] text-secondary">{row.category}</span>
         </div>
@@ -170,10 +170,10 @@ function NavCard({ icon, title, subtitle, onClick }: { icon: 'recurring' | 'tren
     <button
       type="button"
       onClick={onClick}
-      className="group flex items-center gap-3.5 rounded-card bg-surface px-5 py-[18px] text-left transition-colors hover:bg-raised active:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+      className="group flex items-center gap-3 rounded-card bg-surface px-4 py-4 text-left transition-colors hover:bg-surface active:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
     >
       <Icon name={icon} size={22} className="shrink-0 text-ink" />
-      <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+      <span className="flex min-w-0 flex-1 flex-col gap-0">
         <span className="truncate text-[15px] font-semibold text-ink">{title}</span>
         <span className="truncate text-[13px] text-secondary">{subtitle}</span>
       </span>
@@ -200,10 +200,10 @@ export default function WilliamSpending() {
       <FloatingNav />
       <TabBar />
 
-      <main className="mx-auto flex max-w-[1100px] flex-col gap-[18px] px-4 md:gap-5 md:px-6">
+      <main className="mx-auto flex max-w-[1100px] flex-col gap-4 px-4 md:gap-4 md:px-6">
         {/* ── Header ── */}
         <div className="flex items-start justify-between gap-3">
-          <div className="flex flex-col gap-1.5 md:flex-row md:items-center md:gap-3.5">
+          <div className="flex flex-col gap-1 md:flex-row md:items-center md:gap-3">
             <h1 className="text-[28px] font-semibold tracking-[-0.01em] text-ink md:text-[32px]">Spending for</h1>
             <MonthPicker month={month} year={year} onChange={(m, y) => { setMonth(m); setYear(y); }} />
           </div>
@@ -214,14 +214,14 @@ export default function WilliamSpending() {
         </div>
 
         {/* ── Row 1: Spent + By category ── */}
-        <div className="grid grid-cols-1 gap-[18px] md:gap-5 lg:grid-cols-[472fr_596fr] lg:items-stretch">
+        <div className="grid grid-cols-1 gap-4 md:gap-4 lg:grid-cols-[472fr_596fr] lg:items-stretch">
           {/* Spent */}
-          <Card className="flex flex-col gap-3 p-5">
+          <Card className="flex flex-col gap-3 p-4">
             <p className="num-mono text-[12px] uppercase tracking-[0.6px] text-secondary">This month spent</p>
             <p className="text-[44px] font-bold leading-none text-ink">{money0(d.totalSpent, cur)}</p>
             {d.deltaPct !== null ? (
               <div className="flex items-center gap-2">
-                <span className={cn('rounded-full px-2 py-[3px] text-[12px] font-semibold', up ? 'bg-negative-bg text-negative' : 'bg-positive-bg text-positive')}>
+                <span className={cn('rounded-full px-2 py-1 text-[12px] font-semibold', up ? 'bg-negative-bg text-negative' : 'bg-positive-bg text-positive')}>
                   {up ? '↑' : '↓'} {Math.abs(d.deltaPct).toFixed(0)}%
                 </span>
                 <span className="text-[14px] text-secondary">vs last month</span>
@@ -238,14 +238,14 @@ export default function WilliamSpending() {
           </Card>
 
           {/* By category */}
-          <Card className="flex flex-col gap-4 p-5">
+          <Card className="flex flex-col gap-4 p-4">
             <div className="flex items-center justify-between">
               <h2 className="text-[18px] font-semibold text-ink">By category</h2>
               <Button size="s" variant="tonal" onClick={() => setBudgetsOpen(true)}>
                 Set targets
               </Button>
             </div>
-            <div className="flex flex-col items-center gap-6 md:flex-row md:items-center md:gap-7">
+            <div className="flex flex-col items-center gap-6 md:flex-row md:items-center md:gap-6">
               <Donut slices={d.categories} total={d.totalSpent} currency={cur} />
               <Legend slices={d.categories} currency={cur} />
             </div>
@@ -253,15 +253,15 @@ export default function WilliamSpending() {
         </div>
 
         {/* ── Row 2: nav cards ── */}
-        <div className="grid grid-cols-1 gap-2.5 lg:grid-cols-2 lg:gap-5">
+        <div className="grid grid-cols-1 gap-2 lg:grid-cols-2 lg:gap-4">
           <NavCard icon="recurring" title="Recurring" subtitle="Subscriptions & installments" onClick={() => navigate('/william/spending/recurring')} />
           <NavCard icon="trends" title="Trends" subtitle="Spending over time" onClick={() => navigate('/william/spending/trends')} />
         </div>
 
         {/* ── Row 3: Recent + Budgets ── */}
-        <div className="grid grid-cols-1 gap-[18px] md:gap-5 lg:grid-cols-[596fr_472fr] lg:items-start">
+        <div className="grid grid-cols-1 gap-4 md:gap-4 lg:grid-cols-[596fr_472fr] lg:items-start">
           {/* Recent */}
-          <Card className="flex flex-col gap-1 p-5">
+          <Card className="flex flex-col gap-1 p-4">
             <div className="flex items-center justify-between pb-1">
               <h2 className="text-[18px] font-semibold text-ink">Recent</h2>
               <CardLink onClick={() => navigate('/william/spending/transactions')}>See all</CardLink>
@@ -274,7 +274,7 @@ export default function WilliamSpending() {
           </Card>
 
           {/* Budgets */}
-          <Card className="flex flex-col gap-[18px] p-5">
+          <Card className="flex flex-col gap-4 p-4">
             <h2 className="text-[18px] font-semibold text-ink">Budgets</h2>
             {d.budgetRows.length > 0 ? (
               d.budgetRows.map((row) => <BudgetItem key={row.id} row={row} currency={cur} />)

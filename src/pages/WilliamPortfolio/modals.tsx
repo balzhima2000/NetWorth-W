@@ -209,9 +209,9 @@ export function SetTargetsModal({ open, onClose, holdings, totalValue }: { open:
     <Modal open={open} onClose={onClose} title="Set allocation targets" footer={
       <>
         {/* Desktop: Turn off (left) · Cancel · Save (right) */}
-        <div className="hidden w-full items-center gap-2.5 md:flex">
+        <div className="hidden w-full items-center gap-2 md:flex">
           <button type="button" onClick={turnOff} className="text-[14px] font-medium text-secondary hover:text-ink">Turn off targets</button>
-          <div className="ml-auto flex gap-2.5">
+          <div className="ml-auto flex gap-2">
             <Button pill size="l" variant="tonal" onClick={onClose}>Cancel</Button>
             <Button pill size="l" variant="primary" onClick={save}>Save targets</Button>
           </div>
@@ -225,15 +225,15 @@ export function SetTargetsModal({ open, onClose, holdings, totalValue }: { open:
     }>
       <p className="text-[13px] text-secondary">Set a target weight per holding — we’ll flag drift on your allocation bar.</p>
       <SegmentToggle options={[{ value: 'category', label: 'By category' }, { value: 'holding', label: 'By holding' }]} value={mode} onChange={(m) => { setMode(m); setTargets({}); }} />
-      <div className="flex flex-col gap-2.5">
+      <div className="flex flex-col gap-2">
         {items.map((it) => (
           <div key={it.key} className="flex items-center justify-between">
-            <div className="flex flex-col gap-0.5">
+            <div className="flex flex-col gap-0">
               <span className="text-[15px] font-medium text-ink">{it.label}</span>
               <span className="text-[12px] font-medium text-secondary">Now {it.now.toFixed(0)}%</span>
             </div>
             <div className="relative w-[88px]">
-              <TextInput type="number" inputMode="decimal" value={get(it.key, it.now)} onChange={(e) => setTargets((t) => ({ ...t, [it.key]: e.target.value }))} className="num pr-7 text-right" />
+              <TextInput type="number" inputMode="decimal" value={get(it.key, it.now)} onChange={(e) => setTargets((t) => ({ ...t, [it.key]: e.target.value }))} className="num pr-6 text-right" />
               <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[13px] text-secondary">%</span>
             </div>
           </div>
@@ -242,7 +242,7 @@ export function SetTargetsModal({ open, onClose, holdings, totalValue }: { open:
       <div className="flex items-center justify-between border-t border-line pt-3">
         <span className="text-[14px] font-medium text-ink">Total allocated</span>
         <div className="flex items-center gap-2">
-          <span className={cn('rounded-full px-2 py-0.5 text-[11px] font-medium', balanced ? 'bg-positive-bg text-positive' : 'bg-sunken text-secondary')}>
+          <span className={cn('rounded-full px-2 py-0 text-[11px] font-medium', balanced ? 'bg-positive-bg text-positive' : 'bg-sunken text-secondary')}>
             {balanced ? 'Balanced' : `${total.toFixed(0)}%`}
           </span>
           <span className="num text-[15px] font-medium text-ink">{total.toFixed(0)}%</span>

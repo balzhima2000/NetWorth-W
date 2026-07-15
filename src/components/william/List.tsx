@@ -10,7 +10,7 @@ import { CardLink } from './CardControl';
  */
 export function List({ className, children, ...rest }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={cn('divide-y divide-line rounded-card bg-surface px-5 pt-1', className)} {...rest}>
+    <div className={cn('divide-y divide-line rounded-card bg-surface px-4 pt-1', className)} {...rest}>
       {children}
     </div>
   );
@@ -27,7 +27,7 @@ function Chevron({ className }: { className?: string }) {
 /** In-card list header (Figma Lists "Header": 18 SemiBold + optional trailing action). */
 export function ListHeader({ title, action, onAction }: { title: string; action?: string; onAction?: () => void }) {
   return (
-    <div className="flex items-center justify-between py-2.5">
+    <div className="flex items-center justify-between py-2">
       <h2 className="text-[18px] font-semibold text-ink">{title}</h2>
       {action && (
         <CardLink onClick={onAction}>{action}</CardLink>
@@ -55,7 +55,7 @@ export function ListRow({ title, subtitle, marker, trailing, chevron, danger, on
     <>
       <span className="flex min-w-0 items-center gap-3 transition-transform duration-150 group-hover:translate-x-0.5">
         {marker && <span aria-hidden="true" className="h-8 w-[3px] shrink-0 rounded-full" style={{ background: marker }} />}
-        <span className="flex min-w-0 flex-col gap-0.5">
+        <span className="flex min-w-0 flex-col gap-0">
           <span className={cn('truncate font-medium', subtitle ? 'text-[15px]' : 'text-[14px]', danger ? 'text-negative' : 'text-ink')}>
             {title}
           </span>
@@ -75,7 +75,7 @@ export function ListRow({ title, subtitle, marker, trailing, chevron, danger, on
       </span>
     </>
   );
-  const layout = cn('flex w-full items-center justify-between gap-3 text-left', subtitle ? 'py-[13px]' : 'py-5');
+  const layout = cn('flex w-full items-center justify-between gap-3 text-left', subtitle ? 'py-3' : 'py-4');
   if (onClick) {
     return (
       // Motion-only hover (no fill): the content nudges right and the chevron

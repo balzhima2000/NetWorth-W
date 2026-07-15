@@ -62,12 +62,12 @@ export function FloatingNav() {
     // a separate account island, ~10px apart. The wrapper is transparent.
     <nav
       aria-label="Primary"
-      className="fixed left-1/2 top-5 z-50 hidden -translate-x-1/2 items-center gap-2.5 md:flex"
+      className="fixed left-1/2 top-5 z-50 hidden -translate-x-1/2 items-center gap-2 md:flex"
     >
       <div
         ref={listRef}
         onMouseLeave={() => setHovered(null)}
-        className="nav-glass relative flex items-center gap-1.5 rounded-full px-2 py-2"
+        className="nav-glass relative flex items-center gap-2 rounded-full px-1 py-1"
       >
         <div
           aria-hidden="true"
@@ -84,7 +84,7 @@ export function FloatingNav() {
               onClick={() => navigate(item.path)}
               aria-current={active ? 'page' : undefined}
               className={cn(
-                'relative z-10 flex items-center gap-1.5 rounded-full px-3 py-2 text-[14px] font-medium transition-colors',
+                'relative z-10 flex items-center gap-1 rounded-full px-3 py-2 text-[14px] font-medium transition-colors',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
                 active || hovered === i ? 'text-ink' : 'text-secondary',
               )}
@@ -99,7 +99,7 @@ export function FloatingNav() {
         onClick={() => navigate(account.path)}
         aria-label={account.label}
         aria-current={pathname === account.path ? 'page' : undefined}
-        className="nav-glass group relative flex h-[53px] w-[53px] items-center justify-center rounded-full text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+        className="nav-glass group relative flex h-[44px] w-[44px] items-center justify-center rounded-full text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
       >
         {/* Selected/hover highlight — same accent-bg pill as the other nav
             items (37px, matching their height), just circular; on the glass. */}
@@ -125,7 +125,7 @@ export function TabBar() {
     <nav
       className={cn(
         'fixed bottom-4 left-1/2 z-50 flex w-[340px] -translate-x-1/2 md:hidden',
-        'nav-glass items-center gap-1 rounded-full p-1.5',
+        'nav-glass items-center gap-1 rounded-full p-1',
       )}
     >
       {tabs.map((item) => {
@@ -136,7 +136,7 @@ export function TabBar() {
             onClick={() => navigate(item.path)}
             aria-current={active ? 'page' : undefined}
             className={cn(
-              'flex flex-1 flex-col items-center gap-0.5 rounded-full py-2 transition-colors',
+              'flex flex-1 flex-col items-center gap-0 rounded-full py-2 transition-colors',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
               // Active item = grey pill (surface-raised) + ink; inactive = muted.
               active ? 'bg-raised text-ink' : 'text-muted',

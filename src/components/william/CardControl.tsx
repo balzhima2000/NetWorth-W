@@ -129,7 +129,7 @@ export const CardLink = React.forwardRef<
       ref={ref}
       type={type}
       className={cn(
-        'inline-flex items-center gap-1.5 whitespace-nowrap rounded-sm text-[14px] font-medium text-secondary',
+        'inline-flex items-center gap-1 whitespace-nowrap rounded-sm text-[14px] font-medium text-secondary',
         'transition-colors hover:text-ink',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-surface',
         className,

@@ -103,7 +103,7 @@ function ToastCard({ toast }: { toast: ToastItem }) {
         relative flex items-center gap-3
         bg-[#111111] border border-white/[0.08]
         rounded-xl shadow-2xl
-        px-4 py-3 pr-10
+        px-4 py-3 pr-8
         min-w-[260px] max-w-[360px]
         animate-in fade-in slide-in-from-right-4 duration-300
       `}
@@ -122,7 +122,7 @@ function ToastCard({ toast }: { toast: ToastItem }) {
       {/* Close button */}
       <button
         onClick={() => removeToast(toast.id)}
-        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/70 transition-colors p-0.5"
+        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/70 transition-colors p-0"
         aria-label="Dismiss notification"
       >
         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

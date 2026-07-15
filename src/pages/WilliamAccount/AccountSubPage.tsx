@@ -9,7 +9,7 @@ export function AccountSubPage({ title, subtitle, children }: { title: string; s
     <div className="william min-h-screen bg-canvas pb-28 pt-6 md:pt-24">
       <FloatingNav />
       <TabBar />
-      <main className="mx-auto flex max-w-[720px] flex-col gap-5 px-4 md:px-6">
+      <main className="mx-auto flex max-w-[720px] flex-col gap-4 px-4 md:px-6">
         <div className="flex flex-col gap-2 pt-2 md:pt-6">
           <BackLink label="Account" onClick={() => navigate('/william/account')} className="w-fit" />
           <h1 className="text-[24px] font-semibold tracking-[-0.02em] text-ink md:text-[32px]">{title}</h1>

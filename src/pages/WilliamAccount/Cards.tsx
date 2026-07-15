@@ -32,7 +32,7 @@ export default function Cards() {
       ) : (
         <Card className="flex flex-col p-0 overflow-hidden">
           {cards.map((c, i) => (
-            <div key={c.id} className={cn('flex items-center justify-between px-5 py-3.5', i < cards.length - 1 && 'border-b border-line')}>
+            <div key={c.id} className={cn('flex items-center justify-between px-4 py-3', i < cards.length - 1 && 'border-b border-line')}>
               <div className="flex items-center gap-3">
                 <span className="h-4 w-6 rounded" style={{ background: c.color }} />
                 <span className={cn('text-[15px] font-medium', c.isActive ? 'text-ink' : 'text-muted line-through')}>{c.name}</span>

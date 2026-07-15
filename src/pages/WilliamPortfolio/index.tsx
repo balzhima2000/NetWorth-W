@@ -27,7 +27,7 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 
 function MarketChip({ market }: { market: CurrentHolding['market'] }) {
   return (
-    <span className="rounded-full bg-sunken px-2 py-0.5 text-[11px] font-medium text-secondary">
+    <span className="rounded-full bg-sunken px-2 py-0 text-[11px] font-medium text-secondary">
       {marketLabel(market)}
     </span>
   );
@@ -36,7 +36,7 @@ function MarketChip({ market }: { market: CurrentHolding['market'] }) {
 // ── Summary ───────────────────────────────────────────────────────────────────
 function SummaryCard({ d }: { d: ReturnType<typeof usePortfolioData> }) {
   return (
-    <Card className="num-fit flex flex-col gap-2.5 p-5">
+    <Card className="num-fit flex flex-col gap-2 p-4">
       <Eyebrow>Portfolio value</Eyebrow>
       <p className="num num-hero font-bold text-ink">
         {formatCurrency(d.totalValue, d.defaultCurrency)}
@@ -67,9 +67,9 @@ function AllocationCard({ d, onSetTargets }: { d: ReturnType<typeof usePortfolio
     for (let i = 0; i < d.allocation.length - 1; i++) { c += d.allocation[i].target ?? 0; ticks.push(c); }
   }
   return (
-    <Card className="flex flex-col gap-3.5 p-5">
+    <Card className="flex flex-col gap-3 p-4">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1">
           <Eyebrow>Allocation</Eyebrow>
           <InfoTip title="Allocation & drift">
             Your mix across Stocks, Cash, Crypto and Other. Set targets to track drift — the tick
@@ -90,7 +90,7 @@ function AllocationCard({ d, onSetTargets }: { d: ReturnType<typeof usePortfolio
           ))}
         </div>
       ) : (
-        <div className="flex h-3.5 w-full gap-[3px]">
+        <div className="flex h-3.5 w-full gap-1">
           {d.allocation.map((a) => <div key={a.label} className="rounded-[4px]" style={{ width: `${a.percent}%`, background: a.color }} />)}
         </div>
       )}
@@ -99,17 +99,17 @@ function AllocationCard({ d, onSetTargets }: { d: ReturnType<typeof usePortfolio
           <span className="h-2.5 w-0.5 rounded-full bg-muted" /> marks your target weight
         </span>
       )}
-      <div className="flex flex-col gap-2.5">
+      <div className="flex flex-col gap-2">
         {d.allocation.map((a) => (
           <div key={a.label} className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full" style={{ background: a.color }} />
               <span className="text-[14px] font-medium text-ink">{a.label}</span>
             </div>
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2">
               <span className="num text-[14px] font-medium text-ink">{a.percent.toFixed(0)}%</span>
               {hasTargets && a.drift != null ? (
-                <span className="num rounded-full bg-sunken px-2 py-0.5 text-[11px] font-medium text-secondary">
+                <span className="num rounded-full bg-sunken px-2 py-0 text-[11px] font-medium text-secondary">
                   {a.drift >= 0 ? '+' : '−'}{Math.abs(a.drift).toFixed(0)}%<span className="hidden md:inline"> vs target</span>
                 </span>
               ) : (
@@ -157,8 +157,8 @@ function ColHeader({ label, sortKey, active, dir, onSort }: { label: string; sor
 
 function HoldingsTable({ d, sortBy, sortDir, onSort }: { d: ReturnType<typeof usePortfolioData>; sortBy: SortKey; sortDir: SortDir; onSort: (k: SortKey) => void }) {
   return (
-    <Card className="hidden flex-col px-5 pb-2 pt-5 md:flex">
-      <div className="mb-3.5 flex items-center gap-1.5">
+    <Card className="hidden flex-col px-4 pb-2 pt-4 md:flex">
+      <div className="mb-3.5 flex items-center gap-1">
         <h2 className="text-[18px] font-semibold tracking-[-0.01em] text-ink">Holdings</h2>
         <InfoTip title="Gain vs return">
           Gain is shown in your base currency and includes exchange-rate movement since you bought.
@@ -174,8 +174,8 @@ function HoldingsTable({ d, sortBy, sortDir, onSort }: { d: ReturnType<typeof us
         ))}
       </div>
       {d.holdings.map((h, i) => (
-        <div key={h.ticker} className={cn(GRID, 'py-3.5', i < d.holdings.length - 1 && 'border-b border-line')}>
-          <div className="flex min-w-0 flex-col gap-0.5 pr-2">
+        <div key={h.ticker} className={cn(GRID, 'py-3', i < d.holdings.length - 1 && 'border-b border-line')}>
+          <div className="flex min-w-0 flex-col gap-0 pr-2">
             <div className="flex items-center gap-2">
               <span className="text-[15px] font-semibold text-ink">{h.ticker}</span>
               <MarketChip market={h.market} />
@@ -206,7 +206,7 @@ function SortDropdown({ sortBy, sortDir, onSelectField, onToggleDir }: { sortBy:
     return () => document.removeEventListener('mousedown', onDoc);
   }, []);
   const current = SORT_COLS.find((c) => c.key === sortBy)!;
-  const menuItem = 'num flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-[12px] font-medium uppercase tracking-[0.6px]';
+  const menuItem = 'num flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-[12px] font-medium uppercase tracking-[0.6px]';
   return (
     <div ref={ref} className="relative">
       {/* In-card dropdown; the "Sort:" prefix says what the pill does, so the
@@ -220,7 +220,7 @@ function SortDropdown({ sortBy, sortDir, onSelectField, onToggleDir }: { sortBy:
         {colLabel(current)}
       </CardDropdown>
       {open && (
-        <div className="absolute right-0 z-10 mt-2 flex w-[200px] flex-col gap-0.5 rounded-xl bg-surface p-1.5 shadow-[var(--w-shadow-2)]">
+        <div className="absolute right-0 z-10 mt-2 flex w-[200px] flex-col gap-0 rounded-xl bg-surface p-1 shadow-[var(--w-shadow-2)]">
           {SORT_COLS.map((c) => {
             const active = c.key === sortBy;
             return (
@@ -247,9 +247,9 @@ function SortDropdown({ sortBy, sortDir, onSelectField, onToggleDir }: { sortBy:
 
 function HoldingsList({ d, sortBy, sortDir, onSelectField, onToggleDir }: { d: ReturnType<typeof usePortfolioData>; sortBy: SortKey; sortDir: SortDir; onSelectField: (k: SortKey) => void; onToggleDir: () => void }) {
   return (
-    <Card className="flex flex-col px-[18px] pb-1.5 pt-[18px] md:hidden">
+    <Card className="flex flex-col px-4 pb-1 pt-4 md:hidden">
       <div className="mb-3 flex items-center justify-between">
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1">
           <h2 className="text-[18px] font-semibold text-ink">Holdings</h2>
           <InfoTip title="Gain vs return">
             Gain is shown in your base currency and includes exchange-rate movement since you bought.
@@ -259,7 +259,7 @@ function HoldingsList({ d, sortBy, sortDir, onSelectField, onToggleDir }: { d: R
         <SortDropdown sortBy={sortBy} sortDir={sortDir} onSelectField={onSelectField} onToggleDir={onToggleDir} />
       </div>
       {d.holdings.map((h, i) => (
-        <div key={h.ticker} className={cn('flex items-center justify-between py-3.5', i < d.holdings.length - 1 && 'border-b border-line')}>
+        <div key={h.ticker} className={cn('flex items-center justify-between py-3', i < d.holdings.length - 1 && 'border-b border-line')}>
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2">
               <span className="text-[15px] font-semibold text-ink">{h.ticker}</span>
@@ -269,7 +269,7 @@ function HoldingsList({ d, sortBy, sortDir, onSelectField, onToggleDir }: { d: R
               {h.sharesHeld.toLocaleString()} × {formatCurrency(h.currentPrice, h.currency)}
             </span>
           </div>
-          <div className="flex flex-col items-end gap-0.5">
+          <div className="flex flex-col items-end gap-0">
             <span className="num text-[16px] font-medium text-ink">{formatCurrency(h.currentValue, d.defaultCurrency)}</span>
             <span className={cn('num text-[12px] font-medium', dir(h.unrealizedGainPercent))}>{signedPct(h.unrealizedGainPercent)}</span>
           </div>
@@ -302,11 +302,11 @@ export default function WilliamPortfolio() {
     <div className="william min-h-screen bg-canvas pb-28 pt-6 md:pt-24">
       <FloatingNav />
       <TabBar />
-      <main className="mx-auto flex max-w-[1100px] flex-col gap-[18px] px-4 md:gap-5 md:px-6">
+      <main className="mx-auto flex max-w-[1100px] flex-col gap-4 px-4 md:gap-4 md:px-6">
 
         {/* Mobile header */}
         <div className="flex items-start justify-between md:hidden">
-          <div className="flex flex-col gap-0.5">
+          <div className="flex flex-col gap-0">
             <h1 className="text-[24px] font-semibold tracking-[-0.02em] text-ink">Portfolio</h1>
             <p className="text-[13px] font-medium text-secondary">{d.subtitle}</p>
           </div>
@@ -324,7 +324,7 @@ export default function WilliamPortfolio() {
             <h1 className="text-[28px] font-semibold tracking-[-0.02em] text-ink">Portfolio</h1>
             <p className="text-[14px] font-medium text-secondary">{d.subtitle}</p>
           </div>
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2">
             <Button pill size="m" variant="secondary" onClick={refresh} loading={refreshing} disabled={!canRefresh}><Icon name="refresh" size={18} /> Refresh</Button>
             <Button pill size="m" variant="secondary" onClick={goImport}><Icon name="import" size={18} /> Import</Button>
             <Button pill size="m" variant="primary" onClick={addTrade} className="font-semibold"><Icon name="plus" size={16} /> Add trade</Button>
@@ -347,7 +347,7 @@ export default function WilliamPortfolio() {
           </Card>
         ) : (
           <>
-            <div className="flex flex-col gap-[18px] md:grid md:grid-cols-[400px_1fr] md:gap-5">
+            <div className="flex flex-col gap-4 md:grid md:grid-cols-[400px_1fr] md:gap-4">
               <SummaryCard d={d} />
               <AllocationCard d={d} onSetTargets={setTargets} />
             </div>

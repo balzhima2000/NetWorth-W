@@ -13,7 +13,7 @@ function CustomTooltip({ active, payload, label, currency }: any) {
   return (
     <div className="flex flex-col gap-1 rounded-xl bg-surface px-3 py-2 shadow-[var(--w-shadow-2)]">
       <p className="ty-label text-muted">{label}</p>
-      <div className="flex items-center gap-1.5">
+      <div className="flex items-center gap-1">
         <span aria-hidden="true" className="h-3.5 w-0.5 rounded-full bg-accent" />
         <p className="num-mono text-[14px] font-medium text-ink">{formatCurrency(payload[0].value, currency)}</p>
       </div>

@@ -174,7 +174,7 @@ Pixel dot-matrix style. Master size 64×64. DOT=6, GAP=2, UNIT=8.
 | Icon/Target | 429:1084 | — | "Set/Edit targets" (ring + bullseye) |
 | Icon/Plus | 429:1098 | — | "Add trade" / add actions |
 
-**⚠️ Toolbar buttons** use the standard `<Button pill size="m">` (M = **36px** per the Button master `897:7790`, re-audited 2026-07 — the earlier "38px, size=toolbar, Medium label" note was drift from the master). All toolbar pills carry the master's **14px SemiBold** label · **16px** horizontal pad · **6px** gap. **Refresh/Import** = `secondary` (white pill on the grey canvas); **Add trade** = `primary` (dark), plus glyph 16px. Row gap = **10px desktop** (`gap-2.5`) / **8px mobile** (`gap-2`). Buttons hug content (Figma manually undersized its Add-trade frame to 110px; we don't, to avoid clipping the label). *(An older Figma usage frame 358:146 drew 38px — that was an instance override; the component master is 36.)*
+**⚠️ Toolbar buttons** use the standard `<Button pill size="m">` (M = **36px** per the Button master `897:7790`, re-audited 2026-07 — the earlier "38px, size=toolbar, Medium label" note was drift from the master). All toolbar pills carry the master's **14px SemiBold** label · **16px** horizontal pad · **4px** gap (was 6 — snapped). **Refresh/Import** = `secondary` (white pill on the grey canvas); **Add trade** = `primary` (dark), plus glyph 16px. Row gap = **8px at both breakpoints** (`gap-2`) — desktop was 10 and snapped down, so the old 10/8 desktop-vs-mobile split is gone. Buttons hug content (Figma manually undersized its Add-trade frame to 110px; we don't, to avoid clipping the label). *(An older Figma usage frame 358:146 drew 38px — that was an instance override; the component master is 36.)*
 
 ### Action Button component (Button page, set 197:60)
 Dashboard action buttons (Trade/Income/Expense). Variant property `Action`.
@@ -189,6 +189,13 @@ Dashboard action buttons (Trade/Income/Expense). Variant property `Action`.
 | Color | VariableCollectionId:2:2 | Light / Dark | 32 |
 | Spacing | VariableCollectionId:3:2 | Value | 8 |
 | Radius | VariableCollectionId:3:11 | Value | 4 |
+
+**⚠️ SPACING IS ENFORCED (2026-07, Balzhima's call). The only legal gap/padding values are `0 · 4 · 8 · 12 · 16 · 24 · 32 · 48 · 64`.**
+- `spacing/N` = N×4 px. **There is no 20, 28, 40, or 56** — the ramp deliberately skips them.
+- The whole file + codebase were snapped to this scale, **ties rounding DOWN** (20→16, 14→12, 10→8, 6→4, 2→0). ~8,360 Figma properties are now variable-bound (was 19) and 252 Tailwind classes were rewritten. **Values like `p-5`, `gap-1.5`, `gap-2.5`, `gap-[18px]` are now bugs, not style.** In Tailwind the legal set is `0 1 2 3 4 6 8 12 16`.
+- **Two deliberate carve-outs.** (1) **Above 64 is left alone** — page-level layout offsets, not component spacing: `pt-24`/`pb-28` (nav clearance), `pr-[68px]`, and Figma's 108/80/70/142. Do not snap these to 64. (2) **Radius is a SEPARATE collection** — `radius/lg` = 20 is legal. A card at r20/p-4 is correct.
+- **Negative gaps are deliberate overlaps — never snap them.** The mobile Tab Bar's `-8` was flattened to 0 by an early pass before this guard existed; it renders fine (4×86 tabs now tile to exactly 352) but the original is only in Figma version history.
+- Fonts, widths, and heights were NOT snapped.
 
 Color collection includes 12 **`color/btn-*` tokens** (Light/Dark, all aliasing the neutral ramp). 8 were recreated 2026-07 after the originals were deleted but stayed bound ("ghost variables"); the primary family was added when the Button set moved off the generic accent tokens: `btn-primary` (n800/n0) · `btn-primary-hover` (n700/n50) · `btn-primary-pressed` (n600/n500) · `btn-on-primary` (n0/n900, default/hover labels) · `btn-on-primary-pressed` (n0/n0 — white stays on the grey pressed fill in dark) · `btn-neutral` (n0/n800) · `btn-neutral-hover` (n100/n700) · `btn-neutral-pressed` (n200/n600) · `btn-subtle-hover` (n100/n800) · `btn-subtle-pressed` (n200/n700) · `btn-disabled` (n200/**n900**) · `btn-disabled-text` (n400/n600). ⚠️ **Disabled is standardized (2026-07):** every Button variant's disabled state uses `btn-disabled` fill (transparent for Subtle) + `btn-disabled-text`. `btn-disabled` Dark was **n800 → n900** because n800 was identical to the enabled `btn-neutral` fill, so disabled looked enabled; n900 recedes. The Button master's **Neutral/Disabled** variants (all 3 sizes) were also rebound from `btn-neutral` → `btn-disabled` (they had the same drift as the code). The Button sets (897:7790 light / 1325:11930 dark) bind ONLY btn-* for fills/labels (plus `color/border` outlines + `color/focus` rings); the Danger set's Disabled state also uses `btn-disabled`/`btn-disabled-text`. ⚠️ **Never combine a variable-bound paint color with paint opacity** — instances re-resolve bound paints and normalize opacity back to 1 (the danger 10%/20% overlays kept spontaneously reverting to solid orange until replaced). State tints must be their own mode-aware tokens. The Danger set uses `btn-danger-hover` (orange/200 L · orange/900 D) and `btn-danger-pressed` (orange/300 L · orange/800 D) as single fills — no alpha overlays. `docs/annotation` (#8a38f5, ex-"DS Purple") is the doc-chrome purple: annotation components + component-set frame strokes; never product UI. Navigation/Lists pages intentionally bind a few **remote Apple-library** variables (`Fills/Tertiary`, `Labels/Secondary`) on iOS reference frames — do not "fix" those.
 
@@ -271,23 +278,27 @@ This applies to **all chart types**: breakdown bars, donut charts, paired bar ch
 
 **RangeSelector/Segment:** track + segments are **`rounded-full`** (r999); selected segment = `color/surface` fill, **no border**; segment pad 6/14. Code `Segmented` `track` prop: **`raised`** (grey track + white pill — inside a card) · **`sunken`** (form toggles) · **`surface`** (floats on the grey canvas: `surface` fill + `shadow-1`, and the selected pill flips to `raised` so it still contrasts — used by the dashboard mobile RangeSelector, which sits outside the card). `raised`=canvas in light, so a range selector on the bare canvas MUST use `track="surface"`.
 
-**⚠️ Dashboard layout gaps + value font sizes are PER-BREAKPOINT (mobile ≠ desktop)** — re-verified 2026-07 against the current **Home** section `1076:13528` (Desktop `954:244` · Mobile `954:390` · dark variants `971:2` / `971:1889`; old IDs 22:3/26:3 are dead). Mobile is tighter:
-| Container / element | Mobile | Desktop |
-|---|---|---|
-| Main stack | 18 | 20 |
-| Top row (cols) | 18 | 20 |
-| Portfolio + This-Month **row gap** | **12** | 20 |
-| Graph card gap | 14 | 18 |
-| FIRE card gap | 8 | 10 |
-| Portfolio/Month card gap | 6 | 10 |
-| Recent activity gap | 10 | 12 |
-| Net-worth hero font | 36 | 44 |
-| Stat-card value font (Portfolio/Month) | **22** | 32 |
-Code uses responsive classes (`gap-[18px] md:gap-5`, `gap-x-3 gap-y-[18px] md:gap-5`, `text-[22px] md:text-[32px]`, etc). The This-Month wrap bug was caused by using desktop values (gap 20 + 32px font) on mobile.
+**⚠️ Dashboard layout gaps — SNAPPED to the Spacing scale (2026-07). Mobile ≠ desktop now only PARTLY holds.** Every gap/padding in Figma and code was snapped to the Spacing collection (`0 4 8 12 16 24 32 48 64`), ties rounding **down**. Three of the seven rows below collapsed to a single value because 18 and 20 both round to 16 — the per-breakpoint distinction is gone there, and a responsive class for them is now dead weight:
+| Container / element | Mobile | Desktop | was (m/d) |
+|---|---|---|---|
+| Main stack | 16 | 16 | 18 / 20 — **collapsed** |
+| Top row (cols) | 16 | 16 | 18 / 20 — **collapsed** |
+| Portfolio + This-Month **row gap** | 12 | 16 | 12 / 20 |
+| Graph card gap | 12 | 16 | 14 / 18 |
+| FIRE card gap | 8 | 8 | 8 / 10 — **collapsed** |
+| Portfolio/Month card gap | 4 | 8 | 6 / 10 |
+| Recent activity gap | 8 | 12 | 10 / 12 |
+| Net-worth hero font | 36 | 44 | unchanged — fonts were not snapped |
+| Stat-card value font (Portfolio/Month) | **22** | 32 | unchanged — fonts were not snapped |
+Font sizes are NOT on the spacing scale and were deliberately left alone. The This-Month wrap bug was caused by using desktop values (gap 20 + 32px font) on mobile — the font half of that still applies.
 
-### Radius + card padding scale (verified against Figma, 2026-06)
-Radius: `sm 8 · md 12 · lg 20 · full 999`. **Standard card radius = 20 (`lg`).** Exceptions: net-worth grey wrapper 24, white inner balance card 18, activity rows / See-all 16, insight callout / chart tooltip 12.
-Card padding: **20px** standard (`p-5`); graph card **24** (`p-6`); activity rows 16/18; net-worth wrapper 12 (18 bottom). Code: `--w-radius-card: 20px`. (The earlier code used r16/p-6 — corrected.)
+### Radius + card padding scale
+
+**⚠️ Spacing and radius are DIFFERENT scales — do not conflate them.**
+
+**Radius is UNCHANGED** (it has its own Radius collection, and 20 is a legitimate token there): `sm 8 · md 12 · lg 20 · full 999`. **Standard card radius = 20 (`lg`).** Exceptions: net-worth grey wrapper 24, white inner balance card 18, activity rows / See-all 16, insight callout / chart tooltip 12. Code: `--w-radius-card: 20px`.
+
+**Card padding was snapped (2026-07): 16px standard (`p-4`)** — 20 is not on the Spacing scale (the ramp goes 16 → 24) and ties round down. Graph card **24** (`p-6`, already on scale); activity rows 16; net-worth wrapper 12. The old "20px standard (`p-5`)" is dead — a card at r20/p-4 is now correct and intentional, NOT drift.
 
 ### Components & states (handoff-ready, 2026-06)
 Pre-dev audit pass added the missing interaction/data states and cleaned duplicates.
@@ -328,7 +339,7 @@ Pre-dev audit pass added the missing interaction/data states and cleaned duplica
 - **Fill**: `color/surface-inverse` (mid-grey, primary style)
 - **Label**: 14px Inter Semi Bold
 - **Icon**: 16px plus glyph (dot-matrix `Icon/Plus`)
-- **Gap**: 6px between icon and label
+- **Gap**: 4px between icon and label (was 6 — snapped 2026-07; 6 is off-scale)
 
 The label text can differ by screen context ("Add trade" on Portfolio, "Add" or "Add transaction" on Spending) but every other property is locked. Before building a new screen's header, screenshot the Portfolio header as the reference — do not estimate sizes from memory.
 
@@ -394,14 +405,16 @@ Field/menu styles were extracted from the modals into reusable components. Share
 - **Modals**: `src/pages/WilliamPortfolio/modals.tsx` — `AddTradeModal`, `AddTransactionModal` (income/expense), `SetTargetsModal`, wired to real stores (`addTrade`, `addTransaction`, `allocationStore.setAllocation`). Mounted on **both** the Portfolio screen (Add trade, Set targets) and the **Dashboard** action buttons (Trade/Income/Expense). **Refresh** uses `useRefreshPrices` and **Import** opens `ImportExcelModal` — both native now (no `/portfolio` bridge).
 - **New william components**: `Modal` (responsive — desktop dialog / mobile bottom sheet, scrim, Esc + scroll-lock) and `Field` primitives (`Field`, `TextInput`, `Textarea`, `SelectInput` with mono `↓`, `SegmentToggle`). `Button` gained a **`pill`** prop (the Figma master is a pill at every size, so `pill` **defaults to `true`**; pass `pill={false}` for the r12 rect) and a **`size`** prop — see the Button size scale below.
 
-### Button size scale — ported 1:1 from the Figma Button master (2026-07 re-audit)
-**Aligned to the Figma Button master `897:7790`.** The master ships **3 sizes (S/M/L)** with a **14px SemiBold** label at *every* size — only height / horizontal pad / icon change. The code `Button` (`src/components/william/Button.tsx`) takes `size?: 'l'|'m'|'s'|'xs'` (default `m`); `xs` is a **code-only** inline size with no Figma peer:
+### Button size scale — ⚠️ H-PAD NO LONGER SCALES (snapped 2026-07)
+The code `Button` (`src/components/william/Button.tsx`) takes `size?: 'l'|'m'|'s'|'xs'` (default `m`); `xs` is a **code-only** inline size with no Figma peer. **After the spacing snap, L/M/S all have identical horizontal padding** — 20 (L) and 18 (S) both round to 16, where M already sat. The three sizes are now distinguished by **height alone**:
 | Size | Height | H-pad | Label | Icon | Used for |
 |---|---|---|---|---|---|
-| **L** | **42px** | px-5 (20) | 14px SemiBold | 20 | prominent CTAs — modal confirm/cancel, empty-state + dashboard "Add trade" |
+| **L** | **42px** | px-4 (16) | 14px SemiBold | 20 | prominent CTAs — modal confirm/cancel, empty-state + dashboard "Add trade" |
 | **M** | **36px** | px-4 (16) | 14px SemiBold | 18 | **default** — Portfolio toolbar pills (Refresh/Import/Add trade) |
-| **S** | **27px** | px-[18] | 14px SemiBold | 16 | compact secondary — Set/Edit targets |
-| **XS** | 28px | px-3 | 12px Medium | 14 | code-only — chips / inline (Account CRUD, sort-trigger mirror) |
+| **S** | **27px** | px-4 (16) | 14px SemiBold | 16 | compact secondary — Set/Edit targets |
+| **XS** | 28px | px-3 (12) | 12px Medium | 14 | code-only — chips / inline (Account CRUD, sort-trigger mirror) |
+- **Icon↔label gap is 4 (`gap-1`) at every size** — was 6, which is off-scale and rounded down.
+- ⚠️ **Known regression, unresolved:** a size scale where only height varies is weak, and in Figma it's worse — the master's *Neutral* variants landed on 12 while *Primary* landed on 16, so Figma's L/M are 12 and code's are 16. **Figma and code disagree on button padding.** The proposed fix (not applied) is to hand-set the three sizes to `12 / 16 / 24` — on-scale and correctly ordered — as a deliberate exception to the mechanical snap. Ask Balzhima before touching.
 - The master's default **shape is a pill (r999) at every size**, so the code `pill` prop now **defaults to `true`**; pass `pill={false}` for a 12px-radius rect.
 - ⚠️ **Figma-internal inconsistency (flagged 2026-07):** the separate **Danger button** master (`899:7421`) draws **Large = 44px**, 2px taller than the regular Button's 42px. `DangerButton.tsx` mirrors its own master (L=44); `Button.tsx` uses 42. Both are faithful — reconcile in Figma when convenient.
 - History: the earlier `44 / 38 / 32 / 28` scale + `rounded-xl` default + Medium labels were a code-side decision that had drifted from the master; re-synced 2026-07 per Balzhima ("Figma is right").

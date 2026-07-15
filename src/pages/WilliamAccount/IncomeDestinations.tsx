@@ -21,7 +21,7 @@ export default function IncomeDestinations() {
     <AccountSubPage title="Income destinations" subtitle="Where your income lands (bank, cash, broker…).">
       <Card className="flex flex-col p-0 overflow-hidden">
         {dests.map((d, i) => (
-          <div key={d.id} className={cn('flex items-center justify-between px-5 py-3.5', i < dests.length - 1 && 'border-b border-line')}>
+          <div key={d.id} className={cn('flex items-center justify-between px-4 py-3', i < dests.length - 1 && 'border-b border-line')}>
             <span className="text-[15px] font-medium text-ink">{d.name}</span>
             {d.id !== 'cash' && <Button size="xs" variant="ghost" onClick={() => del(d.id)}>Delete</Button>}
           </div>

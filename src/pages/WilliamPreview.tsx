@@ -24,7 +24,7 @@ export default function WilliamPreview() {
       className="william min-h-screen bg-canvas"
       data-theme={dark ? 'dark' : undefined}
     >
-      <div className="mx-auto flex max-w-3xl flex-col gap-10 p-10">
+      <div className="mx-auto flex max-w-3xl flex-col gap-8 p-8">
         <header className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
             <h1 className="ty-h1 text-ink">William — Primitives</h1>

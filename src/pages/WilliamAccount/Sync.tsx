@@ -43,8 +43,8 @@ export default function Sync() {
   return (
     <AccountSubPage title="Sync & account" subtitle="Back up and sync across devices.">
       {user ? (
-        <Card className="flex flex-col gap-4 p-5">
-          <div className="flex flex-col gap-0.5">
+        <Card className="flex flex-col gap-4 p-4">
+          <div className="flex flex-col gap-0">
             <span className="text-[13px] text-secondary">Signed in as</span>
             <span className="text-[15px] font-semibold text-ink">{user.email}</span>
           </div>
@@ -62,7 +62,7 @@ export default function Sync() {
           </div>
         </Card>
       ) : (
-        <Card className="flex flex-col gap-4 p-5">
+        <Card className="flex flex-col gap-4 p-4">
           <p className="text-[14px] text-secondary">Sign in with your email to back up and sync. We’ll send a one-time code.</p>
           <Field label="Email"><TextInput value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@email.com" inputMode="email" /></Field>
           {sent && <Field label="Code"><TextInput value={code} onChange={(e) => setCode(e.target.value)} placeholder="6-digit code" inputMode="numeric" /></Field>}

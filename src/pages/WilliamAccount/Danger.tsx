@@ -43,7 +43,7 @@ export default function Danger() {
 
   return (
     <AccountSubPage title="Danger zone" subtitle="Irreversible actions. Export a backup first.">
-      <Card className="flex flex-col gap-4 p-5">
+      <Card className="flex flex-col gap-4 p-4">
         <div className="flex flex-col gap-1">
           <span className="text-[15px] font-semibold text-ink">Reset this device</span>
           <span className="text-[13px] text-secondary">Clears all data on this device and restarts setup. Cloud backup (if signed in) is kept.</span>

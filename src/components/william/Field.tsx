@@ -7,7 +7,7 @@ import { Segmented } from './Segment';
 // Borderless (2026-07): the FILL is the field affordance; focus is an accent
 // ring rather than a border, so there's no layout shift and no hairline.
 const inputBase =
-  'w-full rounded-xl px-3.5 text-[15px] text-ink placeholder:text-muted ' +
+  'w-full rounded-xl px-3 text-[15px] text-ink placeholder:text-muted ' +
   'focus:outline-none focus:ring-2 focus:ring-accent';
 
 /**
@@ -24,7 +24,7 @@ const toneCls: Record<FieldTone, string> = {
 
 export function Field({ label, children, htmlFor }: { label: string; children: React.ReactNode; htmlFor?: string }) {
   return (
-    <label htmlFor={htmlFor} className="flex flex-1 flex-col gap-1.5">
+    <label htmlFor={htmlFor} className="flex flex-1 flex-col gap-1">
       <span className="text-[13px] font-medium text-secondary">{label}</span>
       {children}
     </label>
@@ -45,7 +45,7 @@ export function Textarea({ className, tone = 'sunken', ...rest }: React.Textarea
 export function SelectInput({ className, children, tone = 'sunken', ...rest }: React.SelectHTMLAttributes<HTMLSelectElement> & { tone?: FieldTone }) {
   return (
     <div className="relative">
-      <select className={cn(inputBase, toneCls[tone], 'h-11 appearance-none pr-9', className)} {...rest}>
+      <select className={cn(inputBase, toneCls[tone], 'h-11 appearance-none pr-8', className)} {...rest}>
         {children}
       </select>
       <span className="num pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[12px] text-secondary">↓</span>

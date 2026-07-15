@@ -22,13 +22,12 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
    * every size, so pill is the DEFAULT; pass `pill={false}` for a 12px-radius rect. */
   pill?: boolean;
   /**
-   * Size scale — ported 1:1 from the Figma Button master (897:7790). The master
-   * uses a 14px SemiBold label at EVERY size; only height / horizontal pad / icon
-   * change:
-   * - `l`  42px · px-5 (20) · 14px SemiBold — prominent CTAs (modal confirm, empty-state); pair 20px icon
+   * Size scale. A 14px SemiBold label at every size; only height / icon change.
+   * Horizontal pad is 16 at l/m/s — the sizes are distinguished by HEIGHT ALONE:
+   * - `l`  42px · px-4 (16) · 14px SemiBold — prominent CTAs (modal confirm, empty-state); pair 20px icon
    * - `m`  36px · px-4 (16) · 14px SemiBold — DEFAULT, toolbar/action pills; pair 18px icon
-   * - `s`  27px · px-[18] · 14px SemiBold — compact secondary (Set/Edit targets); pair 16px icon
-   * - `xs` 28px · px-3 · 12px Medium — CODE-ONLY (no Figma peer) — chips / inline controls (sort-trigger, Account CRUD); pair 14px icon
+   * - `s`  27px · px-4 (16) · 14px SemiBold — compact secondary (Set/Edit targets); pair 16px icon
+   * - `xs` 28px · px-3 (12) · 12px Medium — CODE-ONLY (no Figma peer) — chips / inline controls (sort-trigger, Account CRUD); pair 14px icon
    */
   size?: Size;
 }
@@ -39,14 +38,15 @@ const base =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-canvas ' +
   'disabled:pointer-events-none';
 
-// Ported 1:1 from the Figma Button master (897:7790): S/M/L = 27/36/42, gap 6px,
-// 14px SemiBold label at every size — only height / horizontal pad differ. `xs`
-// is a code-only inline size (no Figma peer).
+// S/M/L = 27/36/42 tall, gap 4px, 14px SemiBold label at every size. Horizontal
+// pad no longer scales — l/m/s are all px-4 after the spacing scale collapsed 20
+// and 18 onto 16, so height is the only thing separating the three sizes. `xs` is
+// a code-only inline size (no Figma peer).
 const sizes: Record<Size, string> = {
-  l:  'h-[42px] px-5 gap-1.5 text-[14px] font-semibold',
-  m:  'h-[36px] px-4 gap-1.5 text-[14px] font-semibold',
-  s:  'h-[27px] px-[18px] gap-1.5 text-[14px] font-semibold',
-  xs: 'h-[28px] px-3 gap-1.5 text-[12px] font-medium',
+  l:  'h-[42px] px-4 gap-1 text-[14px] font-semibold',
+  m:  'h-[36px] px-4 gap-1 text-[14px] font-semibold',
+  s:  'h-[27px] px-4 gap-1 text-[14px] font-semibold',
+  xs: 'h-[28px] px-3 gap-1 text-[12px] font-medium',
 };
 
 // State fills match the Figma Button masters (all BORDERLESS, 2026-07):

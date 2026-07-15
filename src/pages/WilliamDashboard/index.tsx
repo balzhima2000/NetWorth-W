@@ -78,7 +78,7 @@ function MobileHeader({ name }: { name?: string }) {
           no shadow (shadows are reserved for things floating ON TOP of the
           screen). accent-bg (#f5f5f5 light) matches the canvas and would
           disappear, hence surface. */}
-      <div className="inline-flex items-center gap-2 rounded-full bg-surface px-4 py-2.5">
+      <div className="inline-flex items-center gap-2 rounded-full bg-surface px-4 py-2">
         <Icon name="star" size={16} className="text-ink" />
         <span className="ty-label text-ink">{greeting}{name ? `, ${name}` : ''}</span>
       </div>
@@ -127,7 +127,7 @@ export default function WilliamDashboard() {
       <FloatingNav />
       <TabBar />
 
-      <main className="mx-auto flex max-w-[1100px] flex-col gap-[18px] px-4 md:gap-5 md:px-6">
+      <main className="mx-auto flex max-w-[1100px] flex-col gap-4 px-4 md:gap-4 md:px-6">
         <h1 className="sr-only">Dashboard</h1>
 
         <MobileHeader name={d.userName} />
@@ -135,14 +135,14 @@ export default function WilliamDashboard() {
         <FinishSetup />
 
         {/* ── Top row: left column (net worth + breakdown) + chart ── */}
-        <div className="grid grid-cols-1 gap-[18px] md:grid-cols-[340px_1fr] md:gap-5 lg:grid-cols-[400px_1fr]">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-[340px_1fr] md:gap-4 lg:grid-cols-[400px_1fr]">
 
           {/* Left column */}
-          <div className="flex flex-col gap-[18px] md:gap-5">
+          <div className="flex flex-col gap-4 md:gap-4">
             {/* Net Worth Card — white card (r24), grey inner balance panel (r18):
                 matches the rebuilt Figma Card/NetWorth on the tonal (borderless) canvas */}
-            <div className="flex flex-col gap-3.5 rounded-[24px] bg-surface p-2.5 pb-4 md:p-3 md:pb-[18px]">
-              <div className="num-fit flex flex-col gap-1.5 rounded-[18px] bg-raised p-[18px] md:p-5">
+            <div className="flex flex-col gap-3 rounded-[24px] bg-surface p-2 pb-4 md:p-3 md:pb-4">
+              <div className="num-fit flex flex-col gap-1 rounded-[18px] bg-raised p-4 md:p-4">
                 <p className="ty-label text-muted">CURRENT NET WORTH</p>
                 <p className={cn('num num-hero font-bold', d.netWorth < 0 ? 'text-negative' : 'text-ink')}>
                   {formatCurrency(d.netWorth, d.defaultCurrency)}
@@ -163,7 +163,7 @@ export default function WilliamDashboard() {
 
             {/* Breakdown */}
             {d.breakdown.length > 0 && (
-              <Card className="p-[18px] md:p-5">
+              <Card className="p-4 md:p-4">
                 <p className="ty-label text-muted mb-3.5 md:mb-4">NET WORTH BREAKDOWN</p>
                 <BreakdownBar items={d.breakdown} currency={d.defaultCurrency} />
               </Card>
@@ -171,7 +171,7 @@ export default function WilliamDashboard() {
           </div>
 
           {/* Chart column: mobile timeframe selector sits OUTSIDE the card */}
-          <div className="flex flex-col gap-[18px]">
+          <div className="flex flex-col gap-4">
             <div className="md:hidden">
               <RangeSelector
                 fullWidth
@@ -182,7 +182,7 @@ export default function WilliamDashboard() {
               />
             </div>
 
-            <Card className="flex flex-1 flex-col gap-3.5 p-[18px] md:gap-[18px] md:p-6">
+            <Card className="flex flex-1 flex-col gap-3 p-4 md:gap-4 md:p-6">
               <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                 <div className="flex flex-col gap-1">
                   <div className="flex flex-wrap items-center gap-2">
@@ -239,7 +239,7 @@ export default function WilliamDashboard() {
         </div>
 
         {/* ── Stats row: FIRE (wide) + Portfolio + This Month ── */}
-        <div className="grid grid-cols-2 gap-x-3 gap-y-[18px] md:grid-cols-3 md:gap-5 lg:grid-cols-[2.2fr_1fr_1fr]">
+        <div className="grid grid-cols-2 gap-x-3 gap-y-4 md:grid-cols-3 md:gap-4 lg:grid-cols-[2.2fr_1fr_1fr]">
 
           {/* FIRE — full width on mobile, first column on desktop */}
           <Card
@@ -248,7 +248,7 @@ export default function WilliamDashboard() {
             aria-label="FIRE progress — open FIRE page"
             onClick={() => navigate('/william/fire')}
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate('/william/fire'); } }}
-            className="group col-span-2 flex cursor-pointer flex-col gap-2 p-[18px] transition-colors hover:bg-raised active:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus md:col-span-1 md:gap-2.5 md:p-5"
+            className="group col-span-2 flex cursor-pointer flex-col gap-2 p-4 transition-colors hover:bg-raised active:bg-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus md:col-span-1 md:gap-2 md:p-4"
           >
             <div className="flex items-center justify-between">
               <p className="ty-label whitespace-nowrap text-muted">FIRE PROGRESS</p>
@@ -269,7 +269,7 @@ export default function WilliamDashboard() {
           </Card>
 
           {/* Portfolio */}
-          <Card className="flex flex-col gap-1.5 p-4 md:gap-2.5 md:p-5">
+          <Card className="flex flex-col gap-1 p-4 md:gap-2 md:p-4">
             <p className="ty-label text-muted">PORTFOLIO</p>
             <p className="num font-bold text-ink text-[22px] md:text-[32px]">{formatCurrency(d.portfolioValue, d.defaultCurrency)}</p>
             {d.holdings.length > 0 && (
@@ -280,7 +280,7 @@ export default function WilliamDashboard() {
           </Card>
 
           {/* This Month */}
-          <Card className="flex flex-col gap-1.5 p-4 md:gap-2.5 md:p-5">
+          <Card className="flex flex-col gap-1 p-4 md:gap-2 md:p-4">
             <p className="ty-label text-muted">THIS MONTH</p>
             <p className={cn('num font-bold text-[22px] md:text-[32px]', d.monthNet < 0 ? 'text-negative' : d.monthNet > 0 ? 'text-positive' : 'text-ink')}>
               {d.monthNet > 0 ? '+' : d.monthNet < 0 ? '−' : ''}{formatCurrency(Math.abs(d.monthNet), d.defaultCurrency)}
@@ -293,7 +293,7 @@ export default function WilliamDashboard() {
 
         {/* ── Recent activity — Figma Card/Activity: List header + Tall rows ── */}
         {d.recentActivity.length > 0 && (
-          <List className="py-2.5">
+          <List className="py-2">
             <ListHeader title="Recent activity" action="See all" onAction={() => navigate('/william/spending')} />
             {d.recentActivity.map((tx) => {
               const isExpense = tx.type === 'expense';

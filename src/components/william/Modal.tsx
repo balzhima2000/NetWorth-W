@@ -47,7 +47,7 @@ export function Modal({ open, onClose, title, children, footer, maxWidth = 480 }
           <div className="h-1 w-10 rounded-full bg-line" />
         </div>
         {/* header */}
-        <div className="flex items-center justify-between px-5 pb-2 pt-4 md:px-6 md:pt-6">
+        <div className="flex items-center justify-between px-4 pb-2 pt-4 md:px-6 md:pt-6">
           <h2 className="text-[20px] font-semibold tracking-[-0.01em] text-ink">{title}</h2>
           <button
             type="button" aria-label="Close" onClick={onClose}
@@ -55,9 +55,9 @@ export function Modal({ open, onClose, title, children, footer, maxWidth = 480 }
           >✕</button>
         </div>
         {/* body */}
-        <div className="flex flex-col gap-4 overflow-y-auto px-5 py-2 md:px-6">{children}</div>
+        <div className="flex flex-col gap-4 overflow-y-auto px-4 py-2 md:px-6">{children}</div>
         {/* footer */}
-        {footer && <div className="flex items-center gap-2.5 px-5 pb-6 pt-4 md:px-6">{footer}</div>}
+        {footer && <div className="flex items-center gap-2 px-4 pb-6 pt-4 md:px-6">{footer}</div>}
       </div>
     </div>
   );

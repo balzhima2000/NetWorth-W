@@ -91,7 +91,7 @@ export function EditAssumptionsModal({ open, onClose }: { open: boolean; onClose
       }
     >
       <p className="-mt-1 ty-body text-secondary">These inputs drive your FI number and projected date.</p>
-      <div className="grid grid-cols-1 gap-x-3 gap-y-3.5 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-x-3 gap-y-3 sm:grid-cols-2">
         <MoneyField label="Annual expenses" placeholder="50,000" value={expenses} onChange={setExpenses} />
         <MoneyField label="Annual savings" placeholder="30,000" value={savings} onChange={setSavings} />
         <Field label="Withdrawal rate (%)">

@@ -54,7 +54,7 @@ export default function Data() {
 
   return (
     <AccountSubPage title="Data management" subtitle="Export a backup or restore from one.">
-      <Card className="flex flex-col gap-3 p-5">
+      <Card className="flex flex-col gap-3 p-4">
         <Button size="m" pill variant="tonal" onClick={exportJSON}>Export full backup (JSON)</Button>
         <Button size="m" pill variant="tonal" onClick={exportCSV}>Export transactions (CSV)</Button>
         <Button size="m" pill variant="ghost" onClick={() => fileRef.current?.click()}>Import backup (JSON)</Button>
