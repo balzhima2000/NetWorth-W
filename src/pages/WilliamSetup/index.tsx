@@ -113,7 +113,7 @@ export default function WilliamSetup() {
             </div>
             <div className="flex flex-col gap-5">
               <Field label="Your name">
-                <TextInput value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Eitan Cohen" autoFocus />
+                <TextInput tone="surface" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Eitan Cohen" autoFocus />
               </Field>
               {!editingCurrency ? (
                 <div className="flex items-center justify-between">
@@ -124,7 +124,7 @@ export default function WilliamSetup() {
                 </div>
               ) : (
                 <Field label="Currency">
-                  <SelectInput value={currency} onChange={(e) => setCurrency(e.target.value)} autoFocus>
+                  <SelectInput tone="surface" value={currency} onChange={(e) => setCurrency(e.target.value)} autoFocus>
                     {CURRENCIES.map((c) => <option key={c.code} value={c.code}>{c.symbol} {c.code} — {c.name}</option>)}
                   </SelectInput>
                 </Field>
@@ -157,7 +157,7 @@ export default function WilliamSetup() {
                   <div className="pt-1">
                     {mode === 'simple' && (
                       <Field label="Current portfolio value">
-                        <TextInput value={simpleValue} onChange={(e) => setSimpleValue(e.target.value)} inputMode="numeric" placeholder="50,000" />
+                        <TextInput tone="surface" value={simpleValue} onChange={(e) => setSimpleValue(e.target.value)} inputMode="numeric" placeholder="50,000" />
                       </Field>
                     )}
                     {mode === 'detailed' && (

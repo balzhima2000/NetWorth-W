@@ -4,11 +4,23 @@ import { Segmented } from './Segment';
 
 /** Form field primitives matched to the Figma Forms components. */
 
-// Borderless (2026-07): the sunken fill IS the field affordance; focus is an
-// accent ring rather than a border, so there's no layout shift and no hairline.
+// Borderless (2026-07): the FILL is the field affordance; focus is an accent
+// ring rather than a border, so there's no layout shift and no hairline.
 const inputBase =
-  'w-full rounded-xl bg-sunken px-3.5 text-[15px] text-ink placeholder:text-muted ' +
+  'w-full rounded-xl px-3.5 text-[15px] text-ink placeholder:text-muted ' +
   'focus:outline-none focus:ring-2 focus:ring-accent';
+
+/**
+ * Where the field sits — it decides the fill, because separation is tonal:
+ *  - `sunken` (default): on a white card / modal → grey field reads as recessed.
+ *  - `surface`: directly on the grey canvas (e.g. Setup) → must be WHITE.
+ *    `sunken` is #f5f5f5 in light = the canvas colour, so it would vanish.
+ */
+export type FieldTone = 'sunken' | 'surface';
+const toneCls: Record<FieldTone, string> = {
+  sunken: 'bg-sunken',
+  surface: 'bg-surface',
+};
 
 export function Field({ label, children, htmlFor }: { label: string; children: React.ReactNode; htmlFor?: string }) {
   return (
@@ -19,20 +31,21 @@ export function Field({ label, children, htmlFor }: { label: string; children: R
   );
 }
 
-export const TextInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
-  function TextInput({ className, ...rest }, ref) {
-    return <input ref={ref} className={cn(inputBase, 'h-11', className)} {...rest} />;
-  },
-);
+export const TextInput = React.forwardRef<
+  HTMLInputElement,
+  React.InputHTMLAttributes<HTMLInputElement> & { tone?: FieldTone }
+>(function TextInput({ className, tone = 'sunken', ...rest }, ref) {
+  return <input ref={ref} className={cn(inputBase, toneCls[tone], 'h-11', className)} {...rest} />;
+});
 
-export function Textarea({ className, ...rest }: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
-  return <textarea className={cn(inputBase, 'min-h-[72px] resize-none py-3 leading-snug', className)} rows={2} {...rest} />;
+export function Textarea({ className, tone = 'sunken', ...rest }: React.TextareaHTMLAttributes<HTMLTextAreaElement> & { tone?: FieldTone }) {
+  return <textarea className={cn(inputBase, toneCls[tone], 'min-h-[72px] resize-none py-3 leading-snug', className)} rows={2} {...rest} />;
 }
 
-export function SelectInput({ className, children, ...rest }: React.SelectHTMLAttributes<HTMLSelectElement>) {
+export function SelectInput({ className, children, tone = 'sunken', ...rest }: React.SelectHTMLAttributes<HTMLSelectElement> & { tone?: FieldTone }) {
   return (
     <div className="relative">
-      <select className={cn(inputBase, 'h-11 appearance-none pr-9', className)} {...rest}>
+      <select className={cn(inputBase, toneCls[tone], 'h-11 appearance-none pr-9', className)} {...rest}>
         {children}
       </select>
       <span className="num pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[12px] text-secondary">↓</span>
